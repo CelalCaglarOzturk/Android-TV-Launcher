@@ -26,12 +26,14 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import nl.ndat.tvlauncher.R
 
 @Composable
 fun AppPopup(
@@ -46,7 +48,7 @@ fun AppPopup(
         modifier = Modifier.padding(8.dp)
     ) {
         Text(
-            text = "App Options",
+            text = stringResource(R.string.app_options),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSecondaryContainer
         )
@@ -55,7 +57,7 @@ fun AppPopup(
         KeyDownButton(
             onClick = { onToggleFavorite(!isFavorite) },
             icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-            text = if (isFavorite) "Remove from Home" else "Add to Home"
+            text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
         )
 
         // Hide / Unhide
@@ -63,7 +65,7 @@ fun AppPopup(
             KeyDownButton(
                 onClick = { onToggleHidden(!isHidden) },
                 icon = if (isHidden) Icons.Default.Add else Icons.Default.Delete,
-                text = if (isHidden) "Unhide App" else "Hide App"
+                text = if (isHidden) stringResource(R.string.app_unhide) else stringResource(R.string.app_hide)
             )
         }
     }

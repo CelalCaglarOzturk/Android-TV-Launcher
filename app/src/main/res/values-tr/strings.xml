@@ -16,9 +16,21 @@
 	<string name="channel_move">Kanalı Taşı</string>
 	<string name="channel_move_up">Yukarı</string>
 	<string name="channel_move_down">Aşağı</string>
-	<string name="channel_move_mode">Kanalı yeniden sıralamak için Yukarı/Aşağı kullanın</string>
+	<string
+        name="channel_move_mode"
+    >Kanalı yeniden sıralamak için Yukarı/Aşağı kullanın</string>
 	<string name="done">Tamam</string>
 	<string name="close">Kapat</string>
 	<string name="channels_settings">Kanallar</string>
 	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
+
+	<!-- App options -->
+	<string name="app_options">Uygulama Seçenekleri</string>
+	<string name="app_open">Aç</string>
+	<string name="app_move">Taşı</string>
+	<string name="app_info">Bilgi</string>
+	<string name="app_add_to_home">Ana Ekrana Ekle</string>
+	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
+	<string name="app_hide">Uygulamayı Gizle</string>
+	<string name="app_unhide">Uygulamayı Göster</string>
 </resources>

@@ -21,4 +21,14 @@
 	<string name="close">Close</string>
 	<string name="channels_settings">Channels</string>
 	<string name="disabled_channels">Disabled Channels</string>
+
+	<!-- App options -->
+	<string name="app_options">App Options</string>
+	<string name="app_open">Open</string>
+	<string name="app_move">Move</string>
+	<string name="app_info">Info</string>
+	<string name="app_add_to_home">Add to Home</string>
+	<string name="app_remove_from_home">Remove from Home</string>
+	<string name="app_hide">Hide App</string>
+	<string name="app_unhide">Unhide App</string>
 </resources>

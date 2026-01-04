@@ -40,6 +40,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -56,6 +57,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.createDrawable
@@ -254,28 +256,28 @@ private fun AppOptionsPopup(
         KeyDownButton(
             onClick = onOpen,
             icon = Icons.Default.PlayArrow,
-            text = "Open"
+            text = stringResource(R.string.app_open)
         )
 
         // Move
         KeyDownButton(
             onClick = onMove,
             icon = Icons.Default.Menu,
-            text = "Move"
+            text = stringResource(R.string.app_move)
         )
 
         // Add to Home / Remove from Home
         KeyDownButton(
             onClick = onToggleFavorite,
             icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-            text = if (isFavorite) "Remove from Home" else "Add to Home"
+            text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
         )
 
         // Info
         KeyDownButton(
             onClick = onInfo,
             icon = Icons.Default.Settings,
-            text = "Info"
+            text = stringResource(R.string.app_info)
         )
     }
 }
