@@ -1,5 +1,6 @@
 package nl.ndat.tvlauncher.ui.tab.home
 
+import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,12 +24,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
-import kotlinx.coroutines.delay
 import nl.ndat.tvlauncher.R
 
 @Composable
@@ -45,11 +51,7 @@ fun ChannelPopup(
     var isMoveMode by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
-    // Delay enabling clicks to prevent the key-up from long press from triggering a button
-    var clicksEnabled by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-        delay(300) // Wait for key-up event to pass
-        clicksEnabled = true
         focusRequester.requestFocus()
     }
 
@@ -71,104 +73,113 @@ fun ChannelPopup(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(
-                    onClick = {
-                        if (clicksEnabled && !isFirst) onMoveUp()
-                    },
+                KeyDownButton(
+                    onClick = { if (!isFirst) onMoveUp() },
+                    icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    text = stringResource(R.string.channel_move_up),
                     enabled = !isFirst,
                     modifier = Modifier.focusRequester(focusRequester)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        contentDescription = stringResource(R.string.channel_move_up)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = stringResource(R.string.channel_move_up))
-                }
-
-                Button(
-                    onClick = {
-                        if (clicksEnabled && !isLast) onMoveDown()
-                    },
-                    enabled = !isLast
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = stringResource(R.string.channel_move_down)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = stringResource(R.string.channel_move_down))
-                }
-            }
-
-            Button(
-                onClick = {
-                    if (clicksEnabled) {
-                        isMoveMode = false
-                        onDismiss()
-                    }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = stringResource(R.string.done)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = stringResource(R.string.done))
+
+                KeyDownButton(
+                    onClick = { if (!isLast) onMoveDown() },
+                    icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    text = stringResource(R.string.channel_move_down),
+                    enabled = !isLast
+                )
             }
+
+            KeyDownButton(
+                onClick = {
+                    isMoveMode = false
+                    onDismiss()
+                },
+                icon = Icons.Default.Check,
+                text = stringResource(R.string.done)
+            )
         } else {
             // Normal mode UI
             // Enable/Disable button
-            Button(
+            KeyDownButton(
                 onClick = {
-                    if (clicksEnabled) {
-                        onToggleEnabled(!isEnabled)
-                        onDismiss()
-                    }
+                    onToggleEnabled(!isEnabled)
+                    onDismiss()
                 },
+                icon = if (isEnabled) Icons.Default.Delete else Icons.Default.Check,
+                text = if (isEnabled)
+                    stringResource(R.string.channel_disable)
+                else
+                    stringResource(R.string.channel_enable),
                 modifier = Modifier.focusRequester(focusRequester)
-            ) {
-                Icon(
-                    imageVector = if (isEnabled) Icons.Default.Delete else Icons.Default.Check,
-                    contentDescription = if (isEnabled)
-                        stringResource(R.string.channel_disable)
-                    else
-                        stringResource(R.string.channel_enable)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = if (isEnabled)
-                        stringResource(R.string.channel_disable)
-                    else
-                        stringResource(R.string.channel_enable)
-                )
-            }
+            )
 
             // Move button (only shown for enabled channels)
             if (isEnabled) {
-                Button(
-                    onClick = { if (clicksEnabled) isMoveMode = true }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(R.string.channel_move)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = stringResource(R.string.channel_move))
-                }
+                KeyDownButton(
+                    onClick = { isMoveMode = true },
+                    icon = Icons.Default.Menu,
+                    text = stringResource(R.string.channel_move)
+                )
             }
 
             // Close button
-            Button(
-                onClick = { if (clicksEnabled) onDismiss() }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = stringResource(R.string.close)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = stringResource(R.string.close))
-            }
+            KeyDownButton(
+                onClick = onDismiss,
+                icon = Icons.Default.Clear,
+                text = stringResource(R.string.close)
+            )
         }
+    }
+}
+
+/**
+ * A button that triggers onClick on key DOWN instead of key UP.
+ * This prevents accidental clicks when releasing a long press.
+ */
+@Composable
+private fun KeyDownButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    var hasTriggered by remember { mutableStateOf(false) }
+
+    Button(
+        onClick = { /* Disabled - we handle click on key down */ },
+        enabled = enabled,
+        modifier = modifier
+            .onKeyEvent { event ->
+                if (!enabled) return@onKeyEvent false
+
+                when {
+                    event.type == KeyEventType.KeyDown &&
+                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
+                        if (!hasTriggered) {
+                            hasTriggered = true
+                            onClick()
+                        }
+                        true
+                    }
+
+                    event.type == KeyEventType.KeyUp &&
+                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
+                        hasTriggered = false
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = text
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(text = text)
     }
 }

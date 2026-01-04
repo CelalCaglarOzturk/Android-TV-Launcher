@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
@@ -55,7 +55,6 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
-import kotlinx.coroutines.delay
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.createDrawable
@@ -236,13 +235,6 @@ private fun AppOptionsPopup(
     onToggleFavorite: () -> Unit,
     onInfo: () -> Unit,
 ) {
-    // Delay enabling clicks to prevent the key-up from long press from triggering a button
-    var clicksEnabled by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        delay(300) // Wait for key-up event to pass
-        clicksEnabled = true
-    }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -258,79 +250,86 @@ private fun AppOptionsPopup(
         )
 
         // Open
-        Button(
-            onClick = { if (clicksEnabled) onOpen() },
-            modifier = Modifier.width(200.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Open")
-            }
-        }
+        KeyDownButton(
+            onClick = onOpen,
+            icon = Icons.Default.PlayArrow,
+            text = "Open"
+        )
 
         // Move
-        Button(
-            onClick = { if (clicksEnabled) onMove() },
-            modifier = Modifier.width(200.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Move")
-            }
-        }
+        KeyDownButton(
+            onClick = onMove,
+            icon = Icons.Default.Menu,
+            text = "Move"
+        )
 
         // Add to Home / Remove from Home
-        Button(
-            onClick = { if (clicksEnabled) onToggleFavorite() },
-            modifier = Modifier.width(200.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = if (isFavorite) "Remove from Home" else "Add to Home")
-            }
-        }
+        KeyDownButton(
+            onClick = onToggleFavorite,
+            icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
+            text = if (isFavorite) "Remove from Home" else "Add to Home"
+        )
 
         // Info
-        Button(
-            onClick = { if (clicksEnabled) onInfo() },
-            modifier = Modifier.width(200.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(text = "Info")
+        KeyDownButton(
+            onClick = onInfo,
+            icon = Icons.Default.Settings,
+            text = "Info"
+        )
+    }
+}
+
+/**
+ * A button that triggers onClick on key DOWN instead of key UP.
+ * This prevents accidental clicks when releasing a long press.
+ */
+@Composable
+private fun KeyDownButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    var hasTriggered by remember { mutableStateOf(false) }
+
+    Button(
+        onClick = { /* Disabled - we handle click on key down */ },
+        modifier = modifier
+            .width(200.dp)
+            .onKeyEvent { event ->
+                when {
+                    event.type == KeyEventType.KeyDown &&
+                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
+                        if (!hasTriggered) {
+                            hasTriggered = true
+                            onClick()
+                        }
+                        true
+                    }
+
+                    event.type == KeyEventType.KeyUp &&
+                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
+                        hasTriggered = false
+                        true
+                    }
+
+                    else -> false
+                }
             }
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(text = text)
         }
     }
 }
