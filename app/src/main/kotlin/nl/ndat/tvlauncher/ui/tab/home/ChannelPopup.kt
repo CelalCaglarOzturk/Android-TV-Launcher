@@ -158,8 +158,10 @@ private fun KeyDownButton(
                             (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
                                     event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
                         if (!hasTriggered) {
-                            hasTriggered = true
-                            onClick()
+                            if (event.nativeKeyEvent.repeatCount == 0) {
+                                hasTriggered = true
+                                onClick()
+                            }
                         }
                         true
                     }
