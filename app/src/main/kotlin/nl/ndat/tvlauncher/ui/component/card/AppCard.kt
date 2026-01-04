@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,86 +39,92 @@ import nl.ndat.tvlauncher.util.modifier.ifElse
 
 @Composable
 fun AppCard(
-	app: App,
-	modifier: Modifier = Modifier,
-	baseHeight: Dp = 90.dp,
-	popupContent: (@Composable () -> Unit)? = null,
+    app: App,
+    modifier: Modifier = Modifier,
+    baseHeight: Dp = 90.dp,
+    popupContent: (@Composable () -> Unit)? = null,
+    onPopupVisibilityChanged: ((Boolean) -> Unit)? = null,
 ) {
-	val context = LocalContext.current
-	val image = remember(app.id) { app.createDrawable(context) }
-	var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
-	val interactionSource = remember { MutableInteractionSource() }
-	val focused by interactionSource.collectIsFocusedAsState()
+    val context = LocalContext.current
+    val image = remember(app.id) { app.createDrawable(context) }
+    var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val focused by interactionSource.collectIsFocusedAsState()
 
-	val launchIntentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    val launchIntentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
 
-	var menuVisible by remember { mutableStateOf(false) }
+    var menuVisible by remember { mutableStateOf(false) }
 
-	PopupContainer(
-		visible = menuVisible && popupContent != null,
-		onDismiss = { menuVisible = false },
-		content = {
-			StandardCardContainer(
-				modifier = modifier
-					.width(baseHeight * (16f / 9f)),
-				interactionSource = interactionSource,
-				title = {
-					Text(
-						text = app.displayName,
-						maxLines = 1,
-						overflow = TextOverflow.Clip,
-						softWrap = false,
-						style = MaterialTheme.typography.bodyMedium.copy(
-							fontWeight = FontWeight.SemiBold
-						),
-						modifier = Modifier
-							.ifElse(
-								focused,
-								Modifier.basicMarquee(
-									iterations = Int.MAX_VALUE,
-									initialDelayMillis = 0,
-								),
-							)
-							.padding(top = 6.dp),
-					)
-				},
-				imageCard = { _ ->
-					Card(
-						modifier = Modifier
-							.height(baseHeight)
-							.aspectRatio(16f / 9f),
-						interactionSource = interactionSource,
-						border = CardDefaults.border(
-							focusedBorder = Border(
-								border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
-							)
-						),
-						onClick = {
-							if (launchIntentUri != null) {
-								context.startActivity(Intent.parseUri(launchIntentUri, 0))
-							}
-						},
-						onLongClick = {
-							if (popupContent != null) {
-								menuVisible = true
-							}
-						}
-					) {
-						AsyncImage(
-							modifier = Modifier.fillMaxSize(),
-							model = image,
-							contentDescription = app.displayName,
-							onSuccess = {
-								val palette = Palette.from(it.result.drawable.toBitmap()).generate()
-								imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
-							}
-						)
-					}
-				}
-			)
-		},
-		popupContent = {
-			if (popupContent != null) popupContent()
-		}
-	)
+    // Notify parent of popup visibility changes
+    LaunchedEffect(menuVisible) {
+        onPopupVisibilityChanged?.invoke(menuVisible)
+    }
+
+    PopupContainer(
+        visible = menuVisible && popupContent != null,
+        onDismiss = { menuVisible = false },
+        content = {
+            StandardCardContainer(
+                modifier = modifier
+                    .width(baseHeight * (16f / 9f)),
+                interactionSource = interactionSource,
+                title = {
+                    Text(
+                        text = app.displayName,
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        softWrap = false,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier
+                            .ifElse(
+                                focused,
+                                Modifier.basicMarquee(
+                                    iterations = Int.MAX_VALUE,
+                                    initialDelayMillis = 0,
+                                ),
+                            )
+                            .padding(top = 6.dp),
+                    )
+                },
+                imageCard = { _ ->
+                    Card(
+                        modifier = Modifier
+                            .height(baseHeight)
+                            .aspectRatio(16f / 9f),
+                        interactionSource = interactionSource,
+                        border = CardDefaults.border(
+                            focusedBorder = Border(
+                                border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
+                            )
+                        ),
+                        onClick = {
+                            if (launchIntentUri != null) {
+                                context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                            }
+                        },
+                        onLongClick = {
+                            if (popupContent != null) {
+                                menuVisible = true
+                            }
+                        }
+                    ) {
+                        AsyncImage(
+                            modifier = Modifier.fillMaxSize(),
+                            model = image,
+                            contentDescription = app.displayName,
+                            onSuccess = {
+                                val palette = Palette.from(it.result.drawable.toBitmap()).generate()
+                                imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
+                            }
+                        )
+                    }
+                }
+            )
+        },
+        popupContent = {
+            if (popupContent != null) popupContent()
+        }
+    )
 }

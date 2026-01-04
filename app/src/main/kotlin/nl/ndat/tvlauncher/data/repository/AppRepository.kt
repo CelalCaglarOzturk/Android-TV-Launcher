@@ -18,8 +18,9 @@ class AppRepository(
         Timber.d("AppRepository: commitApps called with ${apps.size} apps")
 
         try {
-            // Remove apps found in database but not in committed list
-            val existingIds = database.apps.getAll().executeAsList().map { it.id }
+            // Get existing apps from database
+            val existingApps = database.apps.getAllIncludingHidden().executeAsList()
+            val existingIds = existingApps.map { it.id }.toSet()
             Timber.d("AppRepository: Existing IDs in DB: ${existingIds.size}")
 
             val newIds = apps.map { it.id }.toSet()
@@ -31,10 +32,11 @@ class AppRepository(
                 database.apps.removeById(id)
             }
 
-            // Upsert all found
+            // Upsert all found apps
             apps.forEach { app ->
-                Timber.d("AppRepository: Upserting app: ${app.displayName} (${app.id})")
-                commitApp(app)
+                val isNewApp = app.id !in existingIds
+                Timber.d("AppRepository: Upserting app: ${app.displayName} (${app.id}), isNew: $isNewApp")
+                commitApp(app, isNewApp)
             }
 
             Timber.d("AppRepository: commitApps completed")
@@ -44,7 +46,7 @@ class AppRepository(
         }
     }
 
-    private fun commitApp(app: App) {
+    private fun commitApp(app: App, addToFavorites: Boolean = false) {
         try {
             database.apps.upsert(
                 displayName = app.displayName,
@@ -53,6 +55,12 @@ class AppRepository(
                 launchIntentUriLeanback = app.launchIntentUriLeanback,
                 id = app.id
             )
+
+            // If this is a new app, automatically add it to favorites (Home)
+            if (addToFavorites) {
+                Timber.d("AppRepository: Auto-adding ${app.displayName} to favorites")
+                database.apps.updateFavoriteAdd(app.id)
+            }
         } catch (e: Exception) {
             Timber.e(e, "AppRepository: Error upserting app ${app.packageName}")
             throw e
@@ -90,13 +98,25 @@ class AppRepository(
         if (app == null) {
             database.apps.removeByPackageName(packageName)
         } else {
-            commitApp(app)
+            // Check if this is a new app
+            val existingApp = database.apps.getByPackageName(packageName).executeAsOneOrNull()
+            val isNewApp = existingApp == null
+
+            commitApp(app, addToFavorites = isNewApp)
         }
     }
 
+    // Get visible apps (not hidden)
     fun getApps() = database.apps.getAll().executeAsListFlow()
 
-    fun getFavoriteApps() = database.apps.getAllFavorites().executeAsListFlow()
+    // Get all apps including hidden
+    fun getAllAppsIncludingHidden() = database.apps.getAllIncludingHidden().executeAsListFlow()
+
+    // Get hidden apps only
+    fun getHiddenApps() = database.apps.getHidden().executeAsListFlow()
+
+    // Get favorite apps (not hidden)
+    fun getFavoriteApps() = database.apps.getAllFavorites(::App).executeAsListFlow()
 
     suspend fun getByPackageName(packageName: String) =
         withContext(Dispatchers.IO) { database.apps.getByPackageName(packageName).executeAsOneOrNull() }
@@ -111,4 +131,12 @@ class AppRepository(
 
     suspend fun updateFavoriteOrder(id: String, order: Int) =
         withContext(Dispatchers.IO) { database.apps.updateFavoriteOrder(id, order.toLong()) }
+
+    suspend fun hideApp(id: String) = withContext(Dispatchers.IO) {
+        database.apps.hideApp(id)
+    }
+
+    suspend fun unhideApp(id: String) = withContext(Dispatchers.IO) {
+        database.apps.unhideApp(id)
+    }
 }

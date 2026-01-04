@@ -18,34 +18,35 @@ import nl.ndat.tvlauncher.util.composition.LocalBackStack
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ToolbarTabs(
-	modifier: Modifier,
+    modifier: Modifier,
 ) {
-	val backStack = LocalBackStack.current
-	val currentDestination = backStack.lastOrNull()
-	val tabs = mapOf(
-		Destinations.Home to stringResource(R.string.tab_home),
-		Destinations.Apps to stringResource(R.string.tab_apps),
-	)
+    val backStack = LocalBackStack.current
+    val currentDestination = backStack.lastOrNull()
+    val tabs = mapOf(
+        Destinations.Home to stringResource(R.string.tab_home),
+        Destinations.Apps to stringResource(R.string.tab_apps),
+        Destinations.Inputs to stringResource(R.string.tab_inputs),
+    )
 
-	TabRow(
-		selectedTabIndex = tabs.keys.indexOfFirst { destination -> destination == currentDestination },
-		modifier = modifier.focusRestorer(),
-	) {
-		tabs.toList().forEachIndexed { index, (destination, name) ->
-			key(index) {
-				Tab(
-					selected = destination == currentDestination,
-					onFocus = {
-						if (destination == currentDestination) return@Tab
-						if (currentDestination != Destinations.Home) backStack.removeLastOrNull()
+    TabRow(
+        selectedTabIndex = tabs.keys.indexOfFirst { destination -> destination == currentDestination },
+        modifier = modifier.focusRestorer(),
+    ) {
+        tabs.toList().forEachIndexed { index, (destination, name) ->
+            key(index) {
+                Tab(
+                    selected = destination == currentDestination,
+                    onFocus = {
+                        if (destination == currentDestination) return@Tab
+                        if (currentDestination != Destinations.Home) backStack.removeLastOrNull()
 
-						backStack.add(destination)
-					},
-					modifier = Modifier.padding(16.dp, 8.dp)
-				) {
-					Text(name)
-				}
-			}
-		}
-	}
+                        backStack.add(destination)
+                    },
+                    modifier = Modifier.padding(16.dp, 8.dp)
+                ) {
+                    Text(name)
+                }
+            }
+        }
+    }
 }

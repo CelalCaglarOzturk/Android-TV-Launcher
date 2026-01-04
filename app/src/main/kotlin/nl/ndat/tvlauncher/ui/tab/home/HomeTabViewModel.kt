@@ -11,31 +11,35 @@ import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 
 class HomeTabViewModel(
-	private val appRepository: AppRepository,
-	private val channelRepository: ChannelRepository,
+    private val appRepository: AppRepository,
+    private val channelRepository: ChannelRepository,
 ) : ViewModel() {
-	val apps = appRepository.getFavoriteApps()
-		.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val apps = appRepository.getFavoriteApps()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-	val channels = channelRepository.getFavoriteAppChannels()
-		.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val channels = channelRepository.getFavoriteAppChannels()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-	val watchNextPrograms = channelRepository.getWatchNextPrograms()
-		.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val watchNextPrograms = channelRepository.getWatchNextPrograms()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-	fun channelPrograms(channel: Channel) = channelRepository.getProgramsByChannel(channel)
+    fun channelPrograms(channel: Channel) = channelRepository.getProgramsByChannel(channel)
 
-	fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
-		// Return is state is already satisfied
-		if ((app.favoriteOrder != null) == favorite) return@launch
+    fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
+        // Return if state is already satisfied
+        if ((app.favoriteOrder != null) == favorite) return@launch
 
-		if (favorite) appRepository.favorite(app.id)
-		else appRepository.unfavorite(app.id)
-	}
+        if (favorite) appRepository.favorite(app.id)
+        else appRepository.unfavorite(app.id)
+    }
 
-	fun setFavoriteOrder(app: App, order: Int) = viewModelScope.launch {
-		// Make sure app is favorite first
-		if (app.favoriteOrder == null) appRepository.favorite(app.id)
-		appRepository.updateFavoriteOrder(app.id, order)
-	}
+    fun setFavoriteOrder(app: App, order: Int) = viewModelScope.launch {
+        // Make sure app is favorite first
+        if (app.favoriteOrder == null) appRepository.favorite(app.id)
+        appRepository.updateFavoriteOrder(app.id, order)
+    }
+
+    fun hideApp(app: App) = viewModelScope.launch {
+        appRepository.hideApp(app.id)
+    }
 }

@@ -8,4 +8,5 @@
 	<string name="input_switch">Switch input</string>
 	<string name="tab_home">Home</string>
 	<string name="tab_apps">All apps</string>
+	<string name="tab_inputs">Inputs</string>
 </resources>

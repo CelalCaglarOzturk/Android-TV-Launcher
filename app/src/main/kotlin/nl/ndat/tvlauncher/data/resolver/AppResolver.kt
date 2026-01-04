@@ -208,6 +208,7 @@ class AppResolver {
             launchIntentUriDefault = launchIntent?.toUri(0),
             launchIntentUriLeanback = leanbackIntent?.toUri(0),
             favoriteOrder = null,
+            hidden = 0,
         )
     }
 
@@ -259,6 +260,7 @@ class AppResolver {
             launchIntentUriDefault = launchIntentDefault,
             launchIntentUriLeanback = launchIntentLeanback,
             favoriteOrder = null,
+            hidden = 0,
         )
     }
 }
