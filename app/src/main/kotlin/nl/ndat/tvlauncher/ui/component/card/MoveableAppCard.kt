@@ -95,39 +95,49 @@ fun MoveableAppCard(
             StandardCardContainer(
                 modifier = modifier
                     .width(baseHeight * (16f / 9f))
-                    .onKeyEvent { event ->
+                    .onPreviewKeyEvent { event ->
                         // Handle move mode key events
-                        if (isInMoveMode && event.type == KeyEventType.KeyDown) {
-                            when (event.key.nativeKeyCode) {
-                                KeyEvent.KEYCODE_DPAD_LEFT -> {
-                                    onMove?.invoke(MoveDirection.LEFT)
-                                    return@onKeyEvent true
-                                }
+                        if (isInMoveMode) {
+                            if (event.type == KeyEventType.KeyDown) {
+                                when (event.key.nativeKeyCode) {
+                                    KeyEvent.KEYCODE_DPAD_LEFT -> {
+                                        onMove?.invoke(MoveDirection.LEFT)
+                                        return@onPreviewKeyEvent true
+                                    }
 
-                                KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                                    onMove?.invoke(MoveDirection.RIGHT)
-                                    return@onKeyEvent true
-                                }
+                                    KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                                        onMove?.invoke(MoveDirection.RIGHT)
+                                        return@onPreviewKeyEvent true
+                                    }
 
-                                KeyEvent.KEYCODE_DPAD_UP -> {
-                                    onMove?.invoke(MoveDirection.UP)
-                                    return@onKeyEvent true
-                                }
+                                    KeyEvent.KEYCODE_DPAD_UP -> {
+                                        onMove?.invoke(MoveDirection.UP)
+                                        return@onPreviewKeyEvent true
+                                    }
 
-                                KeyEvent.KEYCODE_DPAD_DOWN -> {
-                                    onMove?.invoke(MoveDirection.DOWN)
-                                    return@onKeyEvent true
-                                }
+                                    KeyEvent.KEYCODE_DPAD_DOWN -> {
+                                        onMove?.invoke(MoveDirection.DOWN)
+                                        return@onPreviewKeyEvent true
+                                    }
 
-                                KeyEvent.KEYCODE_DPAD_CENTER,
-                                KeyEvent.KEYCODE_ENTER -> {
-                                    onMoveModeChanged?.invoke(false)
-                                    return@onKeyEvent true
-                                }
+                                    KeyEvent.KEYCODE_DPAD_CENTER,
+                                    KeyEvent.KEYCODE_ENTER -> {
+                                        onMoveModeChanged?.invoke(false)
+                                        return@onPreviewKeyEvent true
+                                    }
 
-                                KeyEvent.KEYCODE_BACK -> {
-                                    onMoveModeChanged?.invoke(false)
-                                    return@onKeyEvent true
+                                    KeyEvent.KEYCODE_BACK -> {
+                                        onMoveModeChanged?.invoke(false)
+                                        return@onPreviewKeyEvent true
+                                    }
+                                }
+                            } else if (event.type == KeyEventType.KeyUp) {
+                                // Consume KeyUp for Center/Enter to prevent click action
+                                when (event.key.nativeKeyCode) {
+                                    KeyEvent.KEYCODE_DPAD_CENTER,
+                                    KeyEvent.KEYCODE_ENTER -> {
+                                        return@onPreviewKeyEvent true
+                                    }
                                 }
                             }
                         }
