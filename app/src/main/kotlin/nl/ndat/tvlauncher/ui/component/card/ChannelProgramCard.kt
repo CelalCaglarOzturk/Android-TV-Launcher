@@ -28,40 +28,40 @@ import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 
 @Composable
 fun ChannelProgramCard(
-	program: ChannelProgram,
-	modifier: Modifier = Modifier,
-	baseHeight: Dp = 100.dp,
+    program: ChannelProgram,
+    modifier: Modifier = Modifier,
+    baseHeight: Dp = 100.dp,
 ) {
-	val context = LocalContext.current
-	var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
+    val context = LocalContext.current
+    var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
 
-	Card(
-		modifier = modifier
-			.height(baseHeight)
-			.aspectRatio(program.posterArtAspectRatio?.floatValue ?: 1f),
-		border = CardDefaults.border(
-			focusedBorder = Border(
-				border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
-			)
-		),
-		onClick = {
-			if (program.intentUri != null) {
-				context.startActivity(Intent.parseUri(program.intentUri, 0))
-			}
-		},
-	) {
-		AsyncImage(
-			modifier = Modifier.fillMaxSize(),
-			model = ImageRequest.Builder(LocalContext.current)
-				.data(program.posterArtUri)
-				.allowHardware(false)
-				.build(),
-			contentDescription = null,
-			contentScale = ContentScale.Crop,
-			onSuccess = {
-				val palette = Palette.from(it.result.drawable.toBitmap()).generate()
-				imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
-			}
-		)
-	}
+    Card(
+        modifier = modifier
+            .height(baseHeight)
+            .aspectRatio(program.posterArtAspectRatio?.floatValue ?: (16f / 9f)),
+        border = CardDefaults.border(
+            focusedBorder = Border(
+                border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
+            )
+        ),
+        onClick = {
+            if (program.intentUri != null) {
+                context.startActivity(Intent.parseUri(program.intentUri, 0))
+            }
+        },
+    ) {
+        AsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(program.posterArtUri)
+                .allowHardware(false)
+                .build(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            onSuccess = {
+                val palette = Palette.from(it.result.drawable.toBitmap()).generate()
+                imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
+            }
+        )
+    }
 }

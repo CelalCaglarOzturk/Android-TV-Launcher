@@ -1,0 +1,24 @@
+<resources>
+	<string name="app_name">TV Launcher</string>
+	<string name="settings">Ayarlar</string>
+    <string name="channel_watch_next">Sıradaki</string>
+	<string name="channel_preview">%1$s: %2$s</string>
+    <string name="settings_system">Sistem ayarları</string>
+	<string name="settings_launcher">Başlatıcı ayarları</string>
+	<string name="input_switch">Girişi değiştir</string>
+	<string name="tab_home">Ana Sayfa</string>
+	<string name="tab_apps">Tüm uygulamalar</string>
+	<string name="tab_inputs">Girişler</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">Kanalı Etkinleştir</string>
+	<string name="channel_disable">Kanalı Devre Dışı Bırak</string>
+	<string name="channel_move">Kanalı Taşı</string>
+	<string name="channel_move_up">Yukarı</string>
+	<string name="channel_move_down">Aşağı</string>
+	<string name="channel_move_mode">Kanalı yeniden sıralamak için Yukarı/Aşağı kullanın</string>
+	<string name="done">Tamam</string>
+	<string name="close">Kapat</string>
+	<string name="channels_settings">Kanallar</string>
+	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
+</resources>
