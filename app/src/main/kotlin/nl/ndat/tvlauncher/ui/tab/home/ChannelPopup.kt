@@ -7,13 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.SwapVert
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -75,7 +74,7 @@ fun ChannelPopup(
                     modifier = Modifier.focusRequester(focusRequester)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowUpward,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(R.string.channel_move_up)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -89,7 +88,7 @@ fun ChannelPopup(
                     enabled = !isLast
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowDownward,
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(R.string.channel_move_down)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -121,7 +120,7 @@ fun ChannelPopup(
                 modifier = Modifier.focusRequester(focusRequester)
             ) {
                 Icon(
-                    imageVector = if (isEnabled) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    imageVector = if (isEnabled) Icons.Default.Delete else Icons.Default.Check,
                     contentDescription = if (isEnabled)
                         stringResource(R.string.channel_disable)
                     else
@@ -142,7 +141,7 @@ fun ChannelPopup(
                     onClick = { isMoveMode = true }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.SwapVert,
+                        imageVector = Icons.Default.Menu,
                         contentDescription = stringResource(R.string.channel_move)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -155,7 +154,7 @@ fun ChannelPopup(
                 onClick = onDismiss
             ) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    imageVector = Icons.Default.Clear,
                     contentDescription = stringResource(R.string.close)
                 )
                 Spacer(modifier = Modifier.width(4.dp))

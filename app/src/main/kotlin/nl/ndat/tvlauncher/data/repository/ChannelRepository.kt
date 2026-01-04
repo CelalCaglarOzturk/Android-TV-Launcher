@@ -150,24 +150,24 @@ class ChannelRepository(
     }
 
     // Channel reordering
-    suspend fun updateChannelOrder(channelId: String, newOrder: Int) = withContext(Dispatchers.IO) {
+    suspend fun updateChannelOrder(channelId: String, newOrder: Long) = withContext(Dispatchers.IO) {
         database.channels.updateDisplayOrderShift(order = newOrder, id = channelId)
     }
 
     suspend fun moveChannelUp(channelId: String) = withContext(Dispatchers.IO) {
         val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
         val currentOrder = channel.displayOrder ?: return@withContext
-        if (currentOrder > 0) {
-            database.channels.updateDisplayOrderShift(order = currentOrder - 1, id = channelId)
+        if (currentOrder > 0L) {
+            database.channels.updateDisplayOrderShift(order = currentOrder - 1L, id = channelId)
         }
     }
 
     suspend fun moveChannelDown(channelId: String) = withContext(Dispatchers.IO) {
         val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
         val currentOrder = channel.displayOrder ?: return@withContext
-        val maxOrder = database.channels.getAllEnabled().executeAsList().maxOfOrNull { it.displayOrder ?: 0 } ?: 0
+        val maxOrder = database.channels.getAllEnabled().executeAsList().maxOfOrNull { it.displayOrder ?: 0L } ?: 0L
         if (currentOrder < maxOrder) {
-            database.channels.updateDisplayOrderShift(order = currentOrder + 1, id = channelId)
+            database.channels.updateDisplayOrderShift(order = currentOrder + 1L, id = channelId)
         }
     }
 
