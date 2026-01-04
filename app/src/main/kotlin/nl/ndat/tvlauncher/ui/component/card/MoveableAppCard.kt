@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +55,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import kotlinx.coroutines.delay
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.createDrawable
@@ -234,6 +236,13 @@ private fun AppOptionsPopup(
     onToggleFavorite: () -> Unit,
     onInfo: () -> Unit,
 ) {
+    // Delay enabling clicks to prevent the key-up from long press from triggering a button
+    var clicksEnabled by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(300) // Wait for key-up event to pass
+        clicksEnabled = true
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -250,13 +259,12 @@ private fun AppOptionsPopup(
 
         // Open
         Button(
-            onClick = onOpen,
+            onClick = { if (clicksEnabled) onOpen() },
             modifier = Modifier.width(200.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxSize()
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
@@ -270,13 +278,12 @@ private fun AppOptionsPopup(
 
         // Move
         Button(
-            onClick = onMove,
+            onClick = { if (clicksEnabled) onMove() },
             modifier = Modifier.width(200.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxSize()
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Default.Menu,
@@ -290,13 +297,12 @@ private fun AppOptionsPopup(
 
         // Add to Home / Remove from Home
         Button(
-            onClick = onToggleFavorite,
+            onClick = { if (clicksEnabled) onToggleFavorite() },
             modifier = Modifier.width(200.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxSize()
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
@@ -310,13 +316,12 @@ private fun AppOptionsPopup(
 
         // Info
         Button(
-            onClick = onInfo,
+            onClick = { if (clicksEnabled) onInfo() },
             modifier = Modifier.width(200.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.fillMaxSize()
+                horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     imageVector = Icons.Default.Settings,

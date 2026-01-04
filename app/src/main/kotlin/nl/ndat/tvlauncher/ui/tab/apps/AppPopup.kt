@@ -13,6 +13,11 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,6 +26,7 @@ import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppPopup(
@@ -29,6 +35,13 @@ fun AppPopup(
     onToggleFavorite: (favorite: Boolean) -> Unit,
     onToggleHidden: ((hidden: Boolean) -> Unit)? = null,
 ) {
+    // Delay enabling clicks to prevent the key-up from long press from triggering a button
+    var clicksEnabled by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        delay(300) // Wait for key-up event to pass
+        clicksEnabled = true
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -42,7 +55,7 @@ fun AppPopup(
 
         // Add to Home / Remove from Home
         Button(
-            onClick = { onToggleFavorite(!isFavorite) },
+            onClick = { if (clicksEnabled) onToggleFavorite(!isFavorite) },
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             Row(
@@ -64,7 +77,7 @@ fun AppPopup(
         // Hide / Unhide
         if (onToggleHidden != null) {
             Button(
-                onClick = { onToggleHidden(!isHidden) },
+                onClick = { if (clicksEnabled) onToggleHidden(!isHidden) },
                 modifier = Modifier.padding(vertical = 4.dp)
             ) {
                 Row(

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,8 +39,10 @@ fun LauncherScreen() {
                     .fillMaxSize()
             ) {
                 val backStack = LocalBackStack.current
-                val currentDestination = remember(backStack.size) {
-                    backStack.lastOrNull() ?: Destinations.Home
+                val currentDestination by remember {
+                    derivedStateOf {
+                        backStack.lastOrNull() ?: Destinations.Home
+                    }
                 }
 
                 // Direct content rendering without animation

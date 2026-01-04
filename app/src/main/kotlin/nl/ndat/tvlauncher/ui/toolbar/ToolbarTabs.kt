@@ -37,8 +37,10 @@ fun ToolbarTabs(
                     selected = destination == currentDestination,
                     onFocus = {
                         if (destination == currentDestination) return@Tab
-                        if (currentDestination != Destinations.Home) backStack.removeLastOrNull()
 
+                        // Clear the backstack and set only the new destination
+                        // This avoids duplicate entries and ensures clean state
+                        backStack.clear()
                         backStack.add(destination)
                     },
                     modifier = Modifier.padding(16.dp, 8.dp)

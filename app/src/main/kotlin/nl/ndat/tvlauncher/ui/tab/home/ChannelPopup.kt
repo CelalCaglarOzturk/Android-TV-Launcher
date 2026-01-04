@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
+import kotlinx.coroutines.delay
 import nl.ndat.tvlauncher.R
 
 @Composable
@@ -44,7 +45,11 @@ fun ChannelPopup(
     var isMoveMode by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
+    // Delay enabling clicks to prevent the key-up from long press from triggering a button
+    var clicksEnabled by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
+        delay(300) // Wait for key-up event to pass
+        clicksEnabled = true
         focusRequester.requestFocus()
     }
 
@@ -68,7 +73,7 @@ fun ChannelPopup(
             ) {
                 Button(
                     onClick = {
-                        if (!isFirst) onMoveUp()
+                        if (clicksEnabled && !isFirst) onMoveUp()
                     },
                     enabled = !isFirst,
                     modifier = Modifier.focusRequester(focusRequester)
@@ -83,7 +88,7 @@ fun ChannelPopup(
 
                 Button(
                     onClick = {
-                        if (!isLast) onMoveDown()
+                        if (clicksEnabled && !isLast) onMoveDown()
                     },
                     enabled = !isLast
                 ) {
@@ -98,8 +103,10 @@ fun ChannelPopup(
 
             Button(
                 onClick = {
-                    isMoveMode = false
-                    onDismiss()
+                    if (clicksEnabled) {
+                        isMoveMode = false
+                        onDismiss()
+                    }
                 }
             ) {
                 Icon(
@@ -114,8 +121,10 @@ fun ChannelPopup(
             // Enable/Disable button
             Button(
                 onClick = {
-                    onToggleEnabled(!isEnabled)
-                    onDismiss()
+                    if (clicksEnabled) {
+                        onToggleEnabled(!isEnabled)
+                        onDismiss()
+                    }
                 },
                 modifier = Modifier.focusRequester(focusRequester)
             ) {
@@ -138,7 +147,7 @@ fun ChannelPopup(
             // Move button (only shown for enabled channels)
             if (isEnabled) {
                 Button(
-                    onClick = { isMoveMode = true }
+                    onClick = { if (clicksEnabled) isMoveMode = true }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
@@ -151,7 +160,7 @@ fun ChannelPopup(
 
             // Close button
             Button(
-                onClick = onDismiss
+                onClick = { if (clicksEnabled) onDismiss() }
             ) {
                 Icon(
                     imageVector = Icons.Default.Clear,
