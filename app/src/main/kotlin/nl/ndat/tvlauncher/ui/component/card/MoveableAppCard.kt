@@ -37,6 +37,7 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -296,7 +297,7 @@ private fun KeyDownButton(
         onClick = { /* Disabled - we handle click on key down */ },
         modifier = modifier
             .width(200.dp)
-            .onKeyEvent { event ->
+            .onPreviewKeyEvent { event ->
                 when {
                     event.type == KeyEventType.KeyDown &&
                             (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||

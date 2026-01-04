@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -150,8 +150,8 @@ private fun KeyDownButton(
         onClick = { /* Disabled - we handle click on key down */ },
         enabled = enabled,
         modifier = modifier
-            .onKeyEvent { event ->
-                if (!enabled) return@onKeyEvent false
+            .onPreviewKeyEvent { event ->
+                if (!enabled) return@onPreviewKeyEvent false
 
                 when {
                     event.type == KeyEventType.KeyDown &&
