@@ -1,35 +1,18 @@
-# TV Launcher
+# Android TV Launcher
 
-TV Launcher (name to be determined) is an Android launcher meant for big screens like televisions. It can be used as a
-replacement for the default Leanback or Google TV launcher on various Android TV devices like the Nvidia Shield or
+Android TV Launcher can be used as a replacement for the default Leanback or Google TV launcher on various Android TV devices like the Nvidia Shield or
 Chromecast with Google TV.
 
 The app is currently in an early development stage.
 
 <img src="https://user-images.githubusercontent.com/2305178/186512479-e94bf85d-ac09-4f9d-b54e-24bcf43c82da.png" height="400" />
 
-## Planned features
+## Features
 
-- Configurable toolbar
+- App  has all of the features of Android Home
+- No animations
+- High performance
 
-  The toolbar is shown on the top of the screen and contains various items that can be hidden and reordered by the user.
-  The planned components that can be used are:
-
-    - Clock
-    - Settings button
-    - Tv input sources switcher
-
-- Favorite app list
-
-  A list of bookmarked apps by the user. They can be shown or hidden from the main screen and reordered.
-
-- Channels
-
-  App provided channels and watch next information.
-
-- All apps
-
-  A grid with all installed apps. Ability to also show mobile app entries.
 
 ### Unplanned features
 
