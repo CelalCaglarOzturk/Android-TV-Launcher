@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
@@ -41,14 +39,10 @@ import nl.ndat.tvlauncher.R
 fun ChannelPopup(
     channelName: String,
     isEnabled: Boolean,
-    isFirst: Boolean,
-    isLast: Boolean,
     onToggleEnabled: (enabled: Boolean) -> Unit,
-    onMoveUp: () -> Unit,
-    onMoveDown: () -> Unit,
+    onEnterMoveMode: () -> Unit,
     onDismiss: () -> Unit = {},
 ) {
-    var isMoveMode by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -65,70 +59,38 @@ fun ChannelPopup(
             modifier = Modifier.padding(bottom = 4.dp)
         )
 
-        if (isMoveMode) {
-            // Move mode UI
-            Text(text = stringResource(R.string.channel_move_mode))
+        // Enable/Disable button
+        KeyDownButton(
+            onClick = {
+                onToggleEnabled(!isEnabled)
+                onDismiss()
+            },
+            icon = if (isEnabled) Icons.Default.Delete else Icons.Default.Check,
+            text = if (isEnabled)
+                stringResource(R.string.channel_disable)
+            else
+                stringResource(R.string.channel_enable),
+            modifier = Modifier.focusRequester(focusRequester)
+        )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                KeyDownButton(
-                    onClick = { if (!isFirst) onMoveUp() },
-                    icon = Icons.Default.KeyboardArrowUp,
-                    text = stringResource(R.string.channel_move_up),
-                    enabled = !isFirst,
-                    modifier = Modifier.focusRequester(focusRequester)
-                )
-
-                KeyDownButton(
-                    onClick = { if (!isLast) onMoveDown() },
-                    icon = Icons.Default.KeyboardArrowDown,
-                    text = stringResource(R.string.channel_move_down),
-                    enabled = !isLast
-                )
-            }
-
+        // Move button (only shown for enabled channels)
+        if (isEnabled) {
             KeyDownButton(
                 onClick = {
-                    isMoveMode = false
+                    onEnterMoveMode()
                     onDismiss()
                 },
-                icon = Icons.Default.Check,
-                text = stringResource(R.string.done)
-            )
-        } else {
-            // Normal mode UI
-            // Enable/Disable button
-            KeyDownButton(
-                onClick = {
-                    onToggleEnabled(!isEnabled)
-                    onDismiss()
-                },
-                icon = if (isEnabled) Icons.Default.Delete else Icons.Default.Check,
-                text = if (isEnabled)
-                    stringResource(R.string.channel_disable)
-                else
-                    stringResource(R.string.channel_enable),
-                modifier = Modifier.focusRequester(focusRequester)
-            )
-
-            // Move button (only shown for enabled channels)
-            if (isEnabled) {
-                KeyDownButton(
-                    onClick = { isMoveMode = true },
-                    icon = Icons.Default.Menu,
-                    text = stringResource(R.string.channel_move)
-                )
-            }
-
-            // Close button
-            KeyDownButton(
-                onClick = onDismiss,
-                icon = Icons.Default.Clear,
-                text = stringResource(R.string.close)
+                icon = Icons.Default.Menu,
+                text = stringResource(R.string.channel_move)
             )
         }
+
+        // Close button
+        KeyDownButton(
+            onClick = onDismiss,
+            icon = Icons.Default.Clear,
+            text = stringResource(R.string.close)
+        )
     }
 }
 

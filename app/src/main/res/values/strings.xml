@@ -35,4 +35,5 @@
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Show mobile apps</string>
 	<string name="apps_hidden_title">Hidden Apps</string>
+	<string name="apps_mobile_available">%1$d mobile apps available</string>
 </resources>

@@ -1,6 +1,9 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
+import android.view.KeyEvent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,6 +25,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.nativeKeyCode
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
@@ -54,6 +63,9 @@ fun ChannelProgramCardRow(
 ) {
     var focusedProgram by remember { mutableStateOf<ChannelProgram?>(null) }
     var popupVisible by remember { mutableStateOf(false) }
+    var isInMoveMode by remember { mutableStateOf(false) }
+    var ignoreNextKeyUp by remember { mutableStateOf(false) }
+
     val titleInteractionSource = remember { MutableInteractionSource() }
     val titleFocused by titleInteractionSource.collectIsFocusedAsState()
 
@@ -82,12 +94,61 @@ fun ChannelProgramCardRow(
                                 .then(
                                     if (channel != null && onToggleEnabled != null) {
                                         Modifier
+                                            .onPreviewKeyEvent { event ->
+                                                if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
+                                                    ignoreNextKeyUp = false
+                                                    return@onPreviewKeyEvent true
+                                                }
+
+                                                if (isInMoveMode) {
+                                                    if (event.type == KeyEventType.KeyDown) {
+                                                        when (event.key.nativeKeyCode) {
+                                                            KeyEvent.KEYCODE_DPAD_UP -> {
+                                                                onMoveUp?.invoke()
+                                                                return@onPreviewKeyEvent true
+                                                            }
+
+                                                            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                                                                onMoveDown?.invoke()
+                                                                return@onPreviewKeyEvent true
+                                                            }
+
+                                                            KeyEvent.KEYCODE_DPAD_CENTER,
+                                                            KeyEvent.KEYCODE_ENTER,
+                                                            KeyEvent.KEYCODE_BACK -> {
+                                                                isInMoveMode = false
+                                                                ignoreNextKeyUp = true
+                                                                return@onPreviewKeyEvent true
+                                                            }
+                                                        }
+                                                    } else if (event.type == KeyEventType.KeyUp) {
+                                                        when (event.key.nativeKeyCode) {
+                                                            KeyEvent.KEYCODE_DPAD_CENTER,
+                                                            KeyEvent.KEYCODE_ENTER -> {
+                                                                return@onPreviewKeyEvent true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                false
+                                            }
                                             .focusable(interactionSource = titleInteractionSource)
                                             .combinedClickable(
                                                 interactionSource = titleInteractionSource,
                                                 indication = null,
                                                 onClick = { },
-                                                onLongClick = { popupVisible = true }
+                                                onLongClick = {
+                                                    if (!isInMoveMode) popupVisible = true
+                                                }
+                                            )
+                                            .ifElse(
+                                                isInMoveMode,
+                                                Modifier
+                                                    .border(
+                                                        BorderStroke(2.dp, Color.White),
+                                                        shape = MaterialTheme.shapes.small
+                                                    )
+                                                    .padding(4.dp)
                                             )
                                     } else {
                                         Modifier
@@ -135,11 +196,8 @@ fun ChannelProgramCardRow(
                     ChannelPopup(
                         channelName = channel.displayName,
                         isEnabled = channel.enabled,
-                        isFirst = isFirst,
-                        isLast = isLast,
                         onToggleEnabled = onToggleEnabled,
-                        onMoveUp = onMoveUp ?: { },
-                        onMoveDown = onMoveDown ?: { },
+                        onEnterMoveMode = { isInMoveMode = true },
                         onDismiss = { popupVisible = false }
                     )
                 }

@@ -71,7 +71,7 @@ fun AppsTab(
                     },
                     supportingContent = {
                         Text(
-                            text = "$mobileOnlyAppsCount mobile apps available",
+                            text = stringResource(R.string.apps_mobile_available, mobileOnlyAppsCount),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )

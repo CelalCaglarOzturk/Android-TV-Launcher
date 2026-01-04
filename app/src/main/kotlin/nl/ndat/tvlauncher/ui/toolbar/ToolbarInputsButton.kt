@@ -15,6 +15,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.ListItem
+import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.InputRepository
@@ -22,43 +24,45 @@ import org.koin.compose.koinInject
 
 @Composable
 fun ToolbarInputsButton() {
-	val inputRepository = koinInject<InputRepository>()
-	val inputs by inputRepository.getInputs().collectAsState(initial = emptyList())
-	val context = LocalContext.current
+    val inputRepository = koinInject<InputRepository>()
+    val inputs by inputRepository.getInputs().collectAsState(initial = emptyList())
+    val context = LocalContext.current
 
-	// TODO: When toolbar is configurable this should be removed
-	if (inputs.isEmpty()) return
+    // TODO: When toolbar is configurable this should be removed
+    if (inputs.isEmpty()) return
 
-	var expand by remember { mutableStateOf(false) }
+    var expand by remember { mutableStateOf(false) }
 
-	IconButton(
-		onClick = { expand = true },
-		enabled = inputs.isNotEmpty()
-	) {
-		Icon(
-			painter = painterResource(id = R.drawable.ic_input),
-			contentDescription = stringResource(id = R.string.input_switch),
-		)
-	}
+    IconButton(
+        onClick = { expand = true },
+        enabled = inputs.isNotEmpty()
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_input),
+            contentDescription = stringResource(id = R.string.input_switch),
+        )
+    }
 
-	if (expand) {
-		// TODO Use a dropdown
-		Dialog(onDismissRequest = { expand = false }) {
-			Column {
-				for (input in inputs) {
-					ListItem(
-						selected = false,
-						headlineContent = { Text(input.displayName) },
-						onClick = {
-							if (input.switchIntentUri != null) {
-								context.startActivity(Intent.parseUri(input.switchIntentUri, 0))
-							}
+    if (expand) {
+        // TODO Use a dropdown
+        Dialog(onDismissRequest = { expand = false }) {
+            Surface(shape = MaterialTheme.shapes.medium) {
+                Column {
+                    for (input in inputs) {
+                        ListItem(
+                            selected = false,
+                            headlineContent = { Text(input.displayName) },
+                            onClick = {
+                                if (input.switchIntentUri != null) {
+                                    context.startActivity(Intent.parseUri(input.switchIntentUri, 0))
+                                }
 
-							expand = false
-						},
-					)
-				}
-			}
-		}
-	}
+                                expand = false
+                            },
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
