@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
@@ -68,9 +70,11 @@ fun MoveableAppCard(
     baseHeight: Dp = 90.dp,
     isInMoveMode: Boolean = false,
     isFavorite: Boolean = false,
+    isWatchNextBlacklisted: Boolean = false,
     onMoveModeChanged: ((Boolean) -> Unit)? = null,
     onMove: ((direction: MoveDirection) -> Unit)? = null,
     onToggleFavorite: ((Boolean) -> Unit)? = null,
+    onToggleWatchNextBlacklist: ((Boolean) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val image = remember(app.id) { app.createDrawable(context) }
@@ -206,6 +210,7 @@ fun MoveableAppCard(
             AppOptionsPopup(
                 app = app,
                 isFavorite = isFavorite,
+                isWatchNextBlacklisted = isWatchNextBlacklisted,
                 onOpen = {
                     menuVisible = false
                     if (launchIntentUri != null) {
@@ -219,6 +224,10 @@ fun MoveableAppCard(
                 onToggleFavorite = {
                     menuVisible = false
                     onToggleFavorite?.invoke(!isFavorite)
+                },
+                onToggleWatchNextBlacklist = {
+                    menuVisible = false
+                    onToggleWatchNextBlacklist?.invoke(!isWatchNextBlacklisted)
                 },
                 onInfo = {
                     menuVisible = false
@@ -237,9 +246,11 @@ fun MoveableAppCard(
 private fun AppOptionsPopup(
     app: App,
     isFavorite: Boolean,
+    isWatchNextBlacklisted: Boolean,
     onOpen: () -> Unit,
     onMove: () -> Unit,
     onToggleFavorite: () -> Unit,
+    onToggleWatchNextBlacklist: () -> Unit,
     onInfo: () -> Unit,
 ) {
     Column(
@@ -275,6 +286,13 @@ private fun AppOptionsPopup(
             onClick = onToggleFavorite,
             icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
             text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
+        )
+
+        // Watch Next Blacklist
+        KeyDownButton(
+            onClick = onToggleWatchNextBlacklist,
+            icon = if (isWatchNextBlacklisted) Icons.Default.Add else Icons.Default.Delete,
+            text = if (isWatchNextBlacklisted) stringResource(R.string.app_add_to_watch_next) else stringResource(R.string.app_remove_from_watch_next)
         )
 
         // Info

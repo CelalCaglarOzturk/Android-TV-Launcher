@@ -31,6 +31,8 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
+	<string name="app_add_to_watch_next">Include in Watch Next</string>
+	<string name="app_remove_from_watch_next">Exclude from Watch Next</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Show mobile apps</string>

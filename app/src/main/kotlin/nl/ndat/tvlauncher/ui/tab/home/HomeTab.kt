@@ -4,14 +4,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
@@ -30,6 +33,7 @@ fun HomeTab(
     val channels by viewModel.channels.collectAsStateWithLifecycle()
     val allAppChannels by viewModel.allAppChannels.collectAsStateWithLifecycle()
     val watchNextPrograms by viewModel.watchNextPrograms.collectAsStateWithLifecycle()
+    val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf for filtered lists to avoid unnecessary recompositions
     val enabledChannels by remember(channels) {
@@ -52,12 +56,19 @@ fun HomeTab(
         derivedStateOf { disabledChannels.isNotEmpty() }
     }
 
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(
+        state = listState,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxSize()
     ) {
         item(key = "apps") {
-            AppCardRow(apps = apps)
+            AppCardRow(
+                apps = apps,
+                baseHeight = appCardSize.dp
+            )
         }
 
         if (hasWatchNext) {
@@ -94,9 +105,23 @@ fun HomeTab(
                     },
                     onMoveUp = {
                         viewModel.moveChannelUp(channel)
+                        // Calculate index in LazyColumn: Apps (1) + WatchNext (0 or 1) + index
+                        val baseIndex = 1 + (if (hasWatchNext) 1 else 0)
+                        if (index > 0) {
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(baseIndex + index - 1)
+                            }
+                        }
                     },
                     onMoveDown = {
                         viewModel.moveChannelDown(channel)
+                        // Calculate index in LazyColumn: Apps (1) + WatchNext (0 or 1) + index
+                        val baseIndex = 1 + (if (hasWatchNext) 1 else 0)
+                        if (index < enabledChannels.size - 1) {
+                            coroutineScope.launch {
+                                listState.animateScrollToItem(baseIndex + index + 1)
+                            }
+                        }
                     }
                 )
             }

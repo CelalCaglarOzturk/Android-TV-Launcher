@@ -1,0 +1,18 @@
+CREATE TABLE WatchNextBlacklist (
+    packageName TEXT NOT NULL PRIMARY KEY
+);
+
+getAll:
+SELECT * FROM WatchNextBlacklist;
+
+insert:
+INSERT OR IGNORE INTO WatchNextBlacklist(packageName)
+VALUES (?);
+
+delete:
+DELETE FROM WatchNextBlacklist
+WHERE packageName = ?;
+
+isBlacklisted:
+SELECT count(*) > 0 FROM WatchNextBlacklist
+WHERE packageName = ?;

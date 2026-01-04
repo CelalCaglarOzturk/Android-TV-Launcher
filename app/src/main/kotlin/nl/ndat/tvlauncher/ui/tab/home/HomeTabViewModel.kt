@@ -7,12 +7,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 
 class HomeTabViewModel(
     private val appRepository: AppRepository,
     private val channelRepository: ChannelRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     companion object {
@@ -33,6 +35,12 @@ class HomeTabViewModel(
     val watchNextPrograms = channelRepository.getWatchNextPrograms()
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
+    val watchNextBlacklist = channelRepository.getWatchNextBlacklist()
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
+
+    val appCardSize = settingsRepository.appCardSize
+        .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_APP_CARD_SIZE)
+
     fun channelPrograms(channel: Channel) = channelRepository.getProgramsByChannel(channel)
 
     fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
@@ -51,6 +59,14 @@ class HomeTabViewModel(
 
     fun hideApp(app: App) = viewModelScope.launch {
         appRepository.hideApp(app.id)
+    }
+
+    fun toggleWatchNextBlacklist(packageName: String, blacklisted: Boolean) = viewModelScope.launch {
+        if (blacklisted) {
+            channelRepository.addToWatchNextBlacklist(packageName)
+        } else {
+            channelRepository.removeFromWatchNextBlacklist(packageName)
+        }
     }
 
     // Channel management functions

@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.BuildConfig
 import nl.ndat.tvlauncher.data.repository.AppRepository
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 
 class AppsTabViewModel(
     private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     companion object {
@@ -26,6 +28,9 @@ class AppsTabViewModel(
     // Toggle for showing mobile apps (apps without leanback intent)
     private val _showMobileApps = MutableStateFlow(false)
     val showMobileApps: StateFlow<Boolean> = _showMobileApps
+
+    val appCardSize = settingsRepository.appCardSize
+        .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_APP_CARD_SIZE)
 
     val apps = combine(
         appRepository.getApps(),

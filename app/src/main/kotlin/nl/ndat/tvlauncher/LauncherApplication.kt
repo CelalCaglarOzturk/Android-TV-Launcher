@@ -8,6 +8,7 @@ import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.resolver.AppResolver
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
 import nl.ndat.tvlauncher.data.resolver.InputResolver
@@ -23,41 +24,43 @@ import org.koin.dsl.module
 import timber.log.Timber
 
 private val launcherModule = module {
-	single { DefaultLauncherHelper(get()) }
+    single { DefaultLauncherHelper(get()) }
 
-	single { AppRepository(get(), get(), get()) }
-	single { AppResolver() }
+    single { AppRepository(get(), get(), get()) }
+    single { AppResolver() }
 
-	single { ChannelRepository(get(), get(), get()) }
-	single { ChannelResolver() }
+    single { ChannelRepository(get(), get(), get()) }
+    single { ChannelResolver() }
 
-	single { InputRepository(get(), get(), get()) }
-	single { InputResolver() }
+    single { InputRepository(get(), get(), get()) }
+    single { InputResolver() }
 
-	viewModel { HomeTabViewModel(get(), get()) }
-	viewModel { AppsTabViewModel(get()) }
+    single { SettingsRepository(get()) }
+
+    viewModel { HomeTabViewModel(get(), get(), get()) }
+    viewModel { AppsTabViewModel(get(), get()) }
 }
 
 private val databaseModule = module {
-	// Create database(s)
-	single { DatabaseContainer(get()) }
+    // Create database(s)
+    single { DatabaseContainer(get()) }
 }
 
 class LauncherApplication : Application(), ImageLoaderFactory {
-	override fun onCreate() {
-		super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-		Timber.plant(Timber.DebugTree())
+        Timber.plant(Timber.DebugTree())
 
-		startKoin {
-			androidLogger(level = if (BuildConfig.DEBUG) Level.DEBUG else Level.INFO)
-			androidContext(this@LauncherApplication)
+        startKoin {
+            androidLogger(level = if (BuildConfig.DEBUG) Level.DEBUG else Level.INFO)
+            androidContext(this@LauncherApplication)
 
-			modules(launcherModule, databaseModule)
-		}
-	}
+            modules(launcherModule, databaseModule)
+        }
+    }
 
-	override fun newImageLoader() = ImageLoader.Builder(this)
-		.logger(DebugLogger())
-		.build()
+    override fun newImageLoader() = ImageLoader.Builder(this)
+        .logger(DebugLogger())
+        .build()
 }

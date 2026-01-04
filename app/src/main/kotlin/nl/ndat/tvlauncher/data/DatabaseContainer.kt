@@ -40,6 +40,7 @@ class DatabaseContainer(
     val inputs = database.inputQueries
     val channels = database.channelQueries
     val channelPrograms = database.channelProgramQueries
+    val watchNextBlacklist = database.watchNextBlacklistQueries
 
     fun <T> transaction(body: () -> T): T = database.transactionWithResult { body() }
 }

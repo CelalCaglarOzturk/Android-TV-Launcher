@@ -38,6 +38,7 @@ fun AppsTab(
     val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
     val showMobileApps by viewModel.showMobileApps.collectAsStateWithLifecycle()
     val mobileOnlyAppsCount by viewModel.mobileOnlyAppsCount.collectAsStateWithLifecycle()
+    val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf to avoid unnecessary recompositions
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
@@ -51,7 +52,7 @@ fun AppsTab(
         ),
         verticalArrangement = Arrangement.spacedBy(14.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
-        columns = GridCells.Adaptive(90.dp * (16f / 9f)),
+        columns = GridCells.Adaptive(appCardSize.dp * (16f / 9f)),
         modifier = modifier.fillMaxSize()
     ) {
         // Mobile Apps Toggle (only show if there are mobile-only apps)
@@ -113,6 +114,7 @@ fun AppsTab(
                 Box {
                     AppCard(
                         app = app,
+                        baseHeight = appCardSize.dp,
                         popupContent = {
                             AppPopup(
                                 isFavorite = app.favoriteOrder != null,
@@ -151,6 +153,7 @@ fun AppsTab(
                 Box {
                     AppCard(
                         app = app,
+                        baseHeight = appCardSize.dp,
                         popupContent = {
                             AppPopup(
                                 isFavorite = app.favoriteOrder != null,

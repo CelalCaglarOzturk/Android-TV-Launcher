@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -20,35 +22,37 @@ import androidx.tv.material3.Text
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CardRow(
-	modifier: Modifier = Modifier,
-	title: String? = null,
-	content: LazyListScope.(childFocusRequester: FocusRequester) -> Unit,
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    state: LazyListState = rememberLazyListState(),
+    content: LazyListScope.(childFocusRequester: FocusRequester) -> Unit,
 ) = Column(
-	modifier = modifier
+    modifier = modifier
 ) {
-	if (title != null) {
-		Text(
-			text = title,
-			fontSize = 18.sp,
-			modifier = Modifier.padding(
-				vertical = 4.dp,
-				horizontal = 48.dp,
-			)
-		)
-	}
+    if (title != null) {
+        Text(
+            text = title,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(
+                vertical = 4.dp,
+                horizontal = 48.dp,
+            )
+        )
+    }
 
-	val childFocusRequester = remember { FocusRequester() }
+    val childFocusRequester = remember { FocusRequester() }
 
-	LazyRow(
-		contentPadding = PaddingValues(
-			vertical = 16.dp,
-			horizontal = 48.dp,
-		),
-		horizontalArrangement = Arrangement.spacedBy(14.dp),
-		modifier = Modifier
-			.fillMaxWidth()
-			.focusRestorer(childFocusRequester),
-	) {
-		content(childFocusRequester)
-	}
+    LazyRow(
+        state = state,
+        contentPadding = PaddingValues(
+            vertical = 16.dp,
+            horizontal = 48.dp,
+        ),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRestorer(childFocusRequester),
+    ) {
+        content(childFocusRequester)
+    }
 }

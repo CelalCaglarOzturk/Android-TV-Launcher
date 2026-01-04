@@ -124,9 +124,11 @@ class ChannelRepository(
             displayOrder = null,
         )
         val programs = channelResolver.getWatchNextPrograms(context)
+        val blacklistedPackages = database.watchNextBlacklist.getAll().executeAsList()
+        val filteredPrograms = programs.filter { it.packageName !in blacklistedPackages }
 
         commitChannel(channel)
-        commitChannelPrograms(channel.id, programs)
+        commitChannelPrograms(channel.id, filteredPrograms)
     }
 
     suspend fun refreshChannelPrograms(channel: Channel) {
@@ -171,6 +173,20 @@ class ChannelRepository(
         }
     }
 
+    // Watch Next Blacklist
+    suspend fun addToWatchNextBlacklist(packageName: String) = withContext(Dispatchers.IO) {
+        database.watchNextBlacklist.insert(packageName)
+        refreshWatchNextChannels()
+    }
+
+    suspend fun removeFromWatchNextBlacklist(packageName: String) = withContext(Dispatchers.IO) {
+        database.watchNextBlacklist.delete(packageName)
+        refreshWatchNextChannels()
+    }
+
+    fun isPackageBlacklistedForWatchNext(packageName: String) =
+        database.watchNextBlacklist.isBlacklisted(packageName).executeAsOne()
+
     // Getters
     fun getChannels() = database.channels.getAll().executeAsListFlow()
     fun getEnabledChannels() = database.channels.getAllEnabled().executeAsListFlow()
@@ -180,6 +196,8 @@ class ChannelRepository(
     fun getProgramsByChannel(channel: Channel) = database.channelPrograms.getByChannel(channel.id).executeAsListFlow()
     fun getWatchNextPrograms() =
         database.channelPrograms.getByChannel(ChannelResolver.CHANNEL_ID_WATCH_NEXT).executeAsListFlow()
+
+    fun getWatchNextBlacklist() = database.watchNextBlacklist.getAll().executeAsListFlow()
 
     fun getChannelById(channelId: String) = database.channels.getById(channelId).executeAsOneOrNull()
 }
