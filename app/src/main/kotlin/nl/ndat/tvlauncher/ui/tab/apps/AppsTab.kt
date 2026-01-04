@@ -3,7 +3,6 @@ package nl.ndat.tvlauncher.ui.tab.apps
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,13 +11,12 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
@@ -27,16 +25,22 @@ import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppsTab(
     modifier: Modifier = Modifier
 ) {
     val viewModel = koinViewModel<AppsTabViewModel>()
-    val apps by viewModel.apps.collectAsState()
-    val hiddenApps by viewModel.hiddenApps.collectAsState()
-    val showMobileApps by viewModel.showMobileApps.collectAsState()
-    val mobileOnlyAppsCount by viewModel.mobileOnlyAppsCount.collectAsState()
+
+    // Use collectAsStateWithLifecycle for better lifecycle handling and performance
+    val apps by viewModel.apps.collectAsStateWithLifecycle()
+    val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
+    val showMobileApps by viewModel.showMobileApps.collectAsStateWithLifecycle()
+    val mobileOnlyAppsCount by viewModel.mobileOnlyAppsCount.collectAsStateWithLifecycle()
+
+    // Use derivedStateOf to avoid unnecessary recompositions
+    val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
+    val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
+    val hasMobileApps by remember { derivedStateOf { mobileOnlyAppsCount > 0 } }
 
     LazyVerticalGrid(
         contentPadding = PaddingValues(
@@ -46,13 +50,14 @@ fun AppsTab(
         verticalArrangement = Arrangement.spacedBy(14.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         columns = GridCells.Adaptive(90.dp * (16f / 9f)),
-        modifier = modifier
-            .focusRestorer()
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         // Mobile Apps Toggle (only show if there are mobile-only apps)
-        if (mobileOnlyAppsCount > 0) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+        if (hasMobileApps) {
+            item(
+                key = "mobile_toggle",
+                span = { GridItemSpan(maxLineSpan) }
+            ) {
                 ListItem(
                     selected = false,
                     onClick = { viewModel.toggleShowMobileApps() },
@@ -86,8 +91,11 @@ fun AppsTab(
         }
 
         // Visible Apps Section
-        if (apps.isNotEmpty()) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+        if (hasApps) {
+            item(
+                key = "all_apps_header",
+                span = { GridItemSpan(maxLineSpan) }
+            ) {
                 Text(
                     text = "All Apps",
                     style = MaterialTheme.typography.titleMedium,
@@ -100,10 +108,7 @@ fun AppsTab(
                 items = apps,
                 key = { app -> app.id },
             ) { app ->
-                Box(
-                    modifier = Modifier
-                        .animateItem()
-                ) {
+                Box(modifier = Modifier.animateItem()) {
                     AppCard(
                         app = app,
                         popupContent = {
@@ -124,8 +129,11 @@ fun AppsTab(
         }
 
         // Hidden Apps Section
-        if (hiddenApps.isNotEmpty()) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+        if (hasHiddenApps) {
+            item(
+                key = "hidden_apps_header",
+                span = { GridItemSpan(maxLineSpan) }
+            ) {
                 Text(
                     text = "Hidden Apps",
                     style = MaterialTheme.typography.titleMedium,
@@ -138,10 +146,7 @@ fun AppsTab(
                 items = hiddenApps,
                 key = { app -> "hidden_${app.id}" },
             ) { app ->
-                Box(
-                    modifier = Modifier
-                        .animateItem()
-                ) {
+                Box(modifier = Modifier.animateItem()) {
                     AppCard(
                         app = app,
                         popupContent = {

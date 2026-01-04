@@ -5,12 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
@@ -23,40 +24,50 @@ fun HomeTab(
     modifier: Modifier = Modifier
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
-    val apps by viewModel.apps.collectAsState()
-    val channels by viewModel.channels.collectAsState()
-    val allAppChannels by viewModel.allAppChannels.collectAsState()
-    val watchNextPrograms by viewModel.watchNextPrograms.collectAsState()
 
-    // Filter to get only enabled preview channels (not watch next)
-    val enabledChannels = remember(channels) {
-        channels.filter { it.type == ChannelType.PREVIEW && it.enabled }
+    // Use lifecycle-aware collection for better performance
+    val apps by viewModel.apps.collectAsStateWithLifecycle()
+    val channels by viewModel.channels.collectAsStateWithLifecycle()
+    val allAppChannels by viewModel.allAppChannels.collectAsStateWithLifecycle()
+    val watchNextPrograms by viewModel.watchNextPrograms.collectAsStateWithLifecycle()
+
+    // Use derivedStateOf for filtered lists to avoid unnecessary recompositions
+    val enabledChannels by remember(channels) {
+        derivedStateOf {
+            channels.filter { it.type == ChannelType.PREVIEW && it.enabled }
+        }
     }
 
-    // Filter to get disabled channels
-    val disabledChannels = remember(allAppChannels) {
-        allAppChannels.filter { !it.enabled && it.type == ChannelType.PREVIEW }
+    val disabledChannels by remember(allAppChannels) {
+        derivedStateOf {
+            allAppChannels.filter { !it.enabled && it.type == ChannelType.PREVIEW }
+        }
+    }
+
+    val hasWatchNext by remember(watchNextPrograms) {
+        derivedStateOf { watchNextPrograms.isNotEmpty() }
+    }
+
+    val hasDisabledChannels by remember(disabledChannels) {
+        derivedStateOf { disabledChannels.isNotEmpty() }
     }
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
-            .fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         item(key = "apps") {
-            AppCardRow(
-                apps = apps
-            )
+            AppCardRow(apps = apps)
         }
 
-        item(
-            key = ChannelResolver.CHANNEL_ID_WATCH_NEXT
-        ) {
-            ChannelProgramCardRow(
-                title = stringResource(R.string.channel_watch_next),
-                programs = watchNextPrograms,
-                app = null,
-            )
+        if (hasWatchNext) {
+            item(key = ChannelResolver.CHANNEL_ID_WATCH_NEXT) {
+                ChannelProgramCardRow(
+                    title = stringResource(R.string.channel_watch_next),
+                    programs = watchNextPrograms,
+                    app = null,
+                )
+            }
         }
 
         itemsIndexed(
@@ -66,9 +77,9 @@ fun HomeTab(
             val app = remember(channel.packageName, apps) {
                 apps.firstOrNull { app -> app.packageName == channel.packageName }
             }
-            val programs by viewModel.channelPrograms(channel).collectAsState(initial = emptyList())
+            val programs by viewModel.channelPrograms(channel).collectAsStateWithLifecycle(initialValue = emptyList())
 
-            if (app != null) {
+            if (app != null && programs.isNotEmpty()) {
                 val title = stringResource(R.string.channel_preview, app.displayName, channel.displayName)
 
                 ChannelProgramCardRow(
@@ -92,7 +103,7 @@ fun HomeTab(
         }
 
         // Show disabled channels section if there are any
-        if (disabledChannels.isNotEmpty()) {
+        if (hasDisabledChannels) {
             item(key = "disabled_channels_header") {
                 DisabledChannelsSection(
                     disabledChannels = disabledChannels,

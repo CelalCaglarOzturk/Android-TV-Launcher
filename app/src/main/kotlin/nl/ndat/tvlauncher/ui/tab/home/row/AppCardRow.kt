@@ -10,7 +10,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import nl.ndat.tvlauncher.data.sqldelight.App
-import nl.ndat.tvlauncher.ui.component.card.AppCard
+import nl.ndat.tvlauncher.ui.component.card.MoveDirection
+import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.tab.home.AppPopup
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.modifier.ifElse
@@ -23,6 +24,9 @@ fun AppCardRow(
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
 
+    // Track which app is in move mode (only one at a time)
+    var moveAppId by remember { mutableStateOf<String?>(null) }
+
     CardRow(
         modifier = modifier,
     ) { childFocusRequester ->
@@ -30,39 +34,48 @@ fun AppCardRow(
             items = apps,
             key = { _, app -> app.id },
         ) { index, app ->
-            var popupVisible by remember { mutableStateOf(false) }
+            val isInMoveMode = moveAppId == app.id
 
             Box(
                 modifier = Modifier
                     .animateItem()
             ) {
-                AppCard(
+                MoveableAppCard(
                     app = app,
                     modifier = Modifier
                         .ifElse(
                             condition = index == 0,
                             positiveModifier = Modifier.focusRequester(childFocusRequester)
                         ),
-                    onPopupVisibilityChanged = { visible ->
-                        popupVisible = visible
+                    isInMoveMode = isInMoveMode,
+                    onMoveModeChanged = { inMoveMode ->
+                        moveAppId = if (inMoveMode) app.id else null
+                    },
+                    onMove = { direction ->
+                        when (direction) {
+                            MoveDirection.LEFT -> {
+                                if (index > 0) {
+                                    viewModel.setFavoriteOrder(app, index - 1)
+                                }
+                            }
+
+                            MoveDirection.RIGHT -> {
+                                if (index < apps.size - 1) {
+                                    viewModel.setFavoriteOrder(app, index + 1)
+                                }
+                            }
+                            // UP and DOWN don't apply to horizontal row
+                            MoveDirection.UP, MoveDirection.DOWN -> {}
+                        }
                     },
                     popupContent = {
                         AppPopup(
-                            isFirst = index == 0,
-                            isLast = index == apps.size - 1,
                             isFavorite = app.favoriteOrder != null,
                             onToggleFavorite = { favorite ->
                                 viewModel.favoriteApp(app, favorite)
                             },
-                            onMove = { relativePosition ->
-                                val newIndex = index + relativePosition
-                                viewModel.setFavoriteOrder(app, newIndex)
-                            },
                             onHide = {
                                 viewModel.hideApp(app)
-                            },
-                            onDismiss = {
-                                popupVisible = false
                             }
                         )
                     }

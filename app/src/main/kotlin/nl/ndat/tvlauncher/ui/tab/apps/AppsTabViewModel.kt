@@ -17,6 +17,12 @@ class AppsTabViewModel(
     private val appRepository: AppRepository,
 ) : ViewModel() {
 
+    companion object {
+        // Stop collecting after 5 seconds when there are no subscribers
+        // This helps reduce resource usage on low-end devices
+        private val SHARING_STARTED = SharingStarted.WhileSubscribed(5000L)
+    }
+
     // Toggle for showing mobile apps (apps without leanback intent)
     private val _showMobileApps = MutableStateFlow(false)
     val showMobileApps: StateFlow<Boolean> = _showMobileApps
@@ -32,7 +38,7 @@ class AppsTabViewModel(
                 // If showMobile is false, only show apps with leanback intent
                 showMobile || app.launchIntentUriLeanback != null
             }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    }.stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val hiddenApps = combine(
         appRepository.getHiddenApps(),
@@ -43,7 +49,7 @@ class AppsTabViewModel(
             .filter { app ->
                 showMobile || app.launchIntentUriLeanback != null
             }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    }.stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     // Count of mobile-only apps (apps without leanback intent)
     val mobileOnlyAppsCount = appRepository.getApps()
@@ -54,7 +60,7 @@ class AppsTabViewModel(
                         app.launchIntentUriDefault != null
             }
         }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, 0)
+        .stateIn(viewModelScope, SHARING_STARTED, 0)
 
     fun toggleShowMobileApps() {
         _showMobileApps.value = !_showMobileApps.value

@@ -25,7 +25,6 @@ fun ToolbarTabs(
     val tabs = mapOf(
         Destinations.Home to stringResource(R.string.tab_home),
         Destinations.Apps to stringResource(R.string.tab_apps),
-        Destinations.Inputs to stringResource(R.string.tab_inputs),
     )
 
     TabRow(

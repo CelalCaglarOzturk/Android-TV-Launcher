@@ -46,12 +46,19 @@ fun AppCard(
     onPopupVisibilityChanged: ((Boolean) -> Unit)? = null,
 ) {
     val context = LocalContext.current
+
+    // Cache drawable - only recompute when app.id changes
     val image = remember(app.id) { app.createDrawable(context) }
+
+    // Cache computed values
     var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
-    val launchIntentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    // Cache launch intent - only recompute when app changes
+    val launchIntentUri = remember(app.id) {
+        app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    }
 
     var menuVisible by remember { mutableStateOf(false) }
 
@@ -60,13 +67,15 @@ fun AppCard(
         onPopupVisibilityChanged?.invoke(menuVisible)
     }
 
+    // Pre-calculate dimensions to avoid repeated calculations
+    val cardWidth = remember(baseHeight) { baseHeight * (16f / 9f) }
+
     PopupContainer(
         visible = menuVisible && popupContent != null,
         onDismiss = { menuVisible = false },
         content = {
             StandardCardContainer(
-                modifier = modifier
-                    .width(baseHeight * (16f / 9f)),
+                modifier = modifier.width(cardWidth),
                 interactionSource = interactionSource,
                 title = {
                     Text(
@@ -96,7 +105,10 @@ fun AppCard(
                         interactionSource = interactionSource,
                         border = CardDefaults.border(
                             focusedBorder = Border(
-                                border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
+                                border = BorderStroke(
+                                    2.dp,
+                                    imagePrimaryColor ?: MaterialTheme.colorScheme.border
+                                ),
                             )
                         ),
                         onClick = {
@@ -114,9 +126,12 @@ fun AppCard(
                             modifier = Modifier.fillMaxSize(),
                             model = image,
                             contentDescription = app.displayName,
-                            onSuccess = {
-                                val palette = Palette.from(it.result.drawable.toBitmap()).generate()
-                                imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
+                            onSuccess = { result ->
+                                // Only compute palette if we don't have a color yet
+                                if (imagePrimaryColor == null) {
+                                    val palette = Palette.from(result.result.drawable.toBitmap()).generate()
+                                    imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
+                                }
                             }
                         )
                     }

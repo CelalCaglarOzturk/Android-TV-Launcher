@@ -14,17 +14,24 @@ class HomeTabViewModel(
     private val appRepository: AppRepository,
     private val channelRepository: ChannelRepository,
 ) : ViewModel() {
+
+    companion object {
+        // Stop collecting after 5 seconds when there are no subscribers
+        // This helps reduce resource usage on low-end devices
+        private val SHARING_STARTED = SharingStarted.WhileSubscribed(5000L)
+    }
+
     val apps = appRepository.getFavoriteApps()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val channels = channelRepository.getFavoriteAppChannels()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val allAppChannels = channelRepository.getAllAppChannels()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val watchNextPrograms = channelRepository.getWatchNextPrograms()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     fun channelPrograms(channel: Channel) = channelRepository.getProgramsByChannel(channel)
 
