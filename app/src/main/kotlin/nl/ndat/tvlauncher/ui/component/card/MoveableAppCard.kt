@@ -1,22 +1,35 @@
 package nl.ndat.tvlauncher.ui.component.card
 
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEventType
@@ -32,8 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import androidx.tv.material3.Border
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
@@ -43,31 +59,28 @@ import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.createDrawable
 import nl.ndat.tvlauncher.util.modifier.ifElse
 
-private const val LONG_PRESS_THRESHOLD_MS = 500L
-private const val MOVE_MODE_THRESHOLD_MS = 1200L
-
 @Composable
 fun MoveableAppCard(
     app: App,
     modifier: Modifier = Modifier,
     baseHeight: Dp = 90.dp,
     isInMoveMode: Boolean = false,
+    isFavorite: Boolean = false,
     onMoveModeChanged: ((Boolean) -> Unit)? = null,
     onMove: ((direction: MoveDirection) -> Unit)? = null,
-    popupContent: (@Composable () -> Unit)? = null,
-    onPopupVisibilityChanged: ((Boolean) -> Unit)? = null,
+    onToggleFavorite: ((Boolean) -> Unit)? = null,
 ) {
     val context = LocalContext.current
-    // Cache the drawable to avoid repeated lookups
     val image = remember(app.id) { app.createDrawable(context) }
     var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
-    val launchIntentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    val launchIntentUri = remember(app.id) {
+        app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    }
 
     var menuVisible by remember { mutableStateOf(false) }
-    var selectPressStartTime by remember { mutableLongStateOf(0L) }
 
     // Border color based on state
     val borderColor = when {
@@ -79,7 +92,7 @@ fun MoveableAppCard(
     val borderWidth = if (isInMoveMode) 3.dp else 2.dp
 
     PopupContainer(
-        visible = menuVisible && popupContent != null && !isInMoveMode,
+        visible = menuVisible && !isInMoveMode,
         onDismiss = { menuVisible = false },
         content = {
             StandardCardContainer(
@@ -111,54 +124,13 @@ fun MoveableAppCard(
 
                                 KeyEvent.KEYCODE_DPAD_CENTER,
                                 KeyEvent.KEYCODE_ENTER -> {
-                                    // Exit move mode on confirm
                                     onMoveModeChanged?.invoke(false)
                                     return@onKeyEvent true
                                 }
 
                                 KeyEvent.KEYCODE_BACK -> {
-                                    // Exit move mode on back
                                     onMoveModeChanged?.invoke(false)
                                     return@onKeyEvent true
-                                }
-                            }
-                        }
-
-                        // Track select button press duration for long-press detection
-                        if (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                            event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER
-                        ) {
-                            if (event.type == KeyEventType.KeyDown) {
-                                if (selectPressStartTime == 0L) {
-                                    selectPressStartTime = System.currentTimeMillis()
-                                } else {
-                                    // Check if held long enough for move mode
-                                    val heldDuration = System.currentTimeMillis() - selectPressStartTime
-                                    if (heldDuration >= MOVE_MODE_THRESHOLD_MS && !isInMoveMode) {
-                                        onMoveModeChanged?.invoke(true)
-                                        selectPressStartTime = 0L
-                                        return@onKeyEvent true
-                                    }
-                                }
-                            } else if (event.type == KeyEventType.KeyUp) {
-                                val pressDuration = System.currentTimeMillis() - selectPressStartTime
-                                selectPressStartTime = 0L
-
-                                when {
-                                    pressDuration >= MOVE_MODE_THRESHOLD_MS -> {
-                                        // Already handled move mode
-                                        return@onKeyEvent true
-                                    }
-
-                                    pressDuration >= LONG_PRESS_THRESHOLD_MS -> {
-                                        // Show popup
-                                        if (popupContent != null) {
-                                            menuVisible = true
-                                            onPopupVisibilityChanged?.invoke(true)
-                                        }
-                                        return@onKeyEvent true
-                                    }
-                                    // Short press - let it fall through to onClick
                                 }
                             }
                         }
@@ -202,9 +174,8 @@ fun MoveableAppCard(
                             }
                         },
                         onLongClick = {
-                            if (!isInMoveMode && popupContent != null) {
+                            if (!isInMoveMode) {
                                 menuVisible = true
-                                onPopupVisibilityChanged?.invoke(true)
                             }
                         }
                     ) {
@@ -213,7 +184,6 @@ fun MoveableAppCard(
                             model = image,
                             contentDescription = app.displayName,
                             onSuccess = { result ->
-                                // Only compute palette if we don't have a color yet
                                 if (imagePrimaryColor == null) {
                                     val palette = Palette.from(result.result.drawable.toBitmap()).generate()
                                     imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
@@ -225,9 +195,139 @@ fun MoveableAppCard(
             )
         },
         popupContent = {
-            if (popupContent != null) popupContent()
+            AppOptionsPopup(
+                app = app,
+                isFavorite = isFavorite,
+                onOpen = {
+                    menuVisible = false
+                    if (launchIntentUri != null) {
+                        context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                    }
+                },
+                onMove = {
+                    menuVisible = false
+                    onMoveModeChanged?.invoke(true)
+                },
+                onToggleFavorite = {
+                    menuVisible = false
+                    onToggleFavorite?.invoke(!isFavorite)
+                },
+                onInfo = {
+                    menuVisible = false
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.parse("package:${app.packageName}")
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(intent)
+                }
+            )
         }
     )
+}
+
+@Composable
+private fun AppOptionsPopup(
+    app: App,
+    isFavorite: Boolean,
+    onOpen: () -> Unit,
+    onMove: () -> Unit,
+    onToggleFavorite: () -> Unit,
+    onInfo: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(8.dp)
+    ) {
+        Text(
+            text = app.displayName,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        // Open
+        Button(
+            onClick = onOpen,
+            modifier = Modifier.width(200.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(text = "Open")
+            }
+        }
+
+        // Move
+        Button(
+            onClick = onMove,
+            modifier = Modifier.width(200.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(text = "Move")
+            }
+        }
+
+        // Add to Home / Remove from Home
+        Button(
+            onClick = onToggleFavorite,
+            modifier = Modifier.width(200.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(text = if (isFavorite) "Remove from Home" else "Add to Home")
+            }
+        }
+
+        // Info
+        Button(
+            onClick = onInfo,
+            modifier = Modifier.width(200.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(text = "Info")
+            }
+        }
+    }
 }
 
 enum class MoveDirection {

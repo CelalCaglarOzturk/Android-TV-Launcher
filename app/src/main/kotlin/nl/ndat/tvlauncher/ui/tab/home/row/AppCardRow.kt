@@ -12,7 +12,6 @@ import androidx.compose.ui.focus.focusRequester
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.card.MoveDirection
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
-import nl.ndat.tvlauncher.ui.tab.home.AppPopup
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
@@ -45,6 +44,7 @@ fun AppCardRow(
                             positiveModifier = Modifier.focusRequester(childFocusRequester)
                         ),
                     isInMoveMode = isInMoveMode,
+                    isFavorite = app.favoriteOrder != null,
                     onMoveModeChanged = { inMoveMode ->
                         moveAppId = if (inMoveMode) app.id else null
                     },
@@ -61,20 +61,14 @@ fun AppCardRow(
                                     viewModel.setFavoriteOrder(app, index + 1)
                                 }
                             }
-                            // UP and DOWN don't apply to horizontal row
-                            MoveDirection.UP, MoveDirection.DOWN -> {}
+
+                            MoveDirection.UP, MoveDirection.DOWN -> {
+                                // UP and DOWN don't apply to horizontal row
+                            }
                         }
                     },
-                    popupContent = {
-                        AppPopup(
-                            isFavorite = app.favoriteOrder != null,
-                            onToggleFavorite = { favorite ->
-                                viewModel.favoriteApp(app, favorite)
-                            },
-                            onHide = {
-                                viewModel.hideApp(app)
-                            }
-                        )
+                    onToggleFavorite = { favorite ->
+                        viewModel.favoriteApp(app, favorite)
                     }
                 )
             }
