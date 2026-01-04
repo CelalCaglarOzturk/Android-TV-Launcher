@@ -33,4 +33,8 @@
 	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
 	<string name="app_hide">Uygulamayı Gizle</string>
 	<string name="app_unhide">Uygulamayı Göster</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
+	<string name="apps_hidden_title">Gizli Uygulamalar</string>
 </resources>

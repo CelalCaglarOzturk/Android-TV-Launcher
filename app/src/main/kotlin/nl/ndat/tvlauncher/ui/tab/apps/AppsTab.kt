@@ -15,6 +15,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.ListItem
@@ -22,6 +23,7 @@ import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
+import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,7 +65,7 @@ fun AppsTab(
                     onClick = { viewModel.toggleShowMobileApps() },
                     headlineContent = {
                         Text(
-                            text = "Show mobile apps",
+                            text = stringResource(R.string.apps_show_mobile),
                             style = MaterialTheme.typography.bodyMedium
                         )
                     },
@@ -135,7 +137,7 @@ fun AppsTab(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
                 Text(
-                    text = "Hidden Apps",
+                    text = stringResource(R.string.apps_hidden_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                     modifier = Modifier.padding(top = 24.dp, bottom = 8.dp)

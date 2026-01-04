@@ -31,4 +31,8 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">Show mobile apps</string>
+	<string name="apps_hidden_title">Hidden Apps</string>
 </resources>
