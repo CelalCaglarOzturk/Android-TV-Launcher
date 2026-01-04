@@ -12,6 +12,7 @@ import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.resolver.AppResolver
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
 import nl.ndat.tvlauncher.data.resolver.InputResolver
+import nl.ndat.tvlauncher.image.AppIconFetcher
 import nl.ndat.tvlauncher.ui.tab.apps.AppsTabViewModel
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
@@ -61,6 +62,9 @@ class LauncherApplication : Application(), ImageLoaderFactory {
     }
 
     override fun newImageLoader() = ImageLoader.Builder(this)
+        .components {
+            add(AppIconFetcher.Factory(this@LauncherApplication))
+        }
         .logger(DebugLogger())
         .build()
 }

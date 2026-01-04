@@ -18,9 +18,8 @@ class HomeTabViewModel(
 ) : ViewModel() {
 
     companion object {
-        // Stop collecting after 5 seconds when there are no subscribers
-        // This helps reduce resource usage on low-end devices
-        private val SHARING_STARTED = SharingStarted.WhileSubscribed(5000L)
+        // Keep the flow active lazily to avoid reloading when switching tabs
+        private val SHARING_STARTED = SharingStarted.Lazily
     }
 
     val apps = appRepository.getFavoriteApps()

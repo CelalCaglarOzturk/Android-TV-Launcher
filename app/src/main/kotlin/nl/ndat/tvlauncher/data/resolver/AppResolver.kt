@@ -22,32 +22,59 @@ class AppResolver {
     fun getApplication(context: Context, packageId: String): App? {
         val packageManager = context.packageManager
 
-        return launcherCategories
-            .mapNotNull { category ->
-                try {
-                    val intent = Intent(Intent.ACTION_MAIN, null)
-                        .addCategory(category)
-                        .setPackage(packageId)
-                    queryIntentActivitiesSafe(packageManager, intent)
-                } catch (e: Exception) {
-                    Timber.e(e, "AppResolver: Error querying package $packageId with category $category")
-                    emptyList()
+        var leanbackIntent: String? = null
+        var defaultIntent: String? = null
+        var displayName: String? = null
+
+        try {
+            val intent = Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
+                .setPackage(packageId)
+            val activities = queryIntentActivitiesSafe(packageManager, intent)
+            if (activities.isNotEmpty()) {
+                val info = activities.first()
+                leanbackIntent = Intent(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
+                    .setClassName(info.activityInfo.packageName, info.activityInfo.name)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+                    .toUri(0)
+                displayName = info.loadLabel(packageManager).toString()
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "AppResolver: Error querying leanback for $packageId")
+        }
+
+        try {
+            val intent = Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_LAUNCHER)
+                .setPackage(packageId)
+            val activities = queryIntentActivitiesSafe(packageManager, intent)
+            if (activities.isNotEmpty()) {
+                val info = activities.first()
+                defaultIntent = Intent(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_LAUNCHER)
+                    .setClassName(info.activityInfo.packageName, info.activityInfo.name)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+                    .toUri(0)
+                if (displayName == null) {
+                    displayName = info.loadLabel(packageManager).toString()
                 }
             }
-            .flatten()
-            .distinctBy { it.activityInfo.packageName }
-            .mapNotNull { resolveInfo ->
-                try {
-                    resolveInfo.toApp(packageManager)
-                } catch (e: Exception) {
-                    Timber.e(
-                        e,
-                        "AppResolver: Error converting ResolveInfo to App for ${resolveInfo.activityInfo?.packageName}"
-                    )
-                    null
-                }
-            }
-            .firstOrNull()
+        } catch (e: Exception) {
+            Timber.e(e, "AppResolver: Error querying launcher for $packageId")
+        }
+
+        if (leanbackIntent == null && defaultIntent == null) return null
+
+        return App(
+            id = "$APP_ID_PREFIX$packageId",
+            displayName = displayName ?: packageId,
+            packageName = packageId,
+            launchIntentUriDefault = defaultIntent,
+            launchIntentUriLeanback = leanbackIntent,
+            favoriteOrder = null,
+            hidden = 0,
+        )
     }
 
     fun getApplications(context: Context): List<App> {
@@ -69,48 +96,69 @@ class AppResolver {
     }
 
     private fun getCategoryApps(packageManager: PackageManager): List<App> {
-        val allResolveInfos = mutableListOf<ResolveInfo>()
+        val leanbackIntents = mutableMapOf<String, String>()
+        val defaultIntents = mutableMapOf<String, String>()
+        val displayNames = mutableMapOf<String, String>()
 
-        for (category in launcherCategories) {
-            try {
-                val intent = Intent(Intent.ACTION_MAIN, null).addCategory(category)
-                val activities = queryIntentActivitiesSafe(packageManager, intent)
-                Timber.d("AppResolver: Category $category returned ${activities.size} activities")
+        fun processActivities(activities: List<ResolveInfo>, isLeanback: Boolean) {
+            activities.forEach { info ->
+                val packageName = info.activityInfo.packageName
+                val className = info.activityInfo.name
 
-                activities.forEach { info ->
+                val intent = Intent(Intent.ACTION_MAIN)
+                    .addCategory(if (isLeanback) Intent.CATEGORY_LEANBACK_LAUNCHER else Intent.CATEGORY_LAUNCHER)
+                    .setClassName(packageName, className)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+
+                val uri = intent.toUri(0)
+
+                if (isLeanback) {
+                    leanbackIntents[packageName] = uri
+                } else {
+                    defaultIntents[packageName] = uri
+                }
+
+                if (!displayNames.containsKey(packageName)) {
                     try {
-                        Timber.d("AppResolver: Found activity: ${info.activityInfo?.packageName} / ${info.activityInfo?.name}")
+                        displayNames[packageName] = info.loadLabel(packageManager).toString()
                     } catch (e: Exception) {
-                        Timber.e(e, "AppResolver: Error logging activity info")
+                        displayNames[packageName] = packageName
                     }
                 }
-
-                allResolveInfos.addAll(activities)
-            } catch (e: Exception) {
-                Timber.e(e, "AppResolver: Error querying category $category")
             }
         }
 
-        val apps = allResolveInfos
-            .filter { it.activityInfo != null }
-            .distinctBy { it.activityInfo.packageName }
-            .mapNotNull { resolveInfo ->
-                try {
-                    resolveInfo.toApp(packageManager)
-                } catch (e: Exception) {
-                    Timber.e(
-                        e,
-                        "AppResolver: Error converting ResolveInfo to App for ${resolveInfo.activityInfo?.packageName}"
-                    )
-                    null
-                }
-            }
+        try {
+            val intent = Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
+            val activities = queryIntentActivitiesSafe(packageManager, intent)
+            processActivities(activities, true)
+        } catch (e: Exception) {
+            Timber.e(e, "AppResolver: Error querying leanback category")
+        }
+
+        try {
+            val intent = Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER)
+            val activities = queryIntentActivitiesSafe(packageManager, intent)
+            processActivities(activities, false)
+        } catch (e: Exception) {
+            Timber.e(e, "AppResolver: Error querying launcher category")
+        }
+
+        val allPackages = leanbackIntents.keys + defaultIntents.keys
+
+        val apps = allPackages.map { packageName ->
+            App(
+                id = "$APP_ID_PREFIX$packageName",
+                displayName = displayNames[packageName] ?: packageName,
+                packageName = packageName,
+                launchIntentUriDefault = defaultIntents[packageName],
+                launchIntentUriLeanback = leanbackIntents[packageName],
+                favoriteOrder = null,
+                hidden = 0,
+            )
+        }
 
         Timber.d("AppResolver: Total unique apps found via categories: ${apps.size}")
-        apps.forEach { app ->
-            Timber.d("AppResolver: App - ${app.displayName} (${app.packageName})")
-        }
-
         return apps
     }
 
@@ -232,35 +280,5 @@ class AppResolver {
         }
     }
 
-    private fun ResolveInfo.toApp(packageManager: PackageManager): App {
-        val packageName = activityInfo.packageName
 
-        val displayName = try {
-            activityInfo.loadLabel(packageManager).toString()
-        } catch (e: Exception) {
-            packageName
-        }
-
-        val launchIntentDefault = try {
-            packageManager.getLaunchIntentForPackage(packageName)?.toUri(0)
-        } catch (e: Exception) {
-            null
-        }
-
-        val launchIntentLeanback = try {
-            packageManager.getLeanbackLaunchIntentForPackage(packageName)?.toUri(0)
-        } catch (e: Exception) {
-            null
-        }
-
-        return App(
-            id = "$APP_ID_PREFIX$packageName",
-            displayName = displayName,
-            packageName = packageName,
-            launchIntentUriDefault = launchIntentDefault,
-            launchIntentUriLeanback = launchIntentLeanback,
-            favoriteOrder = null,
-            hidden = 0,
-        )
-    }
 }

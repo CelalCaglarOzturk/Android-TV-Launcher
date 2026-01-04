@@ -57,10 +57,10 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
-import nl.ndat.tvlauncher.util.createDrawable
 import nl.ndat.tvlauncher.util.modifier.ifElse
 
 @Composable
@@ -77,7 +77,6 @@ fun MoveableAppCard(
     onToggleWatchNextBlacklist: ((Boolean) -> Unit)? = null,
 ) {
     val context = LocalContext.current
-    val image = remember(app.id) { app.createDrawable(context) }
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
@@ -199,7 +198,10 @@ fun MoveableAppCard(
                     ) {
                         AsyncImage(
                             modifier = Modifier.fillMaxSize(),
-                            model = image,
+                            model = ImageRequest.Builder(context)
+                                .data(app)
+                                .crossfade(true)
+                                .build(),
                             contentDescription = app.displayName,
                         )
                     }

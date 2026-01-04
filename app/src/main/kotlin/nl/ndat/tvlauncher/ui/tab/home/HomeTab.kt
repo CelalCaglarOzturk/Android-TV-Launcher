@@ -64,7 +64,10 @@ fun HomeTab(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxSize()
     ) {
-        item(key = "apps") {
+        item(
+            key = "apps",
+            contentType = "apps_row"
+        ) {
             AppCardRow(
                 apps = apps,
                 baseHeight = appCardSize.dp
@@ -72,7 +75,10 @@ fun HomeTab(
         }
 
         if (hasWatchNext) {
-            item(key = ChannelResolver.CHANNEL_ID_WATCH_NEXT) {
+            item(
+                key = ChannelResolver.CHANNEL_ID_WATCH_NEXT,
+                contentType = "channel_row"
+            ) {
                 ChannelProgramCardRow(
                     title = stringResource(R.string.channel_watch_next),
                     programs = watchNextPrograms,
@@ -83,7 +89,8 @@ fun HomeTab(
 
         itemsIndexed(
             items = enabledChannels,
-            key = { _, channel -> channel.id }
+            key = { _, channel -> channel.id },
+            contentType = { _, _ -> "channel_row" }
         ) { index, channel ->
             val app = remember(channel.packageName, apps) {
                 apps.firstOrNull { app -> app.packageName == channel.packageName }
@@ -129,7 +136,10 @@ fun HomeTab(
 
         // Show disabled channels section if there are any
         if (hasDisabledChannels) {
-            item(key = "disabled_channels_header") {
+            item(
+                key = "disabled_channels_header",
+                contentType = "disabled_channels_section"
+            ) {
                 DisabledChannelsSection(
                     disabledChannels = disabledChannels,
                     apps = apps,

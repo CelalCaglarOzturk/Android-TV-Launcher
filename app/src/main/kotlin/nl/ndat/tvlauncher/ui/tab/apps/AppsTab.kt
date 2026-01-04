@@ -59,7 +59,8 @@ fun AppsTab(
         if (hasMobileApps) {
             item(
                 key = "mobile_toggle",
-                span = { GridItemSpan(maxLineSpan) }
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = "mobile_toggle"
             ) {
                 ListItem(
                     selected = false,
@@ -97,7 +98,8 @@ fun AppsTab(
         if (hasApps) {
             item(
                 key = "all_apps_header",
-                span = { GridItemSpan(maxLineSpan) }
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = "section_header"
             ) {
                 Text(
                     text = "All Apps",
@@ -110,6 +112,7 @@ fun AppsTab(
             items(
                 items = apps,
                 key = { app -> app.id },
+                contentType = { "app_card" }
             ) { app ->
                 Box {
                     AppCard(
@@ -136,7 +139,8 @@ fun AppsTab(
         if (hasHiddenApps) {
             item(
                 key = "hidden_apps_header",
-                span = { GridItemSpan(maxLineSpan) }
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = "section_header"
             ) {
                 Text(
                     text = stringResource(R.string.apps_hidden_title),
@@ -149,6 +153,7 @@ fun AppsTab(
             items(
                 items = hiddenApps,
                 key = { app -> "hidden_${app.id}" },
+                contentType = { "app_card" }
             ) { app ->
                 Box {
                     AppCard(

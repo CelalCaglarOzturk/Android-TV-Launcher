@@ -2,10 +2,12 @@ package nl.ndat.tvlauncher.ui.tab.apps
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,9 +22,8 @@ class AppsTabViewModel(
 ) : ViewModel() {
 
     companion object {
-        // Stop collecting after 5 seconds when there are no subscribers
-        // This helps reduce resource usage on low-end devices
-        private val SHARING_STARTED = SharingStarted.WhileSubscribed(5000L)
+        // Keep the flow active lazily to avoid reloading when switching tabs
+        private val SHARING_STARTED = SharingStarted.Lazily
     }
 
     // Toggle for showing mobile apps (apps without leanback intent)
@@ -43,7 +44,9 @@ class AppsTabViewModel(
                 // If showMobile is false, only show apps with leanback intent
                 showMobile || app.launchIntentUriLeanback != null
             }
-    }.stateIn(viewModelScope, SHARING_STARTED, emptyList())
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val hiddenApps = combine(
         appRepository.getHiddenApps(),
@@ -54,7 +57,9 @@ class AppsTabViewModel(
             .filter { app ->
                 showMobile || app.launchIntentUriLeanback != null
             }
-    }.stateIn(viewModelScope, SHARING_STARTED, emptyList())
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     // Count of mobile-only apps (apps without leanback intent)
     val mobileOnlyAppsCount = appRepository.getApps()
@@ -65,6 +70,7 @@ class AppsTabViewModel(
                         app.launchIntentUriDefault != null
             }
         }
+        .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, 0)
 
     fun toggleShowMobileApps() {

@@ -48,6 +48,7 @@ fun ChannelProgramCard(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(program.posterArtUri)
                 .allowHardware(false)
+                .crossfade(true)
                 .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
