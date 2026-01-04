@@ -23,8 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
+
 import androidx.tv.material3.Border
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
@@ -51,7 +50,6 @@ fun AppCard(
     val image = remember(app.id) { app.createDrawable(context) }
 
     // Cache computed values
-    var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
@@ -107,7 +105,7 @@ fun AppCard(
                             focusedBorder = Border(
                                 border = BorderStroke(
                                     2.dp,
-                                    imagePrimaryColor ?: MaterialTheme.colorScheme.border
+                                    MaterialTheme.colorScheme.border
                                 ),
                             )
                         ),
@@ -126,13 +124,6 @@ fun AppCard(
                             modifier = Modifier.fillMaxSize(),
                             model = image,
                             contentDescription = app.displayName,
-                            onSuccess = { result ->
-                                // Only compute palette if we don't have a color yet
-                                if (imagePrimaryColor == null) {
-                                    val palette = Palette.from(result.result.drawable.toBitmap()).generate()
-                                    imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
-                                }
-                            }
                         )
                     }
                 }

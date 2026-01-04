@@ -45,8 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
 import androidx.tv.material3.Border
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
@@ -76,7 +74,6 @@ fun MoveableAppCard(
 ) {
     val context = LocalContext.current
     val image = remember(app.id) { app.createDrawable(context) }
-    var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
@@ -87,11 +84,7 @@ fun MoveableAppCard(
     var menuVisible by remember { mutableStateOf(false) }
 
     // Border color based on state
-    val borderColor = when {
-        isInMoveMode -> Color.White
-        imagePrimaryColor != null -> imagePrimaryColor!!
-        else -> MaterialTheme.colorScheme.border
-    }
+    val borderColor = if (isInMoveMode) Color.White else MaterialTheme.colorScheme.border
 
     val borderWidth = if (isInMoveMode) 3.dp else 2.dp
 
@@ -187,12 +180,6 @@ fun MoveableAppCard(
                             modifier = Modifier.fillMaxSize(),
                             model = image,
                             contentDescription = app.displayName,
-                            onSuccess = { result ->
-                                if (imagePrimaryColor == null) {
-                                    val palette = Palette.from(result.result.drawable.toBitmap()).generate()
-                                    imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
-                                }
-                            }
                         )
                     }
                 }

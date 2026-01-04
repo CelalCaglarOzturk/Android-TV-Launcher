@@ -6,18 +6,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
+
 import androidx.tv.material3.Border
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
@@ -33,7 +27,6 @@ fun ChannelProgramCard(
     baseHeight: Dp = 100.dp,
 ) {
     val context = LocalContext.current
-    var imagePrimaryColor by remember { mutableStateOf<Color?>(null) }
 
     Card(
         modifier = modifier
@@ -41,7 +34,7 @@ fun ChannelProgramCard(
             .aspectRatio(program.posterArtAspectRatio?.floatValue ?: (16f / 9f)),
         border = CardDefaults.border(
             focusedBorder = Border(
-                border = BorderStroke(2.dp, imagePrimaryColor ?: MaterialTheme.colorScheme.border),
+                border = BorderStroke(2.dp, MaterialTheme.colorScheme.border),
             )
         ),
         onClick = {
@@ -58,10 +51,6 @@ fun ChannelProgramCard(
                 .build(),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            onSuccess = {
-                val palette = Palette.from(it.result.drawable.toBitmap()).generate()
-                imagePrimaryColor = palette.mutedSwatch?.rgb?.let(::Color)
-            }
         )
     }
 }
