@@ -1,0 +1,11 @@
+-- Add enabled column to Channel table (default to enabled)
+ALTER TABLE Channel ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1;
+
+-- Add displayOrder column to Channel table for custom ordering
+ALTER TABLE Channel ADD COLUMN displayOrder INTEGER;
+
+-- Create index for enabled channels
+CREATE INDEX channelEnabled ON Channel(enabled);
+
+-- Create index for displayOrder
+CREATE INDEX channelDisplayOrder ON Channel(displayOrder);
