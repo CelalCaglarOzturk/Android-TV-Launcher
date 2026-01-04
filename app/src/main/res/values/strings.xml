@@ -9,4 +9,16 @@
 	<string name="tab_home">Home</string>
 	<string name="tab_apps">All apps</string>
 	<string name="tab_inputs">Inputs</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">Enable Channel</string>
+	<string name="channel_disable">Disable Channel</string>
+	<string name="channel_move">Move Channel</string>
+	<string name="channel_move_up">Up</string>
+	<string name="channel_move_down">Down</string>
+	<string name="channel_move_mode">Use Up/Down to reorder channel</string>
+	<string name="done">Done</string>
+	<string name="close">Close</string>
+	<string name="channels_settings">Channels</string>
+	<string name="disabled_channels">Disabled Channels</string>
 </resources>

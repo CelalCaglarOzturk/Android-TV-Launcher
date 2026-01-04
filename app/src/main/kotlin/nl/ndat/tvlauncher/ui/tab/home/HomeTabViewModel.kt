@@ -20,6 +20,9 @@ class HomeTabViewModel(
     val channels = channelRepository.getFavoriteAppChannels()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    val allAppChannels = channelRepository.getAllAppChannels()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
     val watchNextPrograms = channelRepository.getWatchNextPrograms()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
@@ -41,5 +44,30 @@ class HomeTabViewModel(
 
     fun hideApp(app: App) = viewModelScope.launch {
         appRepository.hideApp(app.id)
+    }
+
+    // Channel management functions
+    fun enableChannel(channel: Channel) = viewModelScope.launch {
+        channelRepository.enableChannel(channel.id)
+    }
+
+    fun disableChannel(channel: Channel) = viewModelScope.launch {
+        channelRepository.disableChannel(channel.id)
+    }
+
+    fun setChannelEnabled(channel: Channel, enabled: Boolean) = viewModelScope.launch {
+        channelRepository.setChannelEnabled(channel.id, enabled)
+    }
+
+    fun moveChannelUp(channel: Channel) = viewModelScope.launch {
+        channelRepository.moveChannelUp(channel.id)
+    }
+
+    fun moveChannelDown(channel: Channel) = viewModelScope.launch {
+        channelRepository.moveChannelDown(channel.id)
+    }
+
+    fun setChannelOrder(channel: Channel, order: Int) = viewModelScope.launch {
+        channelRepository.updateChannelOrder(channel.id, order)
     }
 }

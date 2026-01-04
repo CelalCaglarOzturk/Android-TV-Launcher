@@ -25,13 +25,16 @@ class ChannelRepository(
             database.channels.removeById(id)
         }
 
-        // Upsert channels
+        // Upsert channels (preserving enabled and displayOrder)
         channels.forEach { channel ->
             commitChannel(channel)
         }
     }
 
     private fun commitChannel(channel: Channel) {
+        // Check if channel already exists to preserve enabled/displayOrder
+        val existing = database.channels.getById(channel.id).executeAsOneOrNull()
+
         database.channels.upsert(
             id = channel.id,
             type = channel.type,
@@ -41,6 +44,11 @@ class ChannelRepository(
             packageName = channel.packageName,
             appLinkIntentUri = channel.appLinkIntentUri,
         )
+
+        // If this is a new channel, set initial display order
+        if (existing == null) {
+            database.channels.updateDisplayOrderAdd(channel.id)
+        }
     }
 
     private suspend fun commitChannelPrograms(
@@ -112,6 +120,8 @@ class ChannelRepository(
             description = null,
             packageName = "",
             appLinkIntentUri = null,
+            enabled = true,
+            displayOrder = null,
         )
         val programs = channelResolver.getWatchNextPrograms(context)
 
@@ -124,9 +134,52 @@ class ChannelRepository(
         commitChannelPrograms(channel.id, programs)
     }
 
+    // Channel enable/disable
+    suspend fun enableChannel(channelId: String) = withContext(Dispatchers.IO) {
+        database.channels.enableChannel(channelId)
+        // Assign display order when enabling
+        database.channels.updateDisplayOrderAdd(channelId)
+    }
+
+    suspend fun disableChannel(channelId: String) = withContext(Dispatchers.IO) {
+        database.channels.disableChannel(channelId)
+    }
+
+    suspend fun setChannelEnabled(channelId: String, enabled: Boolean) {
+        if (enabled) enableChannel(channelId) else disableChannel(channelId)
+    }
+
+    // Channel reordering
+    suspend fun updateChannelOrder(channelId: String, newOrder: Int) = withContext(Dispatchers.IO) {
+        database.channels.updateDisplayOrderShift(order = newOrder, id = channelId)
+    }
+
+    suspend fun moveChannelUp(channelId: String) = withContext(Dispatchers.IO) {
+        val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
+        val currentOrder = channel.displayOrder ?: return@withContext
+        if (currentOrder > 0) {
+            database.channels.updateDisplayOrderShift(order = currentOrder - 1, id = channelId)
+        }
+    }
+
+    suspend fun moveChannelDown(channelId: String) = withContext(Dispatchers.IO) {
+        val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
+        val currentOrder = channel.displayOrder ?: return@withContext
+        val maxOrder = database.channels.getAllEnabled().executeAsList().maxOfOrNull { it.displayOrder ?: 0 } ?: 0
+        if (currentOrder < maxOrder) {
+            database.channels.updateDisplayOrderShift(order = currentOrder + 1, id = channelId)
+        }
+    }
+
+    // Getters
     fun getChannels() = database.channels.getAll().executeAsListFlow()
-    fun getFavoriteAppChannels() = database.channels.getFavoriteAppChannels(::Channel).executeAsListFlow()
+    fun getEnabledChannels() = database.channels.getAllEnabled().executeAsListFlow()
+    fun getDisabledChannels() = database.channels.getAllDisabled().executeAsListFlow()
+    fun getAllAppChannels() = database.channels.getAllAppChannels().executeAsListFlow()
+    fun getFavoriteAppChannels() = database.channels.getFavoriteAppChannels().executeAsListFlow()
     fun getProgramsByChannel(channel: Channel) = database.channelPrograms.getByChannel(channel.id).executeAsListFlow()
     fun getWatchNextPrograms() =
         database.channelPrograms.getByChannel(ChannelResolver.CHANNEL_ID_WATCH_NEXT).executeAsListFlow()
+
+    fun getChannelById(channelId: String) = database.channels.getById(channelId).executeAsOneOrNull()
 }

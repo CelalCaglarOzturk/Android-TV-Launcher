@@ -1,3 +1,4 @@
+import kotlin.Boolean;
 import nl.ndat.tvlauncher.data.model.ChannelType;
 
 CREATE TABLE Channel (
@@ -7,23 +8,44 @@ CREATE TABLE Channel (
 	displayName TEXT NOT NULL,
 	description TEXT,
 	packageName TEXT NOT NULL,
-	appLinkIntentUri TEXT
+	appLinkIntentUri TEXT,
+	enabled INTEGER AS Boolean NOT NULL DEFAULT 1,
+	displayOrder INTEGER
 );
 
 CREATE INDEX channelType ON Channel(type);
 CREATE INDEX channelPackageName ON Channel(packageName);
+CREATE INDEX channelEnabled ON Channel(enabled);
+CREATE INDEX channelDisplayOrder ON Channel(displayOrder);
 
 getAll:
 SELECT * FROM Channel;
 
+getAllEnabled:
+SELECT * FROM Channel WHERE enabled = 1 ORDER BY displayOrder ASC, displayName ASC;
+
+getAllDisabled:
+SELECT * FROM Channel WHERE enabled = 0 ORDER BY displayName ASC;
+
 getFavoriteAppChannels:
-SELECT * FROM Channel WHERE (SELECT favoriteOrder FROM App WHERE App.packageName = Channel.packageName) IS NOT NULL;
+SELECT Channel.* FROM Channel
+WHERE Channel.enabled = 1
+AND (SELECT favoriteOrder FROM App WHERE App.packageName = Channel.packageName) IS NOT NULL
+ORDER BY Channel.displayOrder ASC, Channel.displayName ASC;
+
+getAllAppChannels:
+SELECT * FROM Channel
+WHERE type = 'PREVIEW'
+ORDER BY displayOrder ASC, displayName ASC;
 
 getById:
 SELECT * FROM Channel WHERE id = :id LIMIT 1;
 
 getByType:
 SELECT * FROM Channel WHERE type = :type;
+
+getByTypeEnabled:
+SELECT * FROM Channel WHERE type = :type AND enabled = 1 ORDER BY displayOrder ASC, displayName ASC;
 
 upsert {
 	UPDATE Channel SET
@@ -52,6 +74,27 @@ upsert {
         :packageName,
         :appLinkIntentUri
 	);
+}
+
+enableChannel:
+UPDATE Channel SET enabled = 1 WHERE id = :id;
+
+disableChannel:
+UPDATE Channel SET enabled = 0 WHERE id = :id;
+
+updateDisplayOrder:
+UPDATE Channel SET displayOrder = :displayOrder WHERE id = :id;
+
+updateDisplayOrderAdd:
+UPDATE Channel SET displayOrder = COALESCE((SELECT MAX(displayOrder) FROM Channel WHERE enabled = 1), -1) + 1 WHERE id = :id;
+
+updateDisplayOrderShift {
+	-- Decrease the order for all items after the old order
+	UPDATE Channel SET displayOrder = displayOrder - 1 WHERE displayOrder > (SELECT displayOrder FROM Channel WHERE id = :id) AND id != :id AND enabled = 1;
+	-- Increase the order for all items after the new order
+	UPDATE Channel SET displayOrder = displayOrder + 1 WHERE displayOrder >= :order AND id != :id AND enabled = 1;
+	-- Update requested item
+	UPDATE Channel SET displayOrder = :order WHERE id = :id;
 }
 
 removeById:
