@@ -14,9 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +26,6 @@ import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.ui.component.card.InputCard
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InputsTab(
     modifier: Modifier = Modifier
@@ -68,17 +65,13 @@ fun InputsTab(
             verticalArrangement = Arrangement.spacedBy(14.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             columns = GridCells.Adaptive(160.dp),
-            modifier = modifier
-                .focusRestorer()
-                .fillMaxSize()
+            modifier = modifier.fillMaxSize()
         ) {
             items(
                 items = inputs,
                 key = { input -> input.id },
             ) { input ->
-                Box(
-                    modifier = Modifier.animateItem()
-                ) {
+                Box {
                     InputCard(
                         input = input,
                         onClick = {

@@ -18,9 +18,7 @@ import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.ui.AppBase
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.compose.KoinContext
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
@@ -43,9 +41,7 @@ class LauncherActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            KoinContext(getKoin()) {
-                AppBase()
-            }
+            AppBase()
         }
 
         validateDefaultLauncher()

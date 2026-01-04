@@ -108,7 +108,7 @@ fun AppsTab(
                 items = apps,
                 key = { app -> app.id },
             ) { app ->
-                Box(modifier = Modifier.animateItem()) {
+                Box {
                     AppCard(
                         app = app,
                         popupContent = {
@@ -146,7 +146,7 @@ fun AppsTab(
                 items = hiddenApps,
                 key = { app -> "hidden_${app.id}" },
             ) { app ->
-                Box(modifier = Modifier.animateItem()) {
+                Box {
                     AppCard(
                         app = app,
                         popupContent = {

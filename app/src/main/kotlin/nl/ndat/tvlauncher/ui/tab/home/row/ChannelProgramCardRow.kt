@@ -1,11 +1,5 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusable
@@ -118,9 +112,7 @@ fun ChannelProgramCardRow(
                             items = programs,
                             key = { _, program -> program.id },
                         ) { index, program ->
-                            Box(
-                                modifier = Modifier.animateItem()
-                            ) {
+                            Box {
                                 ChannelProgramCard(
                                     program = program,
                                     modifier = Modifier
@@ -154,19 +146,9 @@ fun ChannelProgramCardRow(
             }
         )
 
-        AnimatedContent(
-            targetState = focusedProgram,
-            label = "ChannelProgramCardRow",
-            contentKey = { program -> program?.id },
-            transitionSpec = {
-                if (initialState == null && targetState != null) slideInVertically() togetherWith fadeOut()
-                else if (initialState != null && targetState == null) fadeIn() togetherWith slideOutVertically()
-                else fadeIn() togetherWith fadeOut()
-            }
-        ) { program ->
-            if (program != null) {
-                ChannelProgramCardDetails(program, app)
-            }
+        // Show focused program details without animation
+        if (focusedProgram != null) {
+            ChannelProgramCardDetails(focusedProgram!!, app)
         }
     }
 }

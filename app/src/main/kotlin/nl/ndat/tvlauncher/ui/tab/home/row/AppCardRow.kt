@@ -36,10 +36,7 @@ fun AppCardRow(
         ) { index, app ->
             val isInMoveMode = moveAppId == app.id
 
-            Box(
-                modifier = Modifier
-                    .animateItem()
-            ) {
+            Box {
                 MoveableAppCard(
                     app = app,
                     modifier = Modifier

@@ -74,7 +74,7 @@ class HomeTabViewModel(
         channelRepository.moveChannelDown(channel.id)
     }
 
-    fun setChannelOrder(channel: Channel, order: Int) = viewModelScope.launch {
+    fun setChannelOrder(channel: Channel, order: Long) = viewModelScope.launch {
         channelRepository.updateChannelOrder(channel.id, order)
     }
 }
