@@ -24,3 +24,5 @@ Some features are not implemented because of platform limitations. The following
   [WallpaperManager actions](https://developer.android.com/reference/android/app/WallpaperManager.html).
 
 - Search
+
+### This is a fork of [https://github.com/nielsvanvelzen/tv-launcher](https://github.com/nielsvanvelzen/tv-launcher)
