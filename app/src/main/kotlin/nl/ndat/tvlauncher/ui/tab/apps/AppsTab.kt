@@ -20,43 +20,43 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppsTab(
-	modifier: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
-	val viewModel = koinViewModel<AppsTabViewModel>()
-	val apps by viewModel.apps.collectAsState()
+    val viewModel = koinViewModel<AppsTabViewModel>()
+    val apps by viewModel.apps.collectAsState()
 
-	LazyVerticalGrid(
-		contentPadding = PaddingValues(
-			vertical = 16.dp,
-			horizontal = 48.dp,
-		),
-		verticalArrangement = Arrangement.spacedBy(14.dp),
-		horizontalArrangement = Arrangement.spacedBy(14.dp),
-		columns = GridCells.Adaptive(90.dp * (16f / 9f)),
-		modifier = modifier
-			.focusRestorer()
-			.fillMaxSize()
-	) {
-		items(
-			items = apps,
-			key = { app -> app.id },
-		) { app ->
-			Box(
-				modifier = Modifier
-					.animateItem()
-			) {
-				AppCard(
-					app = app,
-					popupContent = {
-						AppPopup(
-							isFavorite = app.favoriteOrder != null,
-							onToggleFavorite = { favorite ->
-								viewModel.favoriteApp(app, favorite)
-							}
-						)
-					}
-				)
-			}
-		}
-	}
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(
+            vertical = 16.dp,
+            horizontal = 48.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        columns = GridCells.Adaptive(90.dp * (16f / 9f)),
+        modifier = modifier
+            .focusRestorer()
+            .fillMaxSize()
+    ) {
+        items(
+            items = apps,
+            key = { app -> app.id },
+        ) { app ->
+            Box(
+                modifier = Modifier
+                    .animateItem()
+            ) {
+                AppCard(
+                    app = app,
+                    popupContent = {
+                        AppPopup(
+                            isFavorite = app.favoriteOrder != null,
+                            onToggleFavorite = { favorite ->
+                                viewModel.favoriteApp(app, favorite)
+                            }
+                        )
+                    }
+                )
+            }
+        }
+    }
 }

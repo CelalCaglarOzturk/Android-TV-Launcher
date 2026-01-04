@@ -11,15 +11,15 @@ import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 
 class AppsTabViewModel(
-	private val appRepository: AppRepository,
+    private val appRepository: AppRepository,
 ) : ViewModel() {
-	val apps = appRepository.getApps()
-		// Hide launcher app from showing
-		.map { apps -> apps.filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID } }
-		.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val apps = appRepository.getApps()
+        // Hide launcher app from showing
+        .map { apps -> apps.filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID } }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-	fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
-		if (favorite) appRepository.favorite(app.id)
-		else appRepository.unfavorite(app.id)
-	}
+    fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
+        if (favorite) appRepository.favorite(app.id)
+        else appRepository.unfavorite(app.id)
+    }
 }
