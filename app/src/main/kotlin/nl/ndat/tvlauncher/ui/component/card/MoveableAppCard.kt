@@ -82,6 +82,7 @@ fun MoveableAppCard(
     }
 
     var menuVisible by remember { mutableStateOf(false) }
+    var ignoreNextKeyUp by remember { mutableStateOf(false) }
 
     // Border color based on state
     val borderColor = if (isInMoveMode) Color.White else MaterialTheme.colorScheme.border
@@ -96,6 +97,11 @@ fun MoveableAppCard(
                 modifier = modifier
                     .width(baseHeight * (16f / 9f))
                     .onPreviewKeyEvent { event ->
+                        if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
+                            ignoreNextKeyUp = false
+                            return@onPreviewKeyEvent true
+                        }
+
                         // Handle move mode key events
                         if (isInMoveMode) {
                             if (event.type == KeyEventType.KeyDown) {
@@ -123,6 +129,7 @@ fun MoveableAppCard(
                                     KeyEvent.KEYCODE_DPAD_CENTER,
                                     KeyEvent.KEYCODE_ENTER -> {
                                         onMoveModeChanged?.invoke(false)
+                                        ignoreNextKeyUp = true
                                         return@onPreviewKeyEvent true
                                     }
 
