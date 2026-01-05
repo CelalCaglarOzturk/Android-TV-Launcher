@@ -16,8 +16,33 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.unit.sp
+import androidx.tv.material3.Card
+import androidx.tv.material3.CardDefaults
+import androidx.tv.material3.Icon
+import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.StandardCardContainer
+import androidx.tv.material3.Text
+import nl.ndat.tvlauncher.data.sqldelight.App
+import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
 import nl.ndat.tvlauncher.util.FocusController
@@ -62,6 +87,33 @@ fun HomeTab(
 
     // Stable focus requester that persists across recompositions
     val firstItemFocusRequester = remember { FocusRequester() }
+
+    // Track which channel should receive focus after recomposition
+    var focusedChannelId by remember { mutableStateOf<String?>(null) }
+
+    // Map for focus requesters
+    val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    // Restore focus to the channel that was being toggled
+    LaunchedEffect(focusedChannelId, enabledChannels, disabledChannels) {
+        focusedChannelId?.let { id ->
+            val requester = focusRequesters[id]
+            if (requester != null) {
+                try {
+                    requester.requestFocus()
+                    focusedChannelId = null
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            }
+        }
+    }
+
+    // Clean up focus requesters
+    LaunchedEffect(channels, allAppChannels) {
+        val currentIds = allAppChannels.map { it.id }.toSet()
+        focusRequesters.keys.retainAll(currentIds)
+    }
 
     LaunchedEffect(isActive) {
         if (isActive) {
@@ -128,7 +180,14 @@ fun HomeTab(
                 // Memoize size values
                 val enabledChannelsSize = remember(enabledChannels) { enabledChannels.size }
 
+                val focusRequester = remember(channel.id) {
+                    focusRequesters.getOrPut(channel.id) { FocusRequester() }
+                }
+
                 ChannelProgramCardRow(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .focusGroup(),
                     title = displayTitle,
                     programs = programs,
                     app = app,
@@ -138,6 +197,13 @@ fun HomeTab(
                     baseHeight = channelCardSize.dp,
                     overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
                     onToggleEnabled = { enabled ->
+                        if (!enabled) {
+                            val nextChannel = enabledChannels.getOrNull(index + 1)
+                                ?: enabledChannels.getOrNull(index - 1)
+                            focusedChannelId = nextChannel?.id ?: channel.id
+                        } else {
+                            focusedChannelId = channel.id
+                        }
                         viewModel.setChannelEnabled(channel, enabled)
                     },
                     onMoveUp = {
@@ -159,14 +225,111 @@ fun HomeTab(
                 key = "disabled_channels_header",
                 contentType = "disabled_channels_section"
             ) {
-                DisabledChannelsSection(
-                    disabledChannels = disabledChannels,
-                    apps = apps,
-                    onEnableChannel = { channel ->
-                        viewModel.enableChannel(channel)
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.disabled_channels),
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(
+                            vertical = 4.dp,
+                            horizontal = 48.dp,
+                        )
+                    )
+
+                    LazyRow(
+                        contentPadding = PaddingValues(
+                            vertical = 16.dp,
+                            horizontal = 48.dp,
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        itemsIndexed(
+                            items = disabledChannels,
+                            key = { _, channel -> "disabled_${channel.id}" }
+                        ) { index, channel ->
+                            val app = remember(channel.packageName, apps) {
+                                apps.firstOrNull { app -> app.packageName == channel.packageName }
+                            }
+
+                            val focusRequester = remember(channel.id) {
+                                focusRequesters.getOrPut(channel.id) { FocusRequester() }
+                            }
+
+                            DisabledChannelCard(
+                                modifier = Modifier.focusRequester(focusRequester),
+                                channel = channel,
+                                appName = app?.displayName ?: channel.packageName,
+                                onEnable = {
+                                    val nextChannel = disabledChannels.getOrNull(index + 1)
+                                        ?: disabledChannels.getOrNull(index - 1)
+                                    focusedChannelId = nextChannel?.id ?: channel.id
+                                    viewModel.enableChannel(channel)
+                                }
+                            )
+                        }
                     }
-                )
+                }
             }
         }
     }
+}
+
+@Composable
+private fun DisabledChannelCard(
+    channel: Channel,
+    appName: String,
+    onEnable: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    StandardCardContainer(
+        modifier = modifier.width(200.dp),
+        imageCard = { interactionSource ->
+            Card(
+                onClick = onEnable,
+                interactionSource = interactionSource,
+                colors = CardDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = channel.displayName,
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = appName,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.channel_enable),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = stringResource(R.string.channel_enable),
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
+        },
+        title = { }
+    )
 }
