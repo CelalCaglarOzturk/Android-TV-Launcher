@@ -26,7 +26,8 @@ import org.koin.compose.koinInject
 
 @Composable
 fun HomeTab(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isActive: Boolean = true
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
     val focusController = koinInject<FocusController>()
@@ -62,13 +63,15 @@ fun HomeTab(
     // Stable focus requester that persists across recompositions
     val firstItemFocusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(Unit) {
-        focusController.focusReset.collect {
-            listState.scrollToItem(0)
-            try {
-                firstItemFocusRequester.requestFocus()
-            } catch (e: Exception) {
-                // Ignore focus request failures
+    LaunchedEffect(isActive) {
+        if (isActive) {
+            focusController.focusReset.collect {
+                listState.scrollToItem(0)
+                try {
+                    firstItemFocusRequester.requestFocus()
+                } catch (e: Exception) {
+                    // Ignore focus request failures
+                }
             }
         }
     }

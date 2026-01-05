@@ -42,7 +42,8 @@ import org.koin.compose.koinInject
 
 @Composable
 fun AppsTab(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isActive: Boolean = true
 ) {
     val viewModel = koinViewModel<AppsTabViewModel>()
     val focusController = koinInject<FocusController>()
@@ -72,9 +73,9 @@ fun AppsTab(
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
 
     // Restore focus to the app that was being moved after list recomposes
-    // Use a more targeted effect that only runs when focusedAppId changes
-    LaunchedEffect(focusedAppId) {
-        if (focusedAppId != null) {
+    // Use a more targeted effect that only runs when focusedAppId changes and tab is active
+    LaunchedEffect(focusedAppId, isActive) {
+        if (isActive && focusedAppId != null) {
             val focusRequester = focusRequesters[focusedAppId]
             if (focusRequester != null) {
                 try {
@@ -86,13 +87,15 @@ fun AppsTab(
         }
     }
 
-    LaunchedEffect(Unit) {
-        focusController.focusReset.collect {
-            listState.scrollToItem(0)
-            try {
-                firstItemFocusRequester.requestFocus()
-            } catch (e: Exception) {
-                // Ignore
+    LaunchedEffect(isActive) {
+        if (isActive) {
+            focusController.focusReset.collect {
+                listState.scrollToItem(0)
+                try {
+                    firstItemFocusRequester.requestFocus()
+                } catch (e: Exception) {
+                    // Ignore
+                }
             }
         }
     }
