@@ -39,9 +39,6 @@ fun ToolbarInputsButton() {
 
     val context = LocalContext.current
 
-    // TODO: When toolbar is configurable this should be removed
-    if (inputs.isEmpty()) return
-
     var expand by remember { mutableStateOf(false) }
 
     IconButton(
@@ -55,7 +52,6 @@ fun ToolbarInputsButton() {
     }
 
     if (expand) {
-        // TODO Use a dropdown
         Dialog(onDismissRequest = { expand = false }) {
             Surface(shape = MaterialTheme.shapes.medium) {
                 Column {
