@@ -6,6 +6,7 @@ import coil.ImageLoaderFactory
 import coil.util.DebugLogger
 import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.repository.AppRepository
+import nl.ndat.tvlauncher.data.repository.BackupRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
@@ -37,6 +38,7 @@ private val launcherModule = module {
     single { InputResolver() }
 
     single { SettingsRepository(get()) }
+    single { BackupRepository(get(), get(), get()) }
 
     viewModel { HomeTabViewModel(get(), get(), get()) }
     viewModel { AppsTabViewModel(get(), get()) }

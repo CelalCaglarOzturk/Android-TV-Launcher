@@ -25,10 +25,10 @@ class HomeTabViewModel(
     val apps = appRepository.getFavoriteApps()
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
-    val channels = channelRepository.getFavoriteAppChannels()
+    val channels = channelRepository.getEnabledChannels()
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
-    val allAppChannels = channelRepository.getAllAppChannels()
+    val allAppChannels = channelRepository.getChannels()
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val watchNextPrograms = channelRepository.getWatchNextPrograms()

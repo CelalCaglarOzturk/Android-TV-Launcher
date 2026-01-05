@@ -32,24 +32,19 @@ fun HomeTab(
     val apps by viewModel.apps.collectAsStateWithLifecycle()
     val channels by viewModel.channels.collectAsStateWithLifecycle()
     val allAppChannels by viewModel.allAppChannels.collectAsStateWithLifecycle()
-    val watchNextPrograms by viewModel.watchNextPrograms.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf for filtered lists to avoid unnecessary recompositions
     val enabledChannels by remember(channels) {
         derivedStateOf {
-            channels.filter { it.type == ChannelType.PREVIEW && it.enabled }
+            channels.filter { it.enabled }
         }
     }
 
     val disabledChannels by remember(allAppChannels) {
         derivedStateOf {
-            allAppChannels.filter { !it.enabled && it.type == ChannelType.PREVIEW }
+            allAppChannels.filter { !it.enabled }
         }
-    }
-
-    val hasWatchNext by remember(watchNextPrograms) {
-        derivedStateOf { watchNextPrograms.isNotEmpty() }
     }
 
     val hasDisabledChannels by remember(disabledChannels) {
@@ -74,19 +69,6 @@ fun HomeTab(
             )
         }
 
-        if (hasWatchNext) {
-            item(
-                key = ChannelResolver.CHANNEL_ID_WATCH_NEXT,
-                contentType = "channel_row"
-            ) {
-                ChannelProgramCardRow(
-                    title = stringResource(R.string.channel_watch_next),
-                    programs = watchNextPrograms,
-                    app = null,
-                )
-            }
-        }
-
         itemsIndexed(
             items = enabledChannels,
             key = { _, channel -> channel.id },
@@ -96,9 +78,14 @@ fun HomeTab(
                 apps.firstOrNull { app -> app.packageName == channel.packageName }
             }
             val programs by viewModel.channelPrograms(channel).collectAsStateWithLifecycle(initialValue = emptyList())
+            val isWatchNext = channel.type == ChannelType.WATCH_NEXT
 
-            if (app != null && programs.isNotEmpty()) {
-                val title = stringResource(R.string.channel_preview, app.displayName, channel.displayName)
+            if ((isWatchNext || app != null) && programs.isNotEmpty()) {
+                val title = if (isWatchNext) {
+                    stringResource(R.string.channel_watch_next)
+                } else {
+                    stringResource(R.string.channel_preview, app!!.displayName, channel.displayName)
+                }
 
                 ChannelProgramCardRow(
                     title = title,
@@ -112,8 +99,8 @@ fun HomeTab(
                     },
                     onMoveUp = {
                         viewModel.moveChannelUp(channel)
-                        // Calculate index in LazyColumn: Apps (1) + WatchNext (0 or 1) + index
-                        val baseIndex = 1 + (if (hasWatchNext) 1 else 0)
+                        // Calculate index in LazyColumn: Apps (1) + index
+                        val baseIndex = 1
                         if (index > 0) {
                             coroutineScope.launch {
                                 listState.animateScrollToItem(baseIndex + index - 1)
@@ -122,8 +109,8 @@ fun HomeTab(
                     },
                     onMoveDown = {
                         viewModel.moveChannelDown(channel)
-                        // Calculate index in LazyColumn: Apps (1) + WatchNext (0 or 1) + index
-                        val baseIndex = 1 + (if (hasWatchNext) 1 else 0)
+                        // Calculate index in LazyColumn: Apps (1) + index
+                        val baseIndex = 1
                         if (index < enabledChannels.size - 1) {
                             coroutineScope.launch {
                                 listState.animateScrollToItem(baseIndex + index + 1)

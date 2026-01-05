@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.card.MoveDirection
@@ -29,7 +28,6 @@ fun AppCardRow(
     baseHeight: Dp = 90.dp,
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
-    val watchNextBlacklist by viewModel.watchNextBlacklist.collectAsStateWithLifecycle()
 
     // Track which app is in move mode (only one at a time)
     var moveAppId by remember { mutableStateOf<String?>(null) }
@@ -46,7 +44,6 @@ fun AppCardRow(
             key = { _, app -> app.id },
         ) { index, app ->
             val isInMoveMode = moveAppId == app.id
-            val isWatchNextBlacklisted = watchNextBlacklist.contains(app.packageName)
 
             Box {
                 MoveableAppCard(
@@ -59,7 +56,6 @@ fun AppCardRow(
                         ),
                     isInMoveMode = isInMoveMode,
                     isFavorite = app.favoriteOrder != null,
-                    isWatchNextBlacklisted = isWatchNextBlacklisted,
                     onMoveModeChanged = { inMoveMode ->
                         moveAppId = if (inMoveMode) app.id else null
                     },
@@ -90,9 +86,6 @@ fun AppCardRow(
                     },
                     onToggleFavorite = { favorite ->
                         viewModel.favoriteApp(app, favorite)
-                    },
-                    onToggleWatchNextBlacklist = { blacklisted ->
-                        viewModel.toggleWatchNextBlacklist(app.packageName, blacklisted)
                     }
                 )
             }
