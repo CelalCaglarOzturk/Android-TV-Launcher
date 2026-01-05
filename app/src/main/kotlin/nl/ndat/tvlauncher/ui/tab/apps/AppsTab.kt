@@ -19,6 +19,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -39,6 +40,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveDirection
@@ -69,8 +71,30 @@ fun AppsTab(
 
     var showSettings by remember { mutableStateOf(false) }
     var moveAppId by remember { mutableStateOf<String?>(null) }
+
+    // Track which app should receive focus after recomposition
+    var focusedAppId by remember { mutableStateOf<String?>(null) }
+
     val firstItemFocusRequester = remember { FocusRequester() }
     val listState = rememberLazyGridState()
+    val coroutineScope = rememberCoroutineScope()
+
+    // Create a map of focus requesters for each app
+    val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    // Restore focus to the app that was being moved after list recomposes
+    LaunchedEffect(apps, focusedAppId) {
+        if (focusedAppId != null) {
+            val focusRequester = focusRequesters[focusedAppId]
+            if (focusRequester != null) {
+                try {
+                    focusRequester.requestFocus()
+                } catch (e: Exception) {
+                    // Ignore focus request failures
+                }
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         focusController.focusReset.collect {
@@ -81,6 +105,12 @@ fun AppsTab(
                 // Ignore
             }
         }
+    }
+
+    // Clean up focus requesters for apps that are no longer in the list
+    LaunchedEffect(apps) {
+        val currentAppIds = apps.map { it.id }.toSet()
+        focusRequesters.keys.removeAll { it !in currentAppIds }
     }
 
     if (showSettings) {
@@ -183,11 +213,17 @@ fun AppsTab(
                     val isSettings = app.packageName == "nl.ndat.tvlauncher.settings"
                     val isInMoveMode = moveAppId == app.id
 
+                    // Get or create a focus requester for this app
+                    val appFocusRequester = remember(app.id) {
+                        focusRequesters.getOrPut(app.id) { FocusRequester() }
+                    }
+
                     Box {
                         MoveableAppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
                             modifier = Modifier
+                                .focusRequester(appFocusRequester)
                                 .ifElse(
                                     condition = index == 0,
                                     positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
@@ -196,38 +232,74 @@ fun AppsTab(
                             isFavorite = app.favoriteOrder != null,
                             onMoveModeChanged = { inMoveMode ->
                                 moveAppId = if (inMoveMode) app.id else null
+                                // Track focused app when entering move mode
+                                if (inMoveMode) {
+                                    focusedAppId = app.id
+                                }
                             },
                             onMove = { direction ->
                                 when (direction) {
                                     MoveDirection.LEFT -> {
                                         if (index > 0) {
+                                            focusedAppId = app.id
                                             val targetApp = apps[index - 1]
                                             val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - 1)
                                             viewModel.moveApp(app, targetOrder)
+                                            coroutineScope.launch {
+                                                try {
+                                                    appFocusRequester.requestFocus()
+                                                } catch (e: Exception) {
+                                                    // Ignore
+                                                }
+                                            }
                                         }
                                     }
 
                                     MoveDirection.RIGHT -> {
                                         if (index < apps.size - 1) {
+                                            focusedAppId = app.id
                                             val targetApp = apps[index + 1]
                                             val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + 1)
                                             viewModel.moveApp(app, targetOrder)
+                                            coroutineScope.launch {
+                                                try {
+                                                    appFocusRequester.requestFocus()
+                                                } catch (e: Exception) {
+                                                    // Ignore
+                                                }
+                                            }
                                         }
                                     }
 
                                     MoveDirection.UP -> {
                                         if (index >= columnCount) {
+                                            focusedAppId = app.id
                                             val targetApp = apps[index - columnCount]
                                             val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - columnCount)
                                             viewModel.moveApp(app, targetOrder)
+                                            coroutineScope.launch {
+                                                try {
+                                                    appFocusRequester.requestFocus()
+                                                } catch (e: Exception) {
+                                                    // Ignore
+                                                }
+                                            }
                                         }
                                     }
 
                                     MoveDirection.DOWN -> {
                                         if (index + columnCount < apps.size) {
+                                            focusedAppId = app.id
                                             val targetApp = apps[index + columnCount]
                                             val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + columnCount)
                                             viewModel.moveApp(app, targetOrder)
+                                            coroutineScope.launch {
+                                                try {
+                                                    appFocusRequester.requestFocus()
+                                                } catch (e: Exception) {
+                                                    // Ignore
+                                                }
+                                            }
                                         }
                                     }
                                 }

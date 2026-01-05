@@ -22,6 +22,9 @@
 	<string name="channels_settings">Kanallar</string>
 	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
 
+	<!-- Watch Next -->
+	<string name="watch_next_remove">Sıradakilerden Kaldır</string>
+
 	<!-- App options -->
 	<string name="app_options">Uygulama Seçenekleri</string>
 	<string name="app_open">Aç</string>

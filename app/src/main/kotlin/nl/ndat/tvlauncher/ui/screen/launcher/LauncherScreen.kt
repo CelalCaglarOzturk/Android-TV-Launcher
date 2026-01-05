@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import nl.ndat.tvlauncher.data.Destinations
@@ -17,6 +18,10 @@ import nl.ndat.tvlauncher.ui.toolbar.Toolbar
 import nl.ndat.tvlauncher.util.composition.LocalBackStack
 import nl.ndat.tvlauncher.util.composition.ProvideNavigation
 import nl.ndat.tvlauncher.util.modifier.autoFocus
+
+// String keys for SaveableStateHolder (must be Bundle-compatible types)
+private const val KEY_HOME_TAB = "home_tab"
+private const val KEY_APPS_TAB = "apps_tab"
 
 @Composable
 fun LauncherScreen() {
@@ -45,11 +50,28 @@ fun LauncherScreen() {
                     }
                 }
 
-                // Direct content rendering without animation
+                // Use SaveableStateHolder to cache tab states (scroll position, etc.)
+                // while only rendering one tab at a time to avoid focus conflicts
+                val saveableStateHolder = rememberSaveableStateHolder()
+
                 when (currentDestination) {
-                    Destinations.Home -> HomeTab(modifier = Modifier.fillMaxSize())
-                    Destinations.Apps -> AppsTab(modifier = Modifier.fillMaxSize())
-                    else -> HomeTab(modifier = Modifier.fillMaxSize())
+                    Destinations.Home -> {
+                        saveableStateHolder.SaveableStateProvider(key = KEY_HOME_TAB) {
+                            HomeTab(modifier = Modifier.fillMaxSize())
+                        }
+                    }
+
+                    Destinations.Apps -> {
+                        saveableStateHolder.SaveableStateProvider(key = KEY_APPS_TAB) {
+                            AppsTab(modifier = Modifier.fillMaxSize())
+                        }
+                    }
+
+                    else -> {
+                        saveableStateHolder.SaveableStateProvider(key = KEY_HOME_TAB) {
+                            HomeTab(modifier = Modifier.fillMaxSize())
+                        }
+                    }
                 }
             }
         }

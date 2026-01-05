@@ -20,6 +20,9 @@
 	<string name="channels_settings">Channels</string>
 	<string name="disabled_channels">Disabled Channels</string>
 
+	<!-- Watch Next -->
+	<string name="watch_next_remove">Remove from Watch Next</string>
+
 	<!-- App options -->
 	<string name="app_options">App Options</string>
 	<string name="app_open">Open</string>

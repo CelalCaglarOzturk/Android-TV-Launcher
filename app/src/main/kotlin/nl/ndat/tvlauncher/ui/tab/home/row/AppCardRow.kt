@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,8 +35,28 @@ fun AppCardRow(
     // Track which app is in move mode (only one at a time)
     var moveAppId by remember { mutableStateOf<String?>(null) }
 
+    // Track which app should receive focus after recomposition
+    var focusedAppId by remember { mutableStateOf<String?>(null) }
+
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    // Create a map of focus requesters for each app
+    val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    // Restore focus to the app that was being moved after list recomposes
+    LaunchedEffect(apps, focusedAppId) {
+        if (focusedAppId != null) {
+            val focusRequester = focusRequesters[focusedAppId]
+            if (focusRequester != null) {
+                try {
+                    focusRequester.requestFocus()
+                } catch (e: Exception) {
+                    // Ignore focus request failures
+                }
+            }
+        }
+    }
 
     CardRow(
         modifier = modifier,
@@ -47,11 +68,17 @@ fun AppCardRow(
         ) { index, app ->
             val isInMoveMode = moveAppId == app.id
 
+            // Get or create a focus requester for this app
+            val appFocusRequester = remember(app.id) {
+                focusRequesters.getOrPut(app.id) { FocusRequester() }
+            }
+
             Box {
                 MoveableAppCard(
                     app = app,
                     baseHeight = baseHeight,
                     modifier = Modifier
+                        .focusRequester(appFocusRequester)
                         .ifElse(
                             condition = index == 0,
                             positiveModifier = Modifier
@@ -62,23 +89,43 @@ fun AppCardRow(
                     isFavorite = app.favoriteOrder != null,
                     onMoveModeChanged = { inMoveMode ->
                         moveAppId = if (inMoveMode) app.id else null
+                        // Track focused app when entering move mode
+                        if (inMoveMode) {
+                            focusedAppId = app.id
+                        }
                     },
                     onMove = { direction ->
                         when (direction) {
                             MoveDirection.LEFT -> {
                                 if (index > 0) {
+                                    // Track the app to restore focus
+                                    focusedAppId = app.id
                                     viewModel.setFavoriteOrder(app, index - 1)
                                     coroutineScope.launch {
-                                        listState.animateScrollToItem(index - 1)
+                                        listState.animateScrollToItem(maxOf(0, index - 1))
+                                        // Request focus after scroll
+                                        try {
+                                            appFocusRequester.requestFocus()
+                                        } catch (e: Exception) {
+                                            // Ignore
+                                        }
                                     }
                                 }
                             }
 
                             MoveDirection.RIGHT -> {
                                 if (index < apps.size - 1) {
+                                    // Track the app to restore focus
+                                    focusedAppId = app.id
                                     viewModel.setFavoriteOrder(app, index + 1)
                                     coroutineScope.launch {
-                                        listState.animateScrollToItem(index + 1)
+                                        listState.animateScrollToItem(minOf(apps.size - 1, index + 1))
+                                        // Request focus after scroll
+                                        try {
+                                            appFocusRequester.requestFocus()
+                                        } catch (e: Exception) {
+                                            // Ignore
+                                        }
                                     }
                                 }
                             }
@@ -94,5 +141,11 @@ fun AppCardRow(
                 )
             }
         }
+    }
+
+    // Clean up focus requesters for apps that are no longer in the list
+    LaunchedEffect(apps) {
+        val currentAppIds = apps.map { it.id }.toSet()
+        focusRequesters.keys.removeAll { it !in currentAppIds }
     }
 }
