@@ -149,7 +149,7 @@ class BackupRepository(
                 }
 
                 if (channelBackup.displayOrder != null) {
-                    database.channels.updateDisplayOrderShift(channelBackup.displayOrder, match.id)
+                    database.channels.updateDisplayOrderShift(order = channelBackup.displayOrder, id = match.id)
                 }
             }
         }
