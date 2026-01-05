@@ -38,4 +38,13 @@
 	<string name="apps_show_mobile">Show mobile apps</string>
 	<string name="apps_hidden_title">Hidden Apps</string>
 	<string name="apps_mobile_available">%1$d mobile apps available</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">Backup</string>
+	<string name="restore">Restore</string>
+	<string name="backup_success">Backup completed successfully</string>
+	<string name="backup_failed">Backup failed</string>
+	<string name="restore_success">Restore completed successfully</string>
+	<string name="restore_failed">Restore failed</string>
+	<string name="restore_not_found">No backup file found</string>
 </resources>

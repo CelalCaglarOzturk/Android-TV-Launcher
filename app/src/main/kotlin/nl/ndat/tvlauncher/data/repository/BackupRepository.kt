@@ -1,7 +1,7 @@
 package nl.ndat.tvlauncher.data.repository
 
 import android.content.Context
-import android.net.Uri
+import android.os.Environment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
@@ -10,8 +10,7 @@ import kotlinx.serialization.json.Json
 import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.model.ChannelType
 import timber.log.Timber
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.File
 
 class BackupRepository(
     private val context: Context,
@@ -24,30 +23,59 @@ class BackupRepository(
         encodeDefaults = true
     }
 
-    suspend fun exportBackup(uri: Uri) = withContext(Dispatchers.IO) {
+    private val backupFileName = "tv_launcher_backup.json"
+
+    private fun getBackupDirectory(): File {
+        // Use Android/media/nl.ndat.tvlauncher/Backup/ directory
+        val mediaDir = File(
+            Environment.getExternalStorageDirectory(),
+            "Android/media/${context.packageName}/Backup"
+        )
+        if (!mediaDir.exists()) {
+            mediaDir.mkdirs()
+        }
+        return mediaDir
+    }
+
+    private fun getBackupFile(): File {
+        return File(getBackupDirectory(), backupFileName)
+    }
+
+    fun getBackupPath(): String {
+        return getBackupFile().absolutePath
+    }
+
+    fun backupExists(): Boolean {
+        return getBackupFile().exists()
+    }
+
+    suspend fun createBackup() = withContext(Dispatchers.IO) {
         try {
             val backupData = createBackupData()
             val jsonString = json.encodeToString(backupData)
 
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                outputStream.write(jsonString.toByteArray())
-            }
+            val backupFile = getBackupFile()
+            backupFile.writeText(jsonString)
+            Timber.d("Backup created at: ${backupFile.absolutePath}")
         } catch (e: Exception) {
-            Timber.e(e, "Failed to export backup")
+            Timber.e(e, "Failed to create backup")
             throw e
         }
     }
 
-    suspend fun importBackup(uri: Uri) = withContext(Dispatchers.IO) {
+    suspend fun restoreBackup() = withContext(Dispatchers.IO) {
         try {
-            val jsonString = context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                BufferedReader(InputStreamReader(inputStream)).readText()
-            } ?: throw IllegalStateException("Could not open input stream")
+            val backupFile = getBackupFile()
+            if (!backupFile.exists()) {
+                throw IllegalStateException("Backup file not found at: ${backupFile.absolutePath}")
+            }
 
+            val jsonString = backupFile.readText()
             val backupData = json.decodeFromString<BackupData>(jsonString)
             restoreBackupData(backupData)
+            Timber.d("Backup restored from: ${backupFile.absolutePath}")
         } catch (e: Exception) {
-            Timber.e(e, "Failed to import backup")
+            Timber.e(e, "Failed to restore backup")
             throw e
         }
     }

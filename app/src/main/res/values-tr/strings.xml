@@ -40,4 +40,13 @@
 	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
 	<string name="apps_hidden_title">Gizli Uygulamalar</string>
 	<string name="apps_mobile_available">%1$d mobil uygulama mevcut</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">Yedekle</string>
+	<string name="restore">Geri Yükle</string>
+	<string name="backup_success">Yedekleme başarılı</string>
+	<string name="backup_failed">Yedekleme başarısız</string>
+	<string name="restore_success">Geri yükleme başarılı</string>
+	<string name="restore_failed">Geri yükleme başarısız</string>
+	<string name="restore_not_found">Yedek dosyası bulunamadı</string>
 </resources>
