@@ -34,7 +34,6 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +64,6 @@ fun ChannelProgramCardRow(
     onMoveDown: (() -> Unit)? = null,
     onRemoveProgram: ((program: ChannelProgram) -> Unit)? = null,
 ) {
-    var focusedProgram by remember { mutableStateOf<ChannelProgram?>(null) }
     var popupVisible by remember { mutableStateOf(false) }
     var isInMoveMode by remember { mutableStateOf(false) }
     var ignoreNextKeyUp by remember { mutableStateOf(false) }
@@ -192,10 +190,6 @@ fun ChannelProgramCardRow(
                                             condition = index == 0,
                                             positiveModifier = Modifier.focusRequester(childFocusRequester)
                                         )
-                                        .onFocusChanged { state ->
-                                            if (state.hasFocus && focusedProgram != program) focusedProgram = program
-                                            else if (!state.hasFocus && focusedProgram == program) focusedProgram = null
-                                        }
                                         .onPreviewKeyEvent { event ->
                                             if (onRemoveProgram != null &&
                                                 (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER)
@@ -232,10 +226,5 @@ fun ChannelProgramCardRow(
                 }
             }
         )
-
-        // Show focused program details without animation
-        if (focusedProgram != null) {
-            ChannelProgramCardDetails(focusedProgram!!, app)
-        }
     }
 }
