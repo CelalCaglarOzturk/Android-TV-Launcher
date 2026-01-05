@@ -173,24 +173,6 @@ fun AppsTab(
                                 .ifElse(
                                     condition = index == 0,
                                     positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
-                                )
-                                .ifElse(
-                                    condition = isSettings,
-                                    positiveModifier = Modifier.onPreviewKeyEvent { event ->
-                                        if (!isInMoveMode &&
-                                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER)
-                                        ) {
-                                            if (event.type == KeyEventType.KeyUp) {
-                                                showSettings = true
-                                                true
-                                            } else {
-                                                false
-                                            }
-                                        } else {
-                                            false
-                                        }
-                                    }
                                 ),
                             isInMoveMode = isInMoveMode,
                             isFavorite = app.favoriteOrder != null,
@@ -234,6 +216,9 @@ fun AppsTab(
                             },
                             onToggleFavorite = if (!isSettings) {
                                 { favorite -> viewModel.favoriteApp(app, favorite) }
+                            } else null,
+                            onClick = if (isSettings) {
+                                { showSettings = true }
                             } else null
                         )
                     }

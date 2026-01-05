@@ -19,6 +19,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.AppRepository
@@ -33,7 +34,19 @@ fun WatchNextSettingsDialog(
     val channelRepository = koinInject<ChannelRepository>()
     val scope = rememberCoroutineScope()
 
-    val apps by appRepository.getApps().collectAsState(initial = emptyList())
+    val apps by appRepository.getApps()
+        .map { allApps ->
+            allApps.filter { app ->
+                // Only show apps with Leanback intent (TV apps)
+                app.launchIntentUriLeanback != null &&
+                        // Exclude specific apps that don't provide content
+                        app.packageName != "com.android.tv.settings" &&
+                        app.packageName != "com.google.android.tv.remote.service" &&
+                        app.packageName != "com.google.android.play.games" &&
+                        app.packageName != "nl.ndat.tvlauncher.settings"
+            }
+        }
+        .collectAsState(initial = emptyList())
     val blacklist by channelRepository.getWatchNextBlacklist().collectAsState(initial = emptyList())
 
     Dialog(onDismissRequest = onDismissRequest) {

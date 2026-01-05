@@ -71,6 +71,7 @@ fun MoveableAppCard(
     onMoveModeChanged: ((Boolean) -> Unit)? = null,
     onMove: ((direction: MoveDirection) -> Unit)? = null,
     onToggleFavorite: ((Boolean) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -182,8 +183,12 @@ fun MoveableAppCard(
                             )
                         ),
                         onClick = {
-                            if (!isInMoveMode && launchIntentUri != null) {
-                                context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                            if (!isInMoveMode) {
+                                if (onClick != null) {
+                                    onClick()
+                                } else if (launchIntentUri != null) {
+                                    context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                                }
                             }
                         },
                         onLongClick = {
@@ -210,7 +215,9 @@ fun MoveableAppCard(
                 isFavorite = isFavorite,
                 onOpen = {
                     menuVisible = false
-                    if (launchIntentUri != null) {
+                    if (onClick != null) {
+                        onClick()
+                    } else if (launchIntentUri != null) {
                         context.startActivity(Intent.parseUri(launchIntentUri, 0))
                     }
                 },
