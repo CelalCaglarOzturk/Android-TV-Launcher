@@ -58,7 +58,8 @@ class BackupRepository(
             AppBackup(
                 packageName = app.packageName,
                 favoriteOrder = app.favoriteOrder?.toInt(),
-                hidden = app.hidden == 1L
+                hidden = app.hidden == 1L,
+                allAppsOrder = app.allAppsOrder?.toInt()
             )
         }
 
@@ -131,6 +132,16 @@ class BackupRepository(
                 }
             }
 
+        // 3. Restore All Apps Order
+        appsBackup.filter { it.allAppsOrder != null }
+            .sortedBy { it.allAppsOrder }
+            .forEach { appBackup ->
+                val existingApp = database.apps.getByPackageName(appBackup.packageName).executeAsOneOrNull()
+                if (existingApp != null) {
+                    database.apps.updateAllAppsOrder(order = appBackup.allAppsOrder!!.toLong(), id = existingApp.id)
+                }
+            }
+
         // Restore Channels
         val channelsBackup = data.channels
         val currentChannels = database.channels.getByType(ChannelType.PREVIEW).executeAsList()
@@ -175,7 +186,8 @@ data class SettingsBackup(
 data class AppBackup(
     val packageName: String,
     val favoriteOrder: Int?,
-    val hidden: Boolean
+    val hidden: Boolean,
+    val allAppsOrder: Int? = null
 )
 
 @Serializable

@@ -61,6 +61,12 @@ class AppRepository(
                 Timber.d("AppRepository: Auto-adding ${app.displayName} to favorites")
                 database.apps.updateFavoriteAdd(app.id)
             }
+
+            // Ensure all apps have an order in the all apps list
+            val currentApp = database.apps.getById(app.id).executeAsOne()
+            if (currentApp.allAppsOrder == null) {
+                database.apps.updateAllAppsOrderAdd(app.id)
+            }
         } catch (e: Exception) {
             Timber.e(e, "AppRepository: Error upserting app ${app.packageName}")
             throw e
@@ -70,7 +76,24 @@ class AppRepository(
     suspend fun refreshAllApplications() = withContext(Dispatchers.IO) {
         Timber.d("AppRepository: refreshAllApplications called")
         try {
-            val apps = appResolver.getApplications(context)
+            val apps = appResolver.getApplications(context).toMutableList()
+
+            // Add Launcher Settings app
+            val settingsApp = App(
+                id = "settings",
+                displayName = "Launcher Settings",
+                packageName = "nl.ndat.tvlauncher.settings",
+                launchIntentUriDefault = null,
+                launchIntentUriLeanback = null,
+                favoriteOrder = null,
+                hidden = 0,
+                allAppsOrder = null
+            )
+
+            if (apps.none { it.packageName == settingsApp.packageName }) {
+                apps.add(settingsApp)
+            }
+
             Timber.d("AppRepository: Resolver returned ${apps.size} apps")
 
             if (apps.isNotEmpty()) {
@@ -131,6 +154,9 @@ class AppRepository(
 
     suspend fun updateFavoriteOrder(id: String, order: Int) =
         withContext(Dispatchers.IO) { database.apps.updateFavoriteOrder(id, order.toLong()) }
+
+    suspend fun updateAllAppsOrder(id: String, order: Int) =
+        withContext(Dispatchers.IO) { database.apps.updateAllAppsOrder(id, order.toLong()) }
 
     suspend fun hideApp(id: String) = withContext(Dispatchers.IO) {
         database.apps.hideApp(id)

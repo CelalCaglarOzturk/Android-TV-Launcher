@@ -74,6 +74,7 @@ class AppResolver {
             launchIntentUriLeanback = leanbackIntent,
             favoriteOrder = null,
             hidden = 0,
+            allAppsOrder = null,
         )
     }
 
@@ -155,6 +156,7 @@ class AppResolver {
                 launchIntentUriLeanback = leanbackIntents[packageName],
                 favoriteOrder = null,
                 hidden = 0,
+                allAppsOrder = null,
             )
         }
 
@@ -257,6 +259,7 @@ class AppResolver {
             launchIntentUriLeanback = leanbackIntent?.toUri(0),
             favoriteOrder = null,
             hidden = 0,
+            allAppsOrder = null,
         )
     }
 

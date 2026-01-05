@@ -7,21 +7,23 @@ CREATE TABLE App (
 	launchIntentUriLeanback TEXT,
 
 	favoriteOrder INTEGER,
-	hidden INTEGER NOT NULL DEFAULT 0
+	hidden INTEGER NOT NULL DEFAULT 0,
+	allAppsOrder INTEGER
 );
 
 CREATE INDEX appPackageName ON App(packageName);
 CREATE INDEX appFavoriteOrder ON App(favoriteOrder);
 CREATE INDEX appHidden ON App(hidden);
+CREATE INDEX appAllAppsOrder ON App(allAppsOrder);
 
 getAll:
-SELECT * FROM App WHERE hidden = 0 ORDER BY displayName ASC;
+SELECT * FROM App WHERE hidden = 0 ORDER BY allAppsOrder ASC, displayName ASC;
 
 getAllIncludingHidden:
-SELECT * FROM App ORDER BY displayName ASC;
+SELECT * FROM App ORDER BY allAppsOrder ASC, displayName ASC;
 
 getHidden:
-SELECT * FROM App WHERE hidden = 1 ORDER BY displayName ASC;
+SELECT * FROM App WHERE hidden = 1 ORDER BY allAppsOrder ASC, displayName ASC;
 
 getAllFavorites:
 SELECT * FROM App WHERE favoriteOrder IS NOT NULL AND hidden = 0 ORDER BY favoriteOrder ASC;
@@ -72,6 +74,18 @@ updateFavoriteOrder {
 	UPDATE App SET favoriteOrder = favoriteOrder + 1 WHERE favoriteOrder >= :order AND id != :id;
 	-- Update requested item
 	UPDATE App SET favoriteOrder = :order WHERE id = :id;
+}
+
+updateAllAppsOrderAdd:
+UPDATE App SET allAppsOrder = COALESCE((SELECT MAX(allAppsOrder) FROM App), -1) + 1 WHERE id = :id;
+
+updateAllAppsOrder {
+	-- Decrease the order for all items after the old order
+	UPDATE App SET allAppsOrder = allAppsOrder - 1 WHERE allAppsOrder > (SELECT allAppsOrder FROM App WHERE id = :id) AND id != :id;
+	-- Increase the order for all items after the new order
+	UPDATE App SET allAppsOrder = allAppsOrder + 1 WHERE allAppsOrder >= :order AND id != :id;
+	-- Update requested item
+	UPDATE App SET allAppsOrder = :order WHERE id = :id;
 }
 
 hideApp:
