@@ -1,6 +1,7 @@
 package nl.ndat.tvlauncher
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
@@ -18,6 +19,7 @@ import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.ui.AppBase
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
+import nl.ndat.tvlauncher.util.FocusController
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -27,6 +29,7 @@ val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS)
 
 class LauncherActivity : ComponentActivity() {
     private val defaultLauncherHelper: DefaultLauncherHelper by inject()
+    private val focusController: FocusController by inject()
     private val appRepository: AppRepository by inject()
     private val inputRepository: InputRepository by inject()
     private val channelRepository: ChannelRepository by inject()
@@ -86,6 +89,13 @@ class LauncherActivity : ComponentActivity() {
             val intent = defaultLauncherHelper.requestDefaultLauncherIntent()
             @Suppress("DEPRECATION")
             if (intent != null) startActivityForResult(intent, 0)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_HOME)) {
+            focusController.requestFocusReset()
         }
     }
 

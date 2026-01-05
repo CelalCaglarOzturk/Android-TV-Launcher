@@ -142,6 +142,15 @@ class ChannelResolver {
         } ?: emptyList()
     }
 
+    suspend fun removeWatchNextProgram(context: Context, programId: Long) = withContext(Dispatchers.IO) {
+        try {
+            val uri = TvContractCompat.buildWatchNextProgramUri(programId)
+            context.contentResolver.delete(uri, null, null)
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to remove watch next program: $programId")
+        }
+    }
+
     private fun PreviewChannel.toChannel() = Channel(
         id = "$CHANNEL_ID_PREFIX$id",
         type = ChannelType.PREVIEW,

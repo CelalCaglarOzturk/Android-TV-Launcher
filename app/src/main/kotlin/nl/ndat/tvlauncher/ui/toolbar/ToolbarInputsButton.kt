@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,12 +21,22 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.InputRepository
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import org.koin.compose.koinInject
 
 @Composable
 fun ToolbarInputsButton() {
     val inputRepository = koinInject<InputRepository>()
-    val inputs by inputRepository.getInputs().collectAsState(initial = emptyList())
+    val settingsRepository = koinInject<SettingsRepository>()
+    val allInputs by inputRepository.getInputs().collectAsState(initial = emptyList())
+    val hiddenInputs by settingsRepository.hiddenInputs.collectAsState()
+
+    val inputs by remember(allInputs, hiddenInputs) {
+        derivedStateOf {
+            allInputs.filter { !hiddenInputs.contains(it.id) }
+        }
+    }
+
     val context = LocalContext.current
 
     // TODO: When toolbar is configurable this should be removed

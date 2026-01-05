@@ -25,13 +25,14 @@ fun ChannelProgramCard(
     program: ChannelProgram,
     modifier: Modifier = Modifier,
     baseHeight: Dp = 100.dp,
+    overrideAspectRatio: Float? = null,
 ) {
     val context = LocalContext.current
 
     Card(
         modifier = modifier
             .height(baseHeight)
-            .aspectRatio(program.posterArtAspectRatio?.floatValue ?: (16f / 9f)),
+            .aspectRatio(overrideAspectRatio ?: program.posterArtAspectRatio?.floatValue ?: (16f / 9f)),
         border = CardDefaults.border(
             focusedBorder = Border(
                 border = BorderStroke(2.dp, MaterialTheme.colorScheme.border),

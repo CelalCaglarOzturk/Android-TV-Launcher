@@ -45,7 +45,7 @@ fun CardRow(
     LazyRow(
         state = state,
         contentPadding = PaddingValues(
-            vertical = 16.dp,
+            vertical = 4.dp,
             horizontal = 48.dp,
         ),
         horizontalArrangement = Arrangement.spacedBy(14.dp),

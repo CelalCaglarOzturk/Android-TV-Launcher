@@ -76,6 +76,10 @@ class HomeTabViewModel(
         }
     }
 
+    fun removeWatchNextProgram(programId: String) = viewModelScope.launch {
+        channelRepository.removeWatchNextProgram(programId)
+    }
+
     // Channel management functions
     fun enableChannel(channel: Channel) = viewModelScope.launch {
         channelRepository.enableChannel(channel.id)

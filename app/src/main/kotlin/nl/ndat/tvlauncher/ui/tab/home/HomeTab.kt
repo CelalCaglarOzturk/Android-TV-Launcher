@@ -18,15 +18,19 @@ import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
+import androidx.compose.runtime.LaunchedEffect
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
+import nl.ndat.tvlauncher.util.FocusController
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun HomeTab(
     modifier: Modifier = Modifier
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
+    val focusController = koinInject<FocusController>()
 
     // Use lifecycle-aware collection for better performance
     val apps by viewModel.apps.collectAsStateWithLifecycle()
@@ -52,11 +56,16 @@ fun HomeTab(
     }
 
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        focusController.focusReset.collect {
+            listState.scrollToItem(0)
+        }
+    }
 
     LazyColumn(
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(0.dp),
         modifier = modifier.fillMaxSize()
     ) {
         item(
@@ -94,29 +103,20 @@ fun HomeTab(
                     channel = channel,
                     isFirst = index == 0,
                     isLast = index == enabledChannels.size - 1,
+                    baseHeight = appCardSize.dp,
+                    overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
                     onToggleEnabled = { enabled ->
                         viewModel.setChannelEnabled(channel, enabled)
                     },
                     onMoveUp = {
                         viewModel.moveChannelUp(channel)
-                        // Calculate index in LazyColumn: Apps (1) + index
-                        val baseIndex = 1
-                        if (index > 0) {
-                            coroutineScope.launch {
-                                listState.animateScrollToItem(baseIndex + index - 1)
-                            }
-                        }
                     },
                     onMoveDown = {
                         viewModel.moveChannelDown(channel)
-                        // Calculate index in LazyColumn: Apps (1) + index
-                        val baseIndex = 1
-                        if (index < enabledChannels.size - 1) {
-                            coroutineScope.launch {
-                                listState.animateScrollToItem(baseIndex + index + 1)
-                            }
-                        }
-                    }
+                    },
+                    onRemoveProgram = if (isWatchNext) {
+                        { program -> viewModel.removeWatchNextProgram(program.id) }
+                    } else null
                 )
             }
         }

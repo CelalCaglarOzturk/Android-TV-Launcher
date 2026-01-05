@@ -35,6 +35,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
@@ -57,9 +58,12 @@ fun ChannelProgramCardRow(
     channel: Channel? = null,
     isFirst: Boolean = false,
     isLast: Boolean = false,
+    baseHeight: Dp = 90.dp,
+    overrideAspectRatio: Float? = null,
     onToggleEnabled: ((enabled: Boolean) -> Unit)? = null,
     onMoveUp: (() -> Unit)? = null,
     onMoveDown: (() -> Unit)? = null,
+    onRemoveProgram: ((program: ChannelProgram) -> Unit)? = null,
 ) {
     var focusedProgram by remember { mutableStateOf<ChannelProgram?>(null) }
     var popupVisible by remember { mutableStateOf(false) }
@@ -68,6 +72,7 @@ fun ChannelProgramCardRow(
 
     val titleInteractionSource = remember { MutableInteractionSource() }
     val titleFocused by titleInteractionSource.collectIsFocusedAsState()
+    val titleFocusRequester = remember { FocusRequester() }
 
     if (programs.isNotEmpty()) {
         PopupContainer(
@@ -94,6 +99,7 @@ fun ChannelProgramCardRow(
                                 .then(
                                     if (channel != null && onToggleEnabled != null) {
                                         Modifier
+                                            .focusRequester(titleFocusRequester)
                                             .onPreviewKeyEvent { event ->
                                                 if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
                                                     ignoreNextKeyUp = false
@@ -118,6 +124,7 @@ fun ChannelProgramCardRow(
                                                             KeyEvent.KEYCODE_BACK -> {
                                                                 isInMoveMode = false
                                                                 ignoreNextKeyUp = true
+                                                                titleFocusRequester.requestFocus()
                                                                 return@onPreviewKeyEvent true
                                                             }
                                                         }
@@ -161,7 +168,7 @@ fun ChannelProgramCardRow(
 
                     LazyRow(
                         contentPadding = PaddingValues(
-                            vertical = 16.dp,
+                            vertical = 4.dp,
                             horizontal = 48.dp,
                         ),
                         horizontalArrangement = Arrangement.spacedBy(14.dp),
@@ -174,8 +181,12 @@ fun ChannelProgramCardRow(
                             key = { _, program -> program.id },
                         ) { index, program ->
                             Box {
+                                var isLongPress by remember { mutableStateOf(false) }
+
                                 ChannelProgramCard(
                                     program = program,
+                                    baseHeight = baseHeight,
+                                    overrideAspectRatio = overrideAspectRatio,
                                     modifier = Modifier
                                         .ifElse(
                                             condition = index == 0,
@@ -184,6 +195,24 @@ fun ChannelProgramCardRow(
                                         .onFocusChanged { state ->
                                             if (state.hasFocus && focusedProgram != program) focusedProgram = program
                                             else if (!state.hasFocus && focusedProgram == program) focusedProgram = null
+                                        }
+                                        .onPreviewKeyEvent { event ->
+                                            if (onRemoveProgram != null &&
+                                                (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER)
+                                            ) {
+                                                if (event.type == KeyEventType.KeyDown) {
+                                                    if (event.nativeKeyEvent.repeatCount > 0) {
+                                                        isLongPress = true
+                                                    }
+                                                } else if (event.type == KeyEventType.KeyUp) {
+                                                    if (isLongPress) {
+                                                        isLongPress = false
+                                                        onRemoveProgram(program)
+                                                        return@onPreviewKeyEvent true
+                                                    }
+                                                }
+                                            }
+                                            false
                                         },
                                 )
                             }

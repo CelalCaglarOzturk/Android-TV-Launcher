@@ -17,6 +17,7 @@ import nl.ndat.tvlauncher.image.AppIconFetcher
 import nl.ndat.tvlauncher.ui.tab.apps.AppsTabViewModel
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
+import nl.ndat.tvlauncher.util.FocusController
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -27,6 +28,7 @@ import timber.log.Timber
 
 private val launcherModule = module {
     single { DefaultLauncherHelper(get()) }
+    single { FocusController() }
 
     single { AppRepository(get(), get(), get()) }
     single { AppResolver() }

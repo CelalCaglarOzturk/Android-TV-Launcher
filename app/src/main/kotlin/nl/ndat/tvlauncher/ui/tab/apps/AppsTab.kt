@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,14 +43,17 @@ import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveDirection
 import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
+import nl.ndat.tvlauncher.util.FocusController
 import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun AppsTab(
     modifier: Modifier = Modifier
 ) {
     val viewModel = koinViewModel<AppsTabViewModel>()
+    val focusController = koinInject<FocusController>()
 
     // Use collectAsStateWithLifecycle for better lifecycle handling and performance
     val apps by viewModel.apps.collectAsStateWithLifecycle()
@@ -65,6 +70,18 @@ fun AppsTab(
     var showSettings by remember { mutableStateOf(false) }
     var moveAppId by remember { mutableStateOf<String?>(null) }
     val firstItemFocusRequester = remember { FocusRequester() }
+    val listState = rememberLazyGridState()
+
+    LaunchedEffect(Unit) {
+        focusController.focusReset.collect {
+            listState.scrollToItem(0)
+            try {
+                firstItemFocusRequester.requestFocus()
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+    }
 
     if (showSettings) {
         LauncherSettingsDialog(onDismissRequest = { showSettings = false })
@@ -86,6 +103,7 @@ fun AppsTab(
         }
 
         LazyVerticalGrid(
+            state = listState,
             contentPadding = PaddingValues(
                 vertical = 16.dp,
                 horizontal = 48.dp,

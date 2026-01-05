@@ -187,6 +187,14 @@ class ChannelRepository(
     fun isPackageBlacklistedForWatchNext(packageName: String) =
         database.watchNextBlacklist.isBlacklisted(packageName).executeAsOne()
 
+    suspend fun removeWatchNextProgram(programId: String) = withContext(Dispatchers.IO) {
+        val internalId = programId.removePrefix(ChannelResolver.CHANNEL_PROGRAM_ID_PREFIX).toLongOrNull()
+        if (internalId != null) {
+            channelResolver.removeWatchNextProgram(context, internalId)
+            refreshWatchNextChannels()
+        }
+    }
+
     // Getters
     fun getChannels() = database.channels.getAll().executeAsListFlow()
     fun getEnabledChannels() = database.channels.getAllEnabled().executeAsListFlow()

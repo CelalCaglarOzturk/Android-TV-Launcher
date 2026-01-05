@@ -43,9 +43,12 @@ fun LauncherSettingsDialog(
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
+    var showInputsSettings by remember { mutableStateOf(false) }
 
     if (showWatchNextSettings) {
         WatchNextSettingsDialog(onDismissRequest = { showWatchNextSettings = false })
+    } else if (showInputsSettings) {
+        InputsSettingsDialog(onDismissRequest = { showInputsSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             Surface(shape = MaterialTheme.shapes.medium) {
@@ -77,6 +80,12 @@ fun LauncherSettingsDialog(
                         selected = false,
                         onClick = { showWatchNextSettings = true },
                         headlineContent = { Text(stringResource(R.string.channel_watch_next)) }
+                    )
+
+                    ListItem(
+                        selected = false,
+                        onClick = { showInputsSettings = true },
+                        headlineContent = { Text("Inputs") }
                     )
 
                     ListItem(
