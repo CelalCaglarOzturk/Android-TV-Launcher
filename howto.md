@@ -46,7 +46,9 @@
 ### 6. Navigation & Focus
 - **D-pad Navigation**: Full remote control support
 - **Menu Key**: Mapped to long-press for context menus
-- **Focus Reset**: Pressing Home returns focus to first item
+- **Home Button**: Pressing Home resets focus to first app in both tabs
+- **Channel Navigation**: Navigate down from apps row to first channel card, then down to next channel's cards
+- **Long-press on Channel Cards**: Opens channel management popup (enable/disable, move)
 - **Focus Restoration**: Remembers focus position when switching tabs
 
 ---

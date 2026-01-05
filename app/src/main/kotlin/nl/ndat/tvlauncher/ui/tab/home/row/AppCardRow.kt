@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun AppCardRow(
     apps: List<App>,
     modifier: Modifier = Modifier,
     baseHeight: Dp = 90.dp,
+    firstItemFocusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
 
@@ -52,7 +54,9 @@ fun AppCardRow(
                     modifier = Modifier
                         .ifElse(
                             condition = index == 0,
-                            positiveModifier = Modifier.focusRequester(childFocusRequester)
+                            positiveModifier = Modifier
+                                .focusRequester(childFocusRequester)
+                                .focusRequester(firstItemFocusRequester)
                         ),
                     isInMoveMode = isInMoveMode,
                     isFavorite = app.favoriteOrder != null,

@@ -9,15 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
-import nl.ndat.tvlauncher.data.resolver.ChannelResolver
 import androidx.compose.runtime.LaunchedEffect
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
@@ -56,10 +54,16 @@ fun HomeTab(
     }
 
     val listState = rememberLazyListState()
+    val firstItemFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusController.focusReset.collect {
             listState.scrollToItem(0)
+            try {
+                firstItemFocusRequester.requestFocus()
+            } catch (e: Exception) {
+                // Ignore focus request failures
+            }
         }
     }
 
@@ -74,7 +78,8 @@ fun HomeTab(
         ) {
             AppCardRow(
                 apps = apps,
-                baseHeight = appCardSize.dp
+                baseHeight = appCardSize.dp,
+                firstItemFocusRequester = firstItemFocusRequester
             )
         }
 
