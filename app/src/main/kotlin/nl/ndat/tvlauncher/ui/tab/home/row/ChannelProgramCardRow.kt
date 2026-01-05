@@ -162,13 +162,19 @@ fun ChannelProgramCardRow(
                                                     positiveModifier = Modifier.focusRequester(childFocusRequester)
                                                 )
                                                 .onPreviewKeyEvent { event ->
+                                                    // Consume KeyUp events when ignoreNextKeyUp is set (after exiting move mode)
+                                                    if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
+                                                        when (event.key.nativeKeyCode) {
+                                                            KeyEvent.KEYCODE_DPAD_CENTER,
+                                                            KeyEvent.KEYCODE_ENTER -> {
+                                                                ignoreNextKeyUp = false
+                                                                return@onPreviewKeyEvent true
+                                                            }
+                                                        }
+                                                    }
+
                                                     // Handle move mode key events
                                                     if (isInMoveMode) {
-                                                        if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
-                                                            ignoreNextKeyUp = false
-                                                            return@onPreviewKeyEvent true
-                                                        }
-
                                                         if (event.type == KeyEventType.KeyDown) {
                                                             when (event.key.nativeKeyCode) {
                                                                 KeyEvent.KEYCODE_DPAD_UP -> {
@@ -182,17 +188,24 @@ fun ChannelProgramCardRow(
                                                                 }
 
                                                                 KeyEvent.KEYCODE_DPAD_CENTER,
-                                                                KeyEvent.KEYCODE_ENTER,
-                                                                KeyEvent.KEYCODE_BACK -> {
+                                                                KeyEvent.KEYCODE_ENTER -> {
                                                                     isInMoveMode = false
                                                                     ignoreNextKeyUp = true
                                                                     return@onPreviewKeyEvent true
                                                                 }
+
+                                                                KeyEvent.KEYCODE_BACK -> {
+                                                                    isInMoveMode = false
+                                                                    return@onPreviewKeyEvent true
+                                                                }
                                                             }
                                                         } else if (event.type == KeyEventType.KeyUp) {
+                                                            // Consume all KeyUp events while in move mode to prevent card activation
                                                             when (event.key.nativeKeyCode) {
                                                                 KeyEvent.KEYCODE_DPAD_CENTER,
-                                                                KeyEvent.KEYCODE_ENTER -> {
+                                                                KeyEvent.KEYCODE_ENTER,
+                                                                KeyEvent.KEYCODE_DPAD_UP,
+                                                                KeyEvent.KEYCODE_DPAD_DOWN -> {
                                                                     return@onPreviewKeyEvent true
                                                                 }
                                                             }

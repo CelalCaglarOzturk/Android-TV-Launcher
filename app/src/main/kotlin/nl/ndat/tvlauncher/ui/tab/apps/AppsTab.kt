@@ -142,19 +142,6 @@ fun AppsTab(
         ) {
             // Visible Apps Section
             if (hasApps) {
-                item(
-                    key = "all_apps_header",
-                    span = { GridItemSpan(maxLineSpan) },
-                    contentType = "section_header"
-                ) {
-                    Text(
-                        text = stringResource(R.string.tab_apps),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-
                 itemsIndexed(
                     items = apps,
                     key = { _, app -> app.id },
