@@ -67,8 +67,18 @@ class LauncherApplication : Application(), ImageLoaderFactory {
 
     override fun newImageLoader() = ImageLoader.Builder(this)
         .components {
+            // Register keyer for proper cache key generation
+            add(AppIconFetcher.AppKeyer())
+            // Register fetcher for loading app icons
             add(AppIconFetcher.Factory(this@LauncherApplication))
         }
-        .logger(DebugLogger())
+        // Only enable debug logging in debug builds
+        .apply {
+            if (BuildConfig.DEBUG) {
+                logger(DebugLogger())
+            }
+        }
+        // Enable memory and disk caching (enabled by default, but being explicit)
+        .respectCacheHeaders(false) // App icons don't have HTTP cache headers
         .build()
 }

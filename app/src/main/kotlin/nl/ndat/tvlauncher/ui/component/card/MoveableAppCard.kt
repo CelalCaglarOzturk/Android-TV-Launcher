@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
@@ -55,6 +54,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
@@ -74,20 +74,54 @@ fun MoveableAppCard(
     onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
+
+    // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
-    val launchIntentUri = remember(app.id) {
-        app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    // Cache and parse launch intent - only recompute when app changes
+    val launchIntent = remember(app.id) {
+        val intentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+        intentUri?.let { uri ->
+            try {
+                Intent.parseUri(uri, 0)
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
 
     var menuVisible by remember { mutableStateOf(false) }
     var ignoreNextKeyUp by remember { mutableStateOf(false) }
 
-    // Border color based on state
-    val borderColor = if (isInMoveMode) Color.White else MaterialTheme.colorScheme.border
+    // Memoize border styling based on move mode
+    val borderColor = remember(isInMoveMode) {
+        if (isInMoveMode) Color.White else null
+    }
+    val borderWidth = remember(isInMoveMode) { if (isInMoveMode) 3.dp else 2.dp }
 
-    val borderWidth = if (isInMoveMode) 3.dp else 2.dp
+    // Memoize card width calculation
+    val cardWidth = remember(baseHeight) { baseHeight * (16f / 9f) }
+
+    // Memoize the image request to prevent recreating on every recomposition
+    val imageRequest = remember(app.id, context) {
+        ImageRequest.Builder(context)
+            .data(app)
+            .memoryCacheKey("app_icon:${app.id}")
+            .diskCacheKey("app_icon:${app.id}")
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .crossfade(true)
+            .build()
+    }
+
+    // Memoize app info intent
+    val appInfoIntent = remember(app.packageName) {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.parse("package:${app.packageName}")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    }
 
     PopupContainer(
         visible = menuVisible && !isInMoveMode,
@@ -95,7 +129,7 @@ fun MoveableAppCard(
         content = {
             StandardCardContainer(
                 modifier = modifier
-                    .width(baseHeight * (16f / 9f))
+                    .width(cardWidth)
                     .onPreviewKeyEvent { event ->
                         if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
                             ignoreNextKeyUp = false
@@ -179,15 +213,20 @@ fun MoveableAppCard(
                         interactionSource = interactionSource,
                         border = CardDefaults.border(
                             focusedBorder = Border(
-                                border = BorderStroke(borderWidth, borderColor),
+                                border = BorderStroke(
+                                    borderWidth,
+                                    borderColor ?: MaterialTheme.colorScheme.border
+                                ),
                             )
                         ),
                         onClick = {
                             if (!isInMoveMode) {
                                 if (onClick != null) {
                                     onClick()
-                                } else if (launchIntentUri != null) {
-                                    context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                                } else {
+                                    launchIntent?.let { intent ->
+                                        context.startActivity(intent)
+                                    }
                                 }
                             }
                         },
@@ -199,10 +238,7 @@ fun MoveableAppCard(
                     ) {
                         AsyncImage(
                             modifier = Modifier.fillMaxSize(),
-                            model = ImageRequest.Builder(context)
-                                .data(app)
-                                .crossfade(true)
-                                .build(),
+                            model = imageRequest,
                             contentDescription = app.displayName,
                         )
                     }
@@ -217,8 +253,10 @@ fun MoveableAppCard(
                     menuVisible = false
                     if (onClick != null) {
                         onClick()
-                    } else if (launchIntentUri != null) {
-                        context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                    } else {
+                        launchIntent?.let { intent ->
+                            context.startActivity(intent)
+                        }
                     }
                 },
                 onMove = {
@@ -231,11 +269,7 @@ fun MoveableAppCard(
                 },
                 onInfo = {
                     menuVisible = false
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                        data = Uri.parse("package:${app.packageName}")
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    }
-                    context.startActivity(intent)
+                    context.startActivity(appInfoIntent)
                 }
             )
         }

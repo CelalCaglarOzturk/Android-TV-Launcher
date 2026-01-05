@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
@@ -54,22 +55,26 @@ fun LauncherScreen() {
                 // while only rendering one tab at a time to avoid focus conflicts
                 val saveableStateHolder = rememberSaveableStateHolder()
 
-                when (currentDestination) {
-                    Destinations.Home -> {
-                        saveableStateHolder.SaveableStateProvider(key = KEY_HOME_TAB) {
-                            HomeTab(modifier = Modifier.fillMaxSize())
-                        }
+                // Determine which tab key to use
+                val currentTabKey = remember(currentDestination) {
+                    when (currentDestination) {
+                        Destinations.Apps -> KEY_APPS_TAB
+                        else -> KEY_HOME_TAB
                     }
+                }
 
-                    Destinations.Apps -> {
-                        saveableStateHolder.SaveableStateProvider(key = KEY_APPS_TAB) {
-                            AppsTab(modifier = Modifier.fillMaxSize())
-                        }
-                    }
+                // Use key() to help Compose understand tab identity and reduce recomposition
+                // This ensures stable identity for each tab content
+                key(currentTabKey) {
+                    saveableStateHolder.SaveableStateProvider(key = currentTabKey) {
+                        when (currentDestination) {
+                            Destinations.Apps -> {
+                                AppsTab(modifier = Modifier.fillMaxSize())
+                            }
 
-                    else -> {
-                        saveableStateHolder.SaveableStateProvider(key = KEY_HOME_TAB) {
-                            HomeTab(modifier = Modifier.fillMaxSize())
+                            else -> {
+                                HomeTab(modifier = Modifier.fillMaxSize())
+                            }
                         }
                     }
                 }

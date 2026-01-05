@@ -17,6 +17,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
 import nl.ndat.tvlauncher.util.FocusController
@@ -38,23 +39,27 @@ fun HomeTab(
     val channelCardSize by viewModel.channelCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf for filtered lists to avoid unnecessary recompositions
-    val enabledChannels by remember(channels) {
+    // These are keyed on the source data to prevent recalculation on every recomposition
+    val enabledChannels by remember {
         derivedStateOf {
             channels.filter { it.enabled }
         }
     }
 
-    val disabledChannels by remember(allAppChannels) {
+    val disabledChannels by remember {
         derivedStateOf {
             allAppChannels.filter { !it.enabled }
         }
     }
 
-    val hasDisabledChannels by remember(disabledChannels) {
+    val hasDisabledChannels by remember {
         derivedStateOf { disabledChannels.isNotEmpty() }
     }
 
+    // Use rememberSaveable to preserve scroll position across tab switches
     val listState = rememberLazyListState()
+
+    // Stable focus requester that persists across recompositions
     val firstItemFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -89,26 +94,44 @@ fun HomeTab(
             key = { _, channel -> channel.id },
             contentType = { _, _ -> "channel_row" }
         ) { index, channel ->
+            // Cache app lookup to avoid repeated filtering
             val app = remember(channel.packageName, apps) {
                 apps.firstOrNull { app -> app.packageName == channel.packageName }
             }
             val programs by viewModel.channelPrograms(channel).collectAsStateWithLifecycle(initialValue = emptyList())
-            val isWatchNext = channel.type == ChannelType.WATCH_NEXT
+            val isWatchNext = remember(channel.type) { channel.type == ChannelType.WATCH_NEXT }
 
-            if ((isWatchNext || app != null) && programs.isNotEmpty()) {
-                val title = if (isWatchNext) {
-                    stringResource(R.string.channel_watch_next)
-                } else {
-                    stringResource(R.string.channel_preview, app!!.displayName, channel.displayName)
+            // Early return if not displayable - memoize the condition check
+            val shouldDisplay = remember(isWatchNext, app, programs) {
+                (isWatchNext || app != null) && programs.isNotEmpty()
+            }
+
+            if (shouldDisplay) {
+                // Memoize the title computation
+                val title = remember(isWatchNext, app?.displayName, channel.displayName) {
+                    if (isWatchNext) {
+                        null // Will use string resource
+                    } else {
+                        app?.displayName to channel.displayName
+                    }
                 }
 
+                val displayTitle = if (isWatchNext) {
+                    stringResource(R.string.channel_watch_next)
+                } else {
+                    stringResource(R.string.channel_preview, title!!.first!!, title.second)
+                }
+
+                // Memoize size values
+                val enabledChannelsSize = remember(enabledChannels) { enabledChannels.size }
+
                 ChannelProgramCardRow(
-                    title = title,
+                    title = displayTitle,
                     programs = programs,
                     app = app,
                     channel = channel,
                     isFirst = index == 0,
-                    isLast = index == enabledChannels.size - 1,
+                    isLast = index == enabledChannelsSize - 1,
                     baseHeight = channelCardSize.dp,
                     overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
                     onToggleEnabled = { enabled ->

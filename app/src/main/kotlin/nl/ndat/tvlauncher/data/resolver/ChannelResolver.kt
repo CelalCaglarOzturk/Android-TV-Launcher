@@ -30,6 +30,10 @@ class ChannelResolver {
         const val CHANNEL_PROGRAM_ID_PREFIX = "channel_program:"
     }
 
+    /**
+     * Safely query content resolver with proper resource management.
+     * Returns null if the query fails or the URI is invalid.
+     */
     private fun ContentResolver.tryQuery(
         uri: Uri,
         projection: Array<String>? = null,
@@ -49,44 +53,77 @@ class ChannelResolver {
         )
     } catch (err: IllegalArgumentException) {
         // Invalid URI - likely that this platform is not Android TV
+        Timber.w(err, "Failed to query content resolver - invalid URI")
         null
+    } catch (err: SecurityException) {
+        // Permission denied
+        Timber.w(err, "Failed to query content resolver - permission denied")
+        null
+    }
+
+    /**
+     * Process a cursor safely, ensuring it's closed even if an exception occurs.
+     * Uses the cursor's use() extension to guarantee closure.
+     */
+    private inline fun <T> Cursor?.processRows(block: (Cursor) -> T?): List<T> {
+        if (this == null) return emptyList()
+
+        return this.use { cursor ->
+            if (cursor.count == 0) return@use emptyList()
+
+            buildList {
+                if (!cursor.moveToFirst()) {
+                    Timber.w("Unable to move cursor to first row")
+                    return@buildList
+                }
+
+                do {
+                    try {
+                        val result = block(cursor)
+                        if (result != null) {
+                            add(result)
+                        }
+                    } catch (err: NullPointerException) {
+                        Timber.e(err, "Unable to parse row - null pointer")
+                    } catch (err: CursorIndexOutOfBoundsException) {
+                        Timber.e(err, "Unable to parse row - cursor index out of bounds")
+                    } catch (err: Exception) {
+                        Timber.e(err, "Unable to parse row - unexpected error")
+                    }
+                } while (cursor.moveToNext())
+            }
+        }
     }
 
     suspend fun getPreviewChannels(context: Context): List<Channel> = withContext(Dispatchers.IO) {
         context.contentResolver.tryQuery(
             TvContractCompat.Channels.CONTENT_URI,
             PreviewChannel.Columns.PROJECTION,
-        )?.use { cursor ->
-            if (cursor.count == 0) return@use emptyList()
+        ).processRows { cursor ->
+            val appLinkIntentUri = cursor.getString(PreviewChannel.Columns.COL_APP_LINK_INTENT_URI)
+            val displayName = cursor.getString(PreviewChannel.Columns.COL_DISPLAY_NAME)
+            val packageName = cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)
 
-            buildList {
-                if (!cursor.moveToFirst()) {
-                    Timber.w("Unable to move cursor")
-                    return@buildList
+            when {
+                appLinkIntentUri.isNullOrEmpty() -> {
+                    Timber.d("Ignoring channel $packageName due to missing intent uri")
+                    null
                 }
 
-                do {
-                    try {
-                        if (cursor.getString(PreviewChannel.Columns.COL_APP_LINK_INTENT_URI).isNullOrEmpty()) {
-                            Timber.d("Ignoring channel ${cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)} due to missing intent uri")
-                        } else if (cursor.getString(PreviewChannel.Columns.COL_DISPLAY_NAME).isNullOrEmpty()) {
-                            Timber.d("Ignoring channel ${cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)} due to missing display name")
-                        } else {
-                            val channel = PreviewChannel.fromCursor(cursor)?.toChannel()
-                            if (channel == null) {
-                                Timber.d("Ignoring channel ${cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)} due to failing to parse")
-                            } else {
-                                add(channel)
-                            }
-                        }
-                    } catch (err: NullPointerException) {
-                        Timber.e(err, "Unable to parse channel")
-                    } catch (err: CursorIndexOutOfBoundsException) {
-                        Timber.e(err, "Unable to parse channel")
+                displayName.isNullOrEmpty() -> {
+                    Timber.d("Ignoring channel $packageName due to missing display name")
+                    null
+                }
+
+                else -> {
+                    val channel = PreviewChannel.fromCursor(cursor)?.toChannel()
+                    if (channel == null) {
+                        Timber.d("Ignoring channel $packageName due to failing to parse")
                     }
-                } while (cursor.moveToNext())
+                    channel
+                }
             }
-        } ?: emptyList()
+        }
     }
 
     suspend fun getChannelPrograms(context: Context, channelId: Long): List<ChannelProgram> =
@@ -94,52 +131,18 @@ class ChannelResolver {
             context.contentResolver.tryQuery(
                 TvContractCompat.buildPreviewProgramsUriForChannel(channelId),
                 PreviewProgram.PROJECTION,
-            )?.use { cursor ->
-                if (cursor.count == 0) return@use emptyList()
-
-                buildList {
-                    if (!cursor.moveToFirst()) {
-                        Timber.w("Unable to move cursor")
-                        return@buildList
-                    }
-
-                    do {
-                        try {
-                            add(PreviewProgram.fromCursor(cursor).toChannelProgram())
-                        } catch (err: NullPointerException) {
-                            Timber.e(err, "Unable to parse channel program")
-                        } catch (err: CursorIndexOutOfBoundsException) {
-                            Timber.e(err, "Unable to parse channel program")
-                        }
-                    } while (cursor.moveToNext())
-                }
-            } ?: emptyList()
+            ).processRows { cursor ->
+                PreviewProgram.fromCursor(cursor).toChannelProgram()
+            }
         }
 
     suspend fun getWatchNextPrograms(context: Context): List<ChannelProgram> = withContext(Dispatchers.IO) {
         context.contentResolver.tryQuery(
             TvContractCompat.WatchNextPrograms.CONTENT_URI,
             WatchNextProgram.PROJECTION,
-        )?.use { cursor ->
-            if (cursor.count == 0) return@use emptyList()
-
-            buildList {
-                if (!cursor.moveToFirst()) {
-                    Timber.w("Unable to move cursor")
-                    return@buildList
-                }
-
-                do {
-                    try {
-                        add(WatchNextProgram.fromCursor(cursor).toChannelProgram())
-                    } catch (err: NullPointerException) {
-                        Timber.e(err, "Unable to parse channel program")
-                    } catch (err: CursorIndexOutOfBoundsException) {
-                        Timber.e(err, "Unable to parse channel program")
-                    }
-                } while (cursor.moveToNext())
-            }
-        } ?: emptyList()
+        ).processRows { cursor ->
+            WatchNextProgram.fromCursor(cursor).toChannelProgram()
+        }
     }
 
     suspend fun removeWatchNextProgram(context: Context, programId: Long) = withContext(Dispatchers.IO) {

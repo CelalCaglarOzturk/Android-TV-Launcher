@@ -20,8 +20,13 @@ class AppsTabViewModel(
 ) : ViewModel() {
 
     companion object {
-        // Keep the flow active lazily to avoid reloading when switching tabs
-        private val SHARING_STARTED = SharingStarted.Lazily
+        // Use WhileSubscribed with a 5 second timeout to keep data cached during tab switches
+        // This prevents reloading when quickly switching tabs while still allowing cleanup
+        // when the screen is completely left
+        private val SHARING_STARTED = SharingStarted.WhileSubscribed(
+            stopTimeoutMillis = 5000L,
+            replayExpirationMillis = Long.MAX_VALUE // Never expire the replay cache
+        )
     }
 
     // Use showMobileApps from SettingsRepository (persisted setting)

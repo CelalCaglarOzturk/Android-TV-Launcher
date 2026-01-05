@@ -27,6 +27,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 import nl.ndat.tvlauncher.util.modifier.ifElse
@@ -39,17 +40,52 @@ fun ChannelProgramCard(
     overrideAspectRatio: Float? = null,
 ) {
     val context = LocalContext.current
+
+    // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-    val aspectRatio = overrideAspectRatio ?: program.posterArtAspectRatio?.floatValue ?: (16f / 9f)
+    // Memoize aspect ratio calculation to avoid recalculating on every recomposition
+    val aspectRatio = remember(overrideAspectRatio, program.posterArtAspectRatio) {
+        overrideAspectRatio ?: program.posterArtAspectRatio?.floatValue ?: (16f / 9f)
+    }
+
+    // Memoize card width calculation
     val cardWidth = remember(baseHeight, aspectRatio) { baseHeight * aspectRatio }
+
+    // Memoize the image request to prevent recreating on every recomposition
+    // Key on posterArtUri to ensure we reload if the image changes
+    val imageRequest = remember(program.posterArtUri, context) {
+        ImageRequest.Builder(context)
+            .data(program.posterArtUri)
+            .memoryCacheKey("program:${program.id}")
+            .diskCacheKey("program:${program.id}")
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .allowHardware(false)
+            .crossfade(true)
+            .build()
+    }
+
+    // Memoize the launch intent to avoid parsing on every click
+    val launchIntent = remember(program.intentUri) {
+        program.intentUri?.let { uri ->
+            try {
+                Intent.parseUri(uri, 0)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    // Memoize whether we have a title to display
+    val hasTitle = remember(program.title) { !program.title.isNullOrEmpty() }
 
     StandardCardContainer(
         modifier = modifier.width(cardWidth),
         interactionSource = interactionSource,
         title = {
-            if (!program.title.isNullOrEmpty()) {
+            if (hasTitle) {
                 Text(
                     text = program.title!!,
                     maxLines = 1,
@@ -82,18 +118,14 @@ fun ChannelProgramCard(
                     )
                 ),
                 onClick = {
-                    if (program.intentUri != null) {
-                        context.startActivity(Intent.parseUri(program.intentUri, 0))
+                    launchIntent?.let { intent ->
+                        context.startActivity(intent)
                     }
                 },
             ) {
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(program.posterArtUri)
-                        .allowHardware(false)
-                        .crossfade(true)
-                        .build(),
+                    model = imageRequest,
                     contentDescription = program.title,
                     contentScale = ContentScale.Crop,
                 )

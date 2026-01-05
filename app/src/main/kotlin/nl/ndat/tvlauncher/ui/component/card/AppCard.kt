@@ -30,6 +30,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
@@ -46,13 +47,21 @@ fun AppCard(
 ) {
     val context = LocalContext.current
 
-    // Cache computed values
+    // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
     val focused by interactionSource.collectIsFocusedAsState()
 
     // Cache launch intent - only recompute when app changes
-    val launchIntentUri = remember(app.id) {
-        app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+    // Parse the intent once and reuse
+    val launchIntent = remember(app.id) {
+        val intentUri = app.launchIntentUriLeanback ?: app.launchIntentUriDefault
+        intentUri?.let { uri ->
+            try {
+                Intent.parseUri(uri, 0)
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
 
     var menuVisible by remember { mutableStateOf(false) }
@@ -65,8 +74,24 @@ fun AppCard(
     // Pre-calculate dimensions to avoid repeated calculations
     val cardWidth = remember(baseHeight) { baseHeight * (16f / 9f) }
 
+    // Memoize the image request to prevent recreating on every recomposition
+    // Key on app.id since that uniquely identifies the app and its icon
+    val imageRequest = remember(app.id, context) {
+        ImageRequest.Builder(context)
+            .data(app)
+            .memoryCacheKey("app_icon:${app.id}")
+            .diskCacheKey("app_icon:${app.id}")
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .crossfade(true)
+            .build()
+    }
+
+    // Check if popup is available once
+    val hasPopupContent = remember(popupContent) { popupContent != null }
+
     PopupContainer(
-        visible = menuVisible && popupContent != null,
+        visible = menuVisible && hasPopupContent,
         onDismiss = { menuVisible = false },
         content = {
             StandardCardContainer(
@@ -109,22 +134,21 @@ fun AppCard(
                         onClick = {
                             if (onClick != null) {
                                 onClick()
-                            } else if (launchIntentUri != null) {
-                                context.startActivity(Intent.parseUri(launchIntentUri, 0))
+                            } else {
+                                launchIntent?.let { intent ->
+                                    context.startActivity(intent)
+                                }
                             }
                         },
                         onLongClick = {
-                            if (popupContent != null) {
+                            if (hasPopupContent) {
                                 menuVisible = true
                             }
                         }
                     ) {
                         AsyncImage(
                             modifier = Modifier.fillMaxSize(),
-                            model = ImageRequest.Builder(context)
-                                .data(app)
-                                .crossfade(true)
-                                .build(),
+                            model = imageRequest,
                             contentDescription = app.displayName,
                         )
                     }

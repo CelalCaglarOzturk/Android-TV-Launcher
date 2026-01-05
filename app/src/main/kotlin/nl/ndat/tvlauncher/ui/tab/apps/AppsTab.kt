@@ -52,7 +52,8 @@ fun AppsTab(
     val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
-    // Use derivedStateOf to avoid unnecessary recompositions
+    // Use derivedStateOf to avoid unnecessary recompositions - no keys needed
+    // since derivedStateOf already tracks dependencies automatically
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
     val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
 
@@ -66,11 +67,13 @@ fun AppsTab(
     val listState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-    // Create a map of focus requesters for each app
+    // Create a stable map of focus requesters for each app
+    // Use remember with no keys to make it stable across recompositions
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
 
     // Restore focus to the app that was being moved after list recomposes
-    LaunchedEffect(apps, focusedAppId) {
+    // Use a more targeted effect that only runs when focusedAppId changes
+    LaunchedEffect(focusedAppId) {
         if (focusedAppId != null) {
             val focusRequester = focusRequesters[focusedAppId]
             if (focusRequester != null) {
@@ -95,9 +98,10 @@ fun AppsTab(
     }
 
     // Clean up focus requesters for apps that are no longer in the list
+    // This runs only when apps list changes
     LaunchedEffect(apps) {
         val currentAppIds = apps.map { it.id }.toSet()
-        focusRequesters.keys.removeAll { it !in currentAppIds }
+        focusRequesters.keys.retainAll(currentAppIds)
     }
 
     if (showSettings) {
@@ -106,11 +110,14 @@ fun AppsTab(
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val density = LocalDensity.current
-        val itemMinWidth = appCardSize.dp * (16f / 9f)
-        val spacing = 14.dp
-        val horizontalPadding = 96.dp // 48.dp * 2
 
-        val columnCount = remember(maxWidth, itemMinWidth) {
+        // Memoize dimension calculations
+        val itemMinWidth = remember(appCardSize) { appCardSize.dp * (16f / 9f) }
+        val spacing = remember { 14.dp }
+        val horizontalPadding = remember { 96.dp } // 48.dp * 2
+
+        // Memoize column count calculation to avoid recalculating on every frame
+        val columnCount = remember(maxWidth, itemMinWidth, spacing, horizontalPadding) {
             val availableWidth = maxWidth - horizontalPadding
             val itemWidthPx = with(density) { itemMinWidth.toPx() }
             val spacingPx = with(density) { spacing.toPx() }
@@ -118,6 +125,9 @@ fun AppsTab(
 
             ((availableWidthPx + spacingPx) / (itemWidthPx + spacingPx)).toInt().coerceAtLeast(1)
         }
+
+        // Memoize the grid cell configuration
+        val gridCells = remember(appCardSize) { GridCells.Adaptive(appCardSize.dp * (16f / 9f)) }
 
         LazyVerticalGrid(
             state = listState,
@@ -127,7 +137,7 @@ fun AppsTab(
             ),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
-            columns = GridCells.Adaptive(appCardSize.dp * (16f / 9f)),
+            columns = gridCells,
             modifier = Modifier.fillMaxSize()
         ) {
             // Visible Apps Section
@@ -150,10 +160,14 @@ fun AppsTab(
                     key = { _, app -> app.id },
                     contentType = { _, _ -> "app_card" }
                 ) { index, app ->
-                    val isSettings = app.packageName == "nl.ndat.tvlauncher.settings"
+                    // Memoize per-item calculations
+                    val isSettings = remember(app.packageName) {
+                        app.packageName == "nl.ndat.tvlauncher.settings"
+                    }
                     val isInMoveMode = moveAppId == app.id
+                    val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
 
-                    // Get or create a focus requester for this app
+                    // Get or create a focus requester for this app - stable reference
                     val appFocusRequester = remember(app.id) {
                         focusRequesters.getOrPut(app.id) { FocusRequester() }
                     }
@@ -169,7 +183,7 @@ fun AppsTab(
                                     positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
                                 ),
                             isInMoveMode = isInMoveMode,
-                            isFavorite = app.favoriteOrder != null,
+                            isFavorite = isFavorite,
                             onMoveModeChanged = { inMoveMode ->
                                 moveAppId = if (inMoveMode) app.id else null
                                 // Track focused app when entering move mode
@@ -275,13 +289,16 @@ fun AppsTab(
                     key = { app -> "hidden_${app.id}" },
                     contentType = { "app_card" }
                 ) { app ->
+                    // Memoize favorite status
+                    val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
+
                     Box {
                         AppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
                             popupContent = {
                                 AppPopup(
-                                    isFavorite = app.favoriteOrder != null,
+                                    isFavorite = isFavorite,
                                     isHidden = true,
                                     onToggleFavorite = { favorite ->
                                         viewModel.favoriteApp(app, favorite)
