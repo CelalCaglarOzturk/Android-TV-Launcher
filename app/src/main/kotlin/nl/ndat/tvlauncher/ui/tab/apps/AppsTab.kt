@@ -251,6 +251,9 @@ fun AppsTab(
                             onToggleFavorite = if (!isSettings) {
                                 { favorite -> viewModel.favoriteApp(app, favorite) }
                             } else null,
+                            onToggleHidden = if (!isSettings) {
+                                { _ -> viewModel.hideApp(app) }
+                            } else null,
                             onClick = if (isSettings) {
                                 { showSettings = true }
                             } else null

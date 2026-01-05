@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
@@ -71,6 +72,7 @@ fun MoveableAppCard(
     onMoveModeChanged: ((Boolean) -> Unit)? = null,
     onMove: ((direction: MoveDirection) -> Unit)? = null,
     onToggleFavorite: ((Boolean) -> Unit)? = null,
+    onToggleHidden: ((Boolean) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
@@ -267,6 +269,12 @@ fun MoveableAppCard(
                     menuVisible = false
                     onToggleFavorite?.invoke(!isFavorite)
                 },
+                onToggleHidden = if (onToggleHidden != null) {
+                    {
+                        menuVisible = false
+                        onToggleHidden(true)
+                    }
+                } else null,
                 onInfo = {
                     menuVisible = false
                     context.startActivity(appInfoIntent)
@@ -283,6 +291,7 @@ private fun AppOptionsPopup(
     onOpen: () -> Unit,
     onMove: () -> Unit,
     onToggleFavorite: () -> Unit,
+    onToggleHidden: (() -> Unit)?,
     onInfo: () -> Unit,
 ) {
     Column(
@@ -319,6 +328,15 @@ private fun AppOptionsPopup(
             icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
             text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
         )
+
+        // Hide App
+        if (onToggleHidden != null) {
+            KeyDownButton(
+                onClick = onToggleHidden,
+                icon = Icons.Default.Delete,
+                text = stringResource(R.string.app_hide)
+            )
+        }
 
         // Info
         KeyDownButton(
