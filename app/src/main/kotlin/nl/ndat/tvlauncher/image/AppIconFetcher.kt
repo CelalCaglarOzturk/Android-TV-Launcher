@@ -3,6 +3,7 @@ package nl.ndat.tvlauncher.image
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.decode.DataSource
 import coil.fetch.DrawableResult
@@ -11,6 +12,7 @@ import coil.fetch.Fetcher
 import coil.request.Options
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
 
 class AppIconFetcher(
@@ -19,6 +21,14 @@ class AppIconFetcher(
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult = withContext(Dispatchers.IO) {
+        if (app.packageName == "nl.ndat.tvlauncher.settings") {
+            return@withContext DrawableResult(
+                drawable = ContextCompat.getDrawable(context, R.drawable.ic_launcher)!!,
+                isSampled = false,
+                dataSource = DataSource.MEMORY
+            )
+        }
+
         val packageManager = context.packageManager
         val intent = Intent.parseUri(app.launchIntentUriLeanback ?: app.launchIntentUriDefault, 0)
 

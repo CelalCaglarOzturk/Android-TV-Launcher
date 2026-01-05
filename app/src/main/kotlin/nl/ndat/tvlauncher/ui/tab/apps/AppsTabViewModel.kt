@@ -37,13 +37,25 @@ class AppsTabViewModel(
         appRepository.getApps(),
         _showMobileApps
     ) { apps, showMobile ->
-        apps
+        val settingsApp = App(
+            id = "settings",
+            displayName = "Launcher Settings",
+            packageName = "nl.ndat.tvlauncher.settings",
+            launchIntentUriDefault = null,
+            launchIntentUriLeanback = null,
+            favoriteOrder = null,
+            hidden = 0L
+        )
+
+        val filteredApps = apps
             .filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID }
             .filter { app ->
                 // If showMobile is true, show all apps
                 // If showMobile is false, only show apps with leanback intent
                 showMobile || app.launchIntentUriLeanback != null
             }
+
+        listOf(settingsApp) + filteredApps
     }
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())

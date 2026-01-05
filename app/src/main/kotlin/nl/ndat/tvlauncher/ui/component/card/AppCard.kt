@@ -42,6 +42,7 @@ fun AppCard(
     baseHeight: Dp = 90.dp,
     popupContent: (@Composable () -> Unit)? = null,
     onPopupVisibilityChanged: ((Boolean) -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
 
@@ -106,7 +107,9 @@ fun AppCard(
                             )
                         ),
                         onClick = {
-                            if (launchIntentUri != null) {
+                            if (onClick != null) {
+                                onClick()
+                            } else if (launchIntentUri != null) {
                                 context.startActivity(Intent.parseUri(launchIntentUri, 0))
                             }
                         },

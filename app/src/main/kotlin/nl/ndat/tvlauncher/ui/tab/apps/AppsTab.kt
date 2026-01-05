@@ -13,7 +13,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,7 @@ import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.ui.component.card.AppCard
+import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -44,6 +47,12 @@ fun AppsTab(
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
     val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
     val hasMobileApps by remember { derivedStateOf { mobileOnlyAppsCount > 0 } }
+
+    var showSettings by remember { mutableStateOf(false) }
+
+    if (showSettings) {
+        LauncherSettingsDialog(onDismissRequest = { showSettings = false })
+    }
 
     LazyVerticalGrid(
         contentPadding = PaddingValues(
@@ -118,17 +127,26 @@ fun AppsTab(
                     AppCard(
                         app = app,
                         baseHeight = appCardSize.dp,
-                        popupContent = {
-                            AppPopup(
-                                isFavorite = app.favoriteOrder != null,
-                                isHidden = false,
-                                onToggleFavorite = { favorite ->
-                                    viewModel.favoriteApp(app, favorite)
-                                },
-                                onToggleHidden = {
-                                    viewModel.hideApp(app)
-                                }
-                            )
+                        onClick = if (app.packageName == "nl.ndat.tvlauncher.settings") {
+                            { showSettings = true }
+                        } else {
+                            null
+                        },
+                        popupContent = if (app.packageName != "nl.ndat.tvlauncher.settings") {
+                            {
+                                AppPopup(
+                                    isFavorite = app.favoriteOrder != null,
+                                    isHidden = false,
+                                    onToggleFavorite = { favorite ->
+                                        viewModel.favoriteApp(app, favorite)
+                                    },
+                                    onToggleHidden = {
+                                        viewModel.hideApp(app)
+                                    }
+                                )
+                            }
+                        } else {
+                            null
                         }
                     )
                 }
