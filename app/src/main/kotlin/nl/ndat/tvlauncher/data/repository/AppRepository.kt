@@ -133,9 +133,6 @@ class AppRepository(
     // Get visible apps (not hidden)
     fun getApps() = database.apps.getAll().executeAsListFlow()
 
-    // Get all apps including hidden
-    fun getAllAppsIncludingHidden() = database.apps.getAllIncludingHidden().executeAsListFlow()
-
     // Get hidden apps only
     fun getHiddenApps() = database.apps.getHidden().executeAsListFlow()
 

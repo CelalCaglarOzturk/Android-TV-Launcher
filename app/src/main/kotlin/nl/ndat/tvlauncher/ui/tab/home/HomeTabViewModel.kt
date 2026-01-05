@@ -85,10 +85,6 @@ class HomeTabViewModel(
         channelRepository.enableChannel(channel.id)
     }
 
-    fun disableChannel(channel: Channel) = viewModelScope.launch {
-        channelRepository.disableChannel(channel.id)
-    }
-
     fun setChannelEnabled(channel: Channel, enabled: Boolean) = viewModelScope.launch {
         channelRepository.setChannelEnabled(channel.id, enabled)
     }
@@ -99,9 +95,5 @@ class HomeTabViewModel(
 
     fun moveChannelDown(channel: Channel) = viewModelScope.launch {
         channelRepository.moveChannelDown(channel.id)
-    }
-
-    fun setChannelOrder(channel: Channel, order: Long) = viewModelScope.launch {
-        channelRepository.updateChannelOrder(channel.id, order)
     }
 }

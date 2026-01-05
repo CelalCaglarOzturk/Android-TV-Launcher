@@ -184,9 +184,6 @@ class ChannelRepository(
         refreshWatchNextChannels()
     }
 
-    fun isPackageBlacklistedForWatchNext(packageName: String) =
-        database.watchNextBlacklist.isBlacklisted(packageName).executeAsOne()
-
     suspend fun removeWatchNextProgram(programId: String) = withContext(Dispatchers.IO) {
         val internalId = programId.removePrefix(ChannelResolver.CHANNEL_PROGRAM_ID_PREFIX).toLongOrNull()
         if (internalId != null) {
@@ -198,14 +195,9 @@ class ChannelRepository(
     // Getters
     fun getChannels() = database.channels.getAll().executeAsListFlow()
     fun getEnabledChannels() = database.channels.getAllEnabled().executeAsListFlow()
-    fun getDisabledChannels() = database.channels.getAllDisabled().executeAsListFlow()
-    fun getAllAppChannels() = database.channels.getAllAppChannels().executeAsListFlow()
-    fun getFavoriteAppChannels() = database.channels.getFavoriteAppChannels().executeAsListFlow()
     fun getProgramsByChannel(channel: Channel) = database.channelPrograms.getByChannel(channel.id).executeAsListFlow()
     fun getWatchNextPrograms() =
         database.channelPrograms.getByChannel(ChannelResolver.CHANNEL_ID_WATCH_NEXT).executeAsListFlow()
 
     fun getWatchNextBlacklist() = database.watchNextBlacklist.getAll().executeAsListFlow()
-
-    fun getChannelById(channelId: String) = database.channels.getById(channelId).executeAsOneOrNull()
 }

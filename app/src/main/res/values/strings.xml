@@ -3,12 +3,10 @@
 	<string name="settings">Settings</string>
     <string name="channel_watch_next">Watch Next</string>
 	<string name="channel_preview">%1$s: %2$s</string>
-    <string name="settings_system">System settings</string>
 	<string name="settings_launcher">Launcher settings</string>
 	<string name="input_switch">Switch input</string>
 	<string name="tab_home">Home</string>
 	<string name="tab_apps">All apps</string>
-	<string name="tab_inputs">Inputs</string>
 
 	<!-- Channel management -->
 	<string name="channel_enable">Enable Channel</string>
@@ -31,8 +29,6 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
-	<string name="app_add_to_watch_next">Include in Watch Next</string>
-	<string name="app_remove_from_watch_next">Exclude from Watch Next</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Show mobile apps</string>

@@ -3,12 +3,10 @@
 	<string name="settings">Ayarlar</string>
     <string name="channel_watch_next">Sıradakini Oynat</string>
 	<string name="channel_preview">%1$s: %2$s</string>
-    <string name="settings_system">Sistem ayarları</string>
 	<string name="settings_launcher">Başlatıcı ayarları</string>
 	<string name="input_switch">Girişi değiştir</string>
 	<string name="tab_home">Ana Sayfa</string>
 	<string name="tab_apps">Tüm uygulamalar</string>
-	<string name="tab_inputs">Girişler</string>
 
 	<!-- Channel management -->
 	<string name="channel_enable">Kanalı Etkinleştir</string>
@@ -33,8 +31,6 @@
 	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
 	<string name="app_hide">Uygulamayı Gizle</string>
 	<string name="app_unhide">Uygulamayı Göster</string>
-	<string name="app_add_to_watch_next">Sıradakini Oynat\'a Dahil Et</string>
-	<string name="app_remove_from_watch_next">Sıradakini Oynat\'tan Çıkar</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
