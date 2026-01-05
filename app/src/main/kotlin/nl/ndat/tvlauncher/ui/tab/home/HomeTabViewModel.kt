@@ -48,6 +48,9 @@ class HomeTabViewModel(
     val appCardSize = settingsRepository.appCardSize
         .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_APP_CARD_SIZE)
 
+    val channelCardSize = settingsRepository.channelCardSize
+        .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_CHANNEL_CARD_SIZE)
+
     fun channelPrograms(channel: Channel) = channelRepository.getProgramsByChannel(channel)
 
     fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {

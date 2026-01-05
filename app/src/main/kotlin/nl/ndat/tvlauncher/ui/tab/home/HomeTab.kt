@@ -35,6 +35,7 @@ fun HomeTab(
     val channels by viewModel.channels.collectAsStateWithLifecycle()
     val allAppChannels by viewModel.allAppChannels.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
+    val channelCardSize by viewModel.channelCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf for filtered lists to avoid unnecessary recompositions
     val enabledChannels by remember(channels) {
@@ -108,7 +109,7 @@ fun HomeTab(
                     channel = channel,
                     isFirst = index == 0,
                     isLast = index == enabledChannels.size - 1,
-                    baseHeight = appCardSize.dp,
+                    baseHeight = channelCardSize.dp,
                     overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
                     onToggleEnabled = { enabled ->
                         viewModel.setChannelEnabled(channel, enabled)

@@ -22,6 +22,14 @@
 	<string name="channels_settings">Kanallar</string>
 	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
 
+	<!-- Settings -->
+	<string name="settings_app_card_size">Uygulama Kart Boyutu: %1$d dp</string>
+	<string name="settings_channel_card_size">Kanal Kart Boyutu: %1$d dp</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >TV arayüzü olmayan uygulamaları göster</string>
+	<string name="settings_inputs">Girişler</string>
+
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Sıradakilerden Kaldır</string>
 

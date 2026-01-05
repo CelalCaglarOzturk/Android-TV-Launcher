@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +27,7 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
+import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
@@ -40,6 +43,8 @@ fun LauncherSettingsDialog(
     val settingsRepository = koinInject<SettingsRepository>()
     val backupRepository = koinInject<BackupRepository>()
     val appCardSize by settingsRepository.appCardSize.collectAsState()
+    val channelCardSize by settingsRepository.channelCardSize.collectAsState()
+    val showMobileApps by settingsRepository.showMobileApps.collectAsState()
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
@@ -52,19 +57,26 @@ fun LauncherSettingsDialog(
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             Surface(shape = MaterialTheme.shapes.medium) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     Text(
                         text = stringResource(R.string.settings_launcher),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
+                    // App Card Size
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
                     ) {
-                        Text("App Card Size: $appCardSize dp")
+                        Text(stringResource(R.string.settings_app_card_size, appCardSize))
                         Row {
                             Button(onClick = { settingsRepository.setAppCardSize((appCardSize - 10).coerceAtLeast(50)) }) {
                                 Text("-")
@@ -76,6 +88,60 @@ fun LauncherSettingsDialog(
                         }
                     }
 
+                    // Channel Card Size
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Text(stringResource(R.string.settings_channel_card_size, channelCardSize))
+                        Row {
+                            Button(onClick = {
+                                settingsRepository.setChannelCardSize(
+                                    (channelCardSize - 10).coerceAtLeast(
+                                        50
+                                    )
+                                )
+                            }) {
+                                Text("-")
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(onClick = {
+                                settingsRepository.setChannelCardSize(
+                                    (channelCardSize + 10).coerceAtMost(
+                                        200
+                                    )
+                                )
+                            }) {
+                                Text("+")
+                            }
+                        }
+                    }
+
+                    // Show Mobile Apps Toggle
+                    ListItem(
+                        selected = false,
+                        onClick = { settingsRepository.toggleShowMobileApps() },
+                        headlineContent = {
+                            Text(stringResource(R.string.apps_show_mobile))
+                        },
+                        supportingContent = {
+                            Text(
+                                text = stringResource(R.string.settings_show_mobile_apps_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            )
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = showMobileApps,
+                                onCheckedChange = null
+                            )
+                        }
+                    )
+
                     ListItem(
                         selected = false,
                         onClick = { showWatchNextSettings = true },
@@ -85,7 +151,7 @@ fun LauncherSettingsDialog(
                     ListItem(
                         selected = false,
                         onClick = { showInputsSettings = true },
-                        headlineContent = { Text("Inputs") }
+                        headlineContent = { Text(stringResource(R.string.settings_inputs)) }
                     )
 
                     ListItem(

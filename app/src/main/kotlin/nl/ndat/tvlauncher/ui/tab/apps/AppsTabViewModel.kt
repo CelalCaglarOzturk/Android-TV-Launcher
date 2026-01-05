@@ -3,9 +3,7 @@ package nl.ndat.tvlauncher.ui.tab.apps
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -26,16 +24,16 @@ class AppsTabViewModel(
         private val SHARING_STARTED = SharingStarted.Lazily
     }
 
-    // Toggle for showing mobile apps (apps without leanback intent)
-    private val _showMobileApps = MutableStateFlow(false)
-    val showMobileApps: StateFlow<Boolean> = _showMobileApps
+    // Use showMobileApps from SettingsRepository (persisted setting)
+    val showMobileApps = settingsRepository.showMobileApps
+        .stateIn(viewModelScope, SHARING_STARTED, false)
 
     val appCardSize = settingsRepository.appCardSize
         .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_APP_CARD_SIZE)
 
     val apps = combine(
         appRepository.getApps(),
-        _showMobileApps
+        settingsRepository.showMobileApps
     ) { apps, showMobile ->
         apps
             .filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID }
@@ -52,7 +50,7 @@ class AppsTabViewModel(
 
     val hiddenApps = combine(
         appRepository.getHiddenApps(),
-        _showMobileApps
+        settingsRepository.showMobileApps
     ) { apps, showMobile ->
         apps
             .filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID }
@@ -74,14 +72,6 @@ class AppsTabViewModel(
         }
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, 0)
-
-    fun toggleShowMobileApps() {
-        _showMobileApps.value = !_showMobileApps.value
-    }
-
-    fun setShowMobileApps(show: Boolean) {
-        _showMobileApps.value = show
-    }
 
     fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
         if (favorite) appRepository.favorite(app.id)

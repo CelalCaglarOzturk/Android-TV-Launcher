@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -26,20 +25,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.ListItem
-import androidx.tv.material3.ListItemDefaults
 import androidx.tv.material3.MaterialTheme
-import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
-import android.view.KeyEvent
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
@@ -60,14 +50,11 @@ fun AppsTab(
     // Use collectAsStateWithLifecycle for better lifecycle handling and performance
     val apps by viewModel.apps.collectAsStateWithLifecycle()
     val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
-    val showMobileApps by viewModel.showMobileApps.collectAsStateWithLifecycle()
-    val mobileOnlyAppsCount by viewModel.mobileOnlyAppsCount.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
     // Use derivedStateOf to avoid unnecessary recompositions
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
     val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
-    val hasMobileApps by remember { derivedStateOf { mobileOnlyAppsCount > 0 } }
 
     var showSettings by remember { mutableStateOf(false) }
     var moveAppId by remember { mutableStateOf<String?>(null) }
@@ -143,53 +130,6 @@ fun AppsTab(
             columns = GridCells.Adaptive(appCardSize.dp * (16f / 9f)),
             modifier = Modifier.fillMaxSize()
         ) {
-            // Mobile Apps Toggle (only show if there are mobile-only apps)
-            if (hasMobileApps) {
-                item(
-                    key = "mobile_toggle",
-                    span = { GridItemSpan(maxLineSpan) },
-                    contentType = "mobile_toggle"
-                ) {
-                    ListItem(
-                        selected = false,
-                        onClick = { viewModel.toggleShowMobileApps() },
-                        headlineContent = {
-                            Text(
-                                text = stringResource(R.string.apps_show_mobile),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        },
-                        supportingContent = {
-                            Text(
-                                text = stringResource(R.string.apps_mobile_available, mobileOnlyAppsCount),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                            )
-                        },
-                        trailingContent = {
-                            Switch(
-                                checked = showMobileApps,
-                                onCheckedChange = null
-                            )
-                        },
-                        colors = ListItemDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                            .onPreviewKeyEvent {
-                                if (it.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_DOWN && it.type == KeyEventType.KeyDown) {
-                                    firstItemFocusRequester.requestFocus()
-                                    true
-                                } else {
-                                    false
-                                }
-                            }
-                    )
-                }
-            }
-
             // Visible Apps Section
             if (hasApps) {
                 item(
@@ -198,7 +138,7 @@ fun AppsTab(
                     contentType = "section_header"
                 ) {
                     Text(
-                        text = "All Apps",
+                        text = stringResource(R.string.tab_apps),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(bottom = 8.dp)
