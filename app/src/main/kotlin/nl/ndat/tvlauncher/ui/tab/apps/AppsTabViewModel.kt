@@ -40,6 +40,8 @@ class AppsTabViewModel(
         apps
             .filterNot { app -> app.packageName == BuildConfig.APPLICATION_ID }
             .filter { app ->
+                // Always show Launcher Settings regardless of filter
+                if (app.packageName == "nl.ndat.tvlauncher.settings") return@filter true
                 // If showMobile is true, show all apps
                 // If showMobile is false, only show apps with leanback intent
                 showMobile || app.launchIntentUriLeanback != null

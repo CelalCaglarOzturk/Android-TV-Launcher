@@ -57,7 +57,8 @@ class AppRepository(
             )
 
             // If this is a new app, automatically add it to favorites (Home)
-            if (addToFavorites) {
+            // Don't add Launcher Settings to favorites
+            if (addToFavorites && app.packageName != "nl.ndat.tvlauncher.settings") {
                 Timber.d("AppRepository: Auto-adding ${app.displayName} to favorites")
                 database.apps.updateFavoriteAdd(app.id)
             }

@@ -2,7 +2,10 @@ package nl.ndat.tvlauncher.ui.tab.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.data.repository.AppRepository
@@ -23,6 +26,11 @@ class HomeTabViewModel(
     }
 
     val apps = appRepository.getFavoriteApps()
+        .map { apps ->
+            // Filter out Launcher Settings from Home tab
+            apps.filterNot { it.packageName == "nl.ndat.tvlauncher.settings" }
+        }
+        .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
     val channels = channelRepository.getEnabledChannels()

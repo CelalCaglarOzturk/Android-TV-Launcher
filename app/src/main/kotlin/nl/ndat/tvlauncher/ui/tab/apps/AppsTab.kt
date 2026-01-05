@@ -162,8 +162,8 @@ fun AppsTab(
                     key = { _, app -> app.id },
                     contentType = { _, _ -> "app_card" }
                 ) { index, app ->
-                    val isInMoveMode = moveAppId == app.id
                     val isSettings = app.packageName == "nl.ndat.tvlauncher.settings"
+                    val isInMoveMode = moveAppId == app.id
 
                     Box {
                         MoveableAppCard(
@@ -183,8 +183,10 @@ fun AppsTab(
                                         ) {
                                             if (event.type == KeyEventType.KeyUp) {
                                                 showSettings = true
+                                                true
+                                            } else {
+                                                false
                                             }
-                                            true
                                         } else {
                                             false
                                         }
@@ -199,25 +201,33 @@ fun AppsTab(
                                 when (direction) {
                                     MoveDirection.LEFT -> {
                                         if (index > 0) {
-                                            viewModel.moveApp(app, index - 1)
+                                            val targetApp = apps[index - 1]
+                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - 1)
+                                            viewModel.moveApp(app, targetOrder)
                                         }
                                     }
 
                                     MoveDirection.RIGHT -> {
                                         if (index < apps.size - 1) {
-                                            viewModel.moveApp(app, index + 1)
+                                            val targetApp = apps[index + 1]
+                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + 1)
+                                            viewModel.moveApp(app, targetOrder)
                                         }
                                     }
 
                                     MoveDirection.UP -> {
                                         if (index >= columnCount) {
-                                            viewModel.moveApp(app, index - columnCount)
+                                            val targetApp = apps[index - columnCount]
+                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - columnCount)
+                                            viewModel.moveApp(app, targetOrder)
                                         }
                                     }
 
                                     MoveDirection.DOWN -> {
                                         if (index + columnCount < apps.size) {
-                                            viewModel.moveApp(app, index + columnCount)
+                                            val targetApp = apps[index + columnCount]
+                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + columnCount)
+                                            viewModel.moveApp(app, targetOrder)
                                         }
                                     }
                                 }
