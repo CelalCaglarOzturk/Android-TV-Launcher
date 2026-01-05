@@ -33,7 +33,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
@@ -46,9 +50,11 @@ import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
 import nl.ndat.tvlauncher.util.FocusController
+import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HomeTab(
     modifier: Modifier = Modifier,
@@ -131,7 +137,18 @@ fun HomeTab(
     LazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(0.dp),
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .focusProperties {
+                enter = {
+                    if (it == FocusDirection.Down) {
+                        firstItemFocusRequester
+                    } else {
+                        FocusRequester.Default
+                    }
+                }
+            }
+            .focusRestorer(firstItemFocusRequester)
     ) {
         item(
             key = "apps",
@@ -187,6 +204,10 @@ fun HomeTab(
                 ChannelProgramCardRow(
                     modifier = Modifier
                         .focusRequester(focusRequester)
+                        .ifElse(
+                            condition = index == 0 && apps.isEmpty(),
+                            positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
+                        )
                         .focusGroup(),
                     title = displayTitle,
                     programs = programs,

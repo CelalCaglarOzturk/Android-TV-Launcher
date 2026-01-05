@@ -28,8 +28,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
@@ -40,6 +44,7 @@ import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppsTab(
     modifier: Modifier = Modifier,
@@ -141,7 +146,18 @@ fun AppsTab(
             verticalArrangement = Arrangement.spacedBy(14.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             columns = gridCells,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .focusProperties {
+                    enter = {
+                        if (it == FocusDirection.Down) {
+                            firstItemFocusRequester
+                        } else {
+                            FocusRequester.Default
+                        }
+                    }
+                }
+                .focusRestorer(firstItemFocusRequester)
         ) {
             // Visible Apps Section
             if (hasApps) {
@@ -277,11 +293,11 @@ fun AppsTab(
                     )
                 }
 
-                items(
+                itemsIndexed(
                     items = hiddenApps,
-                    key = { app -> "hidden_${app.id}" },
-                    contentType = { "app_card" }
-                ) { app ->
+                    key = { _, app -> "hidden_${app.id}" },
+                    contentType = { _, _ -> "app_card" }
+                ) { index, app ->
                     // Memoize favorite status
                     val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
 
@@ -289,6 +305,10 @@ fun AppsTab(
                         AppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
+                            modifier = Modifier.ifElse(
+                                condition = !hasApps && index == 0,
+                                positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
+                            ),
                             popupContent = {
                                 AppPopup(
                                     isFavorite = isFavorite,
