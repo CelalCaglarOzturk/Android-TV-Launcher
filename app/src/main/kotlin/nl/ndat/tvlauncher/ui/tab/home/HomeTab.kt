@@ -141,7 +141,7 @@ fun HomeTab(
         modifier = modifier
             .fillMaxSize()
             .focusProperties {
-                enter = {
+                onEnter = {
                     if (it == FocusDirection.Down) {
                         firstItemFocusRequester
                     } else {

@@ -65,7 +65,7 @@ fun AppCardRow(
 
     CardRow(
         modifier = modifier.focusProperties {
-            enter = {
+            onEnter = {
                 if (it == FocusDirection.Down) {
                     firstItemFocusRequester
                 } else {

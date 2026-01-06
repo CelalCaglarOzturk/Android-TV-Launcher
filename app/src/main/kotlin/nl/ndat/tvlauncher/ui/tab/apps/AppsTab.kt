@@ -160,7 +160,7 @@ fun AppsTab(
                 .width(gridWidth)
                 .fillMaxHeight()
                 .focusProperties {
-                    enter = {
+                    onEnter = {
                         if (it == FocusDirection.Down) {
                             firstItemFocusRequester
                         } else {

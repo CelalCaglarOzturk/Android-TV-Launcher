@@ -175,7 +175,7 @@ class AppRepository(
             val previousApp =
                 database.apps.findPreviousFavorite(currentOrder).executeAsOneOrNull()
                     ?: return@transaction
-            val previousOrder = previousApp.favoriteOrder ?: return@transaction
+            val previousOrder = previousApp.favoriteOrder
 
             database.apps.updateFavoriteOrderSimple(previousOrder, app.id)
             database.apps.updateFavoriteOrderSimple(currentOrder, previousApp.id)
@@ -189,7 +189,7 @@ class AppRepository(
             val nextApp =
                 database.apps.findNextFavorite(currentOrder).executeAsOneOrNull()
                     ?: return@transaction
-            val nextOrder = nextApp.favoriteOrder ?: return@transaction
+            val nextOrder = nextApp.favoriteOrder
 
             database.apps.updateFavoriteOrderSimple(nextOrder, app.id)
             database.apps.updateFavoriteOrderSimple(currentOrder, nextApp.id)

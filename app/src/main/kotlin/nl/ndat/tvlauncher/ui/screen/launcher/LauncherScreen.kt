@@ -70,7 +70,7 @@ fun LauncherScreen() {
                         .focusProperties {
                             // Block all focus directions when not visible
                             if (!isHomeVisible) {
-                                enter = { FocusRequester.Cancel }
+                                onEnter = { FocusRequester.Cancel }
                             }
                         }
                 ) {
@@ -91,7 +91,7 @@ fun LauncherScreen() {
                         .focusProperties {
                             // Block all focus directions when not visible
                             if (!isAppsVisible) {
-                                enter = { FocusRequester.Cancel }
+                                onEnter = { FocusRequester.Cancel }
                             }
                         }
                 ) {
