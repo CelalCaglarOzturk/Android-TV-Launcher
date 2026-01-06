@@ -284,9 +284,7 @@ fun HomeTab(
                                 channel = channel,
                                 appName = app?.displayName ?: channel.packageName,
                                 onEnable = {
-                                    val nextChannel = disabledChannels.getOrNull(index + 1)
-                                        ?: disabledChannels.getOrNull(index - 1)
-                                    focusedChannelId = nextChannel?.id ?: channel.id
+                                    focusedChannelId = channel.id
                                     viewModel.enableChannel(channel)
                                 }
                             )
