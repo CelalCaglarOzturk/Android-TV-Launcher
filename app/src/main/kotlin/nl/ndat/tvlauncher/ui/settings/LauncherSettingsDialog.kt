@@ -45,6 +45,7 @@ fun LauncherSettingsDialog(
     val appCardSize by settingsRepository.appCardSize.collectAsState()
     val channelCardSize by settingsRepository.channelCardSize.collectAsState()
     val showMobileApps by settingsRepository.showMobileApps.collectAsState()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState()
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
@@ -137,6 +138,27 @@ fun LauncherSettingsDialog(
                         trailingContent = {
                             Switch(
                                 checked = showMobileApps,
+                                onCheckedChange = null
+                            )
+                        }
+                    )
+
+                    ListItem(
+                        selected = false,
+                        onClick = { settingsRepository.toggleEnableAnimations() },
+                        headlineContent = {
+                            Text("Enable Animations")
+                        },
+                        supportingContent = {
+                            Text(
+                                text = "Show marquee and other visual effects",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            )
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = enableAnimations,
                                 onCheckedChange = null
                             )
                         }

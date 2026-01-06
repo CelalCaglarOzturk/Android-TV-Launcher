@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -29,8 +31,10 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 import nl.ndat.tvlauncher.util.modifier.ifElse
+import org.koin.compose.koinInject
 
 @Composable
 fun ChannelProgramCard(
@@ -40,6 +44,8 @@ fun ChannelProgramCard(
     overrideAspectRatio: Float? = null,
 ) {
     val context = LocalContext.current
+    val settingsRepository = koinInject<SettingsRepository>()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
@@ -52,10 +58,14 @@ fun ChannelProgramCard(
 
     // Memoize card width calculation
     val cardWidth = remember(baseHeight, aspectRatio) { baseHeight * aspectRatio }
+    val density = LocalDensity.current
+
+    val requestWidth = remember(cardWidth, density) { with(density) { cardWidth.roundToPx() } }
+    val requestHeight = remember(baseHeight, density) { with(density) { baseHeight.roundToPx() } }
 
     // Memoize the image request to prevent recreating on every recomposition
     // Key on posterArtUri to ensure we reload if the image changes
-    val imageRequest = remember(program.posterArtUri, context) {
+    val imageRequest = remember(program.posterArtUri, context, enableAnimations, requestWidth, requestHeight) {
         ImageRequest.Builder(context)
             .data(program.posterArtUri)
             .memoryCacheKey("program:${program.id}")
@@ -63,7 +73,8 @@ fun ChannelProgramCard(
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
             .allowHardware(false)
-            .crossfade(true)
+            .crossfade(enableAnimations)
+            .size(requestWidth, requestHeight)
             .build()
     }
 
@@ -96,7 +107,7 @@ fun ChannelProgramCard(
                     ),
                     modifier = Modifier
                         .ifElse(
-                            isFocused,
+                            isFocused && enableAnimations,
                             Modifier.basicMarquee(
                                 iterations = Int.MAX_VALUE,
                                 initialDelayMillis = 2000,

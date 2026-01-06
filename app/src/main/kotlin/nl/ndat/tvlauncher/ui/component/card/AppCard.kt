@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -32,9 +34,11 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.modifier.ifElse
+import org.koin.compose.koinInject
 
 @Composable
 fun AppCard(
@@ -46,6 +50,8 @@ fun AppCard(
     onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
+    val settingsRepository = koinInject<SettingsRepository>()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
@@ -73,17 +79,22 @@ fun AppCard(
 
     // Pre-calculate dimensions to avoid repeated calculations
     val cardWidth = remember(baseHeight) { baseHeight * (16f / 9f) }
+    val density = LocalDensity.current
+
+    val requestWidth = remember(cardWidth, density) { with(density) { cardWidth.roundToPx() } }
+    val requestHeight = remember(baseHeight, density) { with(density) { baseHeight.roundToPx() } }
 
     // Memoize the image request to prevent recreating on every recomposition
     // Key on app.id since that uniquely identifies the app and its icon
-    val imageRequest = remember(app.id, context) {
+    val imageRequest = remember(app.id, context, enableAnimations, requestWidth, requestHeight) {
         ImageRequest.Builder(context)
             .data(app)
             .memoryCacheKey("app_icon:${app.id}")
             .diskCacheKey("app_icon:${app.id}")
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
-            .crossfade(true)
+            .crossfade(enableAnimations)
+            .size(requestWidth, requestHeight)
             .build()
     }
 
@@ -108,7 +119,7 @@ fun AppCard(
                         ),
                         modifier = Modifier
                             .ifElse(
-                                focused,
+                                focused && enableAnimations,
                                 Modifier.basicMarquee(
                                     iterations = Int.MAX_VALUE,
                                     initialDelayMillis = 0,

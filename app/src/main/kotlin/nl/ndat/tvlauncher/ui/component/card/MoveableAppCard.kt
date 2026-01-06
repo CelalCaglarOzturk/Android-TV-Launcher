@@ -10,6 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -40,6 +41,7 @@ import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,6 +63,8 @@ import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.modifier.ifElse
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
+import org.koin.compose.koinInject
 
 @Composable
 fun MoveableAppCard(
@@ -76,6 +80,8 @@ fun MoveableAppCard(
     onClick: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
+    val settingsRepository = koinInject<SettingsRepository>()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
@@ -104,16 +110,21 @@ fun MoveableAppCard(
 
     // Memoize card width calculation
     val cardWidth = remember(baseHeight) { baseHeight * (16f / 9f) }
+    val density = LocalDensity.current
+
+    val requestWidth = remember(cardWidth, density) { with(density) { cardWidth.roundToPx() } }
+    val requestHeight = remember(baseHeight, density) { with(density) { baseHeight.roundToPx() } }
 
     // Memoize the image request to prevent recreating on every recomposition
-    val imageRequest = remember(app.id, context) {
+    val imageRequest = remember(app.id, context, enableAnimations, requestWidth, requestHeight) {
         ImageRequest.Builder(context)
             .data(app)
             .memoryCacheKey("app_icon:${app.id}")
             .diskCacheKey("app_icon:${app.id}")
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
-            .crossfade(true)
+            .crossfade(enableAnimations)
+            .size(requestWidth, requestHeight)
             .build()
     }
 
@@ -198,7 +209,7 @@ fun MoveableAppCard(
                         ),
                         modifier = Modifier
                             .ifElse(
-                                focused && !isInMoveMode,
+                                focused && !isInMoveMode && enableAnimations,
                                 Modifier.basicMarquee(
                                     iterations = Int.MAX_VALUE,
                                     initialDelayMillis = 0,
