@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -13,6 +14,7 @@ import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.data.sqldelight.Channel
+import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 
 class HomeTabViewModel(
     private val appRepository: AppRepository,
@@ -56,7 +58,15 @@ class HomeTabViewModel(
     val channelCardSize = settingsRepository.channelCardSize
         .stateIn(viewModelScope, SHARING_STARTED, SettingsRepository.DEFAULT_CHANNEL_CARD_SIZE)
 
-    fun channelPrograms(channelId: String) = channelRepository.getProgramsByChannel(channelId)
+    private val _channelProgramsCache = mutableMapOf<String, StateFlow<List<ChannelProgram>>>()
+
+    fun channelPrograms(channelId: String): StateFlow<List<ChannelProgram>> {
+        return _channelProgramsCache.getOrPut(channelId) {
+            channelRepository.getProgramsByChannel(channelId)
+                .flowOn(Dispatchers.Default)
+                .stateIn(viewModelScope, SHARING_STARTED, emptyList())
+        }
+    }
 
     fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
         // Return if state is already satisfied

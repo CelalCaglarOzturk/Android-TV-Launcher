@@ -172,7 +172,7 @@ fun HomeTab(
             }
             val programs by remember(channel.id) {
                 viewModel.channelPrograms(channel.id)
-            }.collectAsStateWithLifecycle(initialValue = emptyList())
+            }.collectAsStateWithLifecycle()
             val isWatchNext = remember(channel.type) { channel.type == ChannelType.WATCH_NEXT }
 
             // Early return if not displayable - memoize the condition check
