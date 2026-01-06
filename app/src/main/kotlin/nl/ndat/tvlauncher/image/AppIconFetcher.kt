@@ -12,6 +12,7 @@ import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.key.Keyer
 import coil.request.Options
+import coil.size.Dimension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import nl.ndat.tvlauncher.R
@@ -32,17 +33,19 @@ class AppIconFetcher(
 
         // Downsample if a specific size is requested
         val size = options.size
-        if (size is coil.size.PixelSize) {
-            val width = size.width
-            val height = size.height
-            if (width > 0 && height > 0) {
+        val width = size.width
+        val height = size.height
+        if (width is Dimension.Pixels && height is Dimension.Pixels) {
+            val w = width.px
+            val h = height.px
+            if (w > 0 && h > 0) {
                 val bitmap = android.graphics.Bitmap.createBitmap(
-                    width,
-                    height,
+                    w,
+                    h,
                     android.graphics.Bitmap.Config.ARGB_8888
                 )
                 val canvas = android.graphics.Canvas(bitmap)
-                drawable.setBounds(0, 0, width, height)
+                drawable.setBounds(0, 0, w, h)
                 drawable.draw(canvas)
                 drawable = android.graphics.drawable.BitmapDrawable(context.resources, bitmap)
             }
