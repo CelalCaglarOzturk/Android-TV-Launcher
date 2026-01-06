@@ -103,14 +103,14 @@ fun HomeTab(
     // Restore focus to the channel that was being toggled
     LaunchedEffect(focusedChannelId, enabledChannels, disabledChannels) {
         focusedChannelId?.let { id ->
-            val requester = focusRequesters[id]
-            if (requester != null) {
-                try {
-                    requester.requestFocus()
-                    focusedChannelId = null
-                } catch (e: Exception) {
-                    // Ignore
-                }
+            // Scroll to the item to ensure it's composed and can receive focus
+            val enabledIndex = enabledChannels.indexOfFirst { it.id == id }
+            if (enabledIndex != -1) {
+                // +1 for Apps row
+                listState.scrollToItem(enabledIndex + 1)
+            } else if (disabledChannels.any { it.id == id }) {
+                // +1 for Apps row, + enabledChannels.size
+                listState.scrollToItem(enabledChannels.size + 1)
             }
         }
     }
@@ -201,6 +201,17 @@ fun HomeTab(
                     focusRequesters.getOrPut(channel.id) { FocusRequester() }
                 }
 
+                LaunchedEffect(Unit) {
+                    if (focusedChannelId == channel.id) {
+                        try {
+                            focusRequester.requestFocus()
+                            focusedChannelId = null
+                        } catch (e: Exception) {
+                            // Ignore
+                        }
+                    }
+                }
+
                 ChannelProgramCardRow(
                     modifier = Modifier
                         .focusRequester(focusRequester)
@@ -218,13 +229,7 @@ fun HomeTab(
                     baseHeight = channelCardSize.dp,
                     overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
                     onToggleEnabled = { enabled ->
-                        if (!enabled) {
-                            val nextChannel = enabledChannels.getOrNull(index + 1)
-                                ?: enabledChannels.getOrNull(index - 1)
-                            focusedChannelId = nextChannel?.id ?: channel.id
-                        } else {
-                            focusedChannelId = channel.id
-                        }
+                        focusedChannelId = channel.id
                         viewModel.setChannelEnabled(channel, enabled)
                     },
                     onMoveUp = {
@@ -277,6 +282,17 @@ fun HomeTab(
 
                             val focusRequester = remember(channel.id) {
                                 focusRequesters.getOrPut(channel.id) { FocusRequester() }
+                            }
+
+                            LaunchedEffect(Unit) {
+                                if (focusedChannelId == channel.id) {
+                                    try {
+                                        focusRequester.requestFocus()
+                                        focusedChannelId = null
+                                    } catch (e: Exception) {
+                                        // Ignore
+                                    }
+                                }
                             }
 
                             DisabledChannelCard(
