@@ -56,4 +56,17 @@
 	<string name="restore_success">Geri yükleme başarılı</string>
 	<string name="restore_failed">Geri yükleme başarısız</string>
 	<string name="restore_not_found">Yedek dosyası bulunamadı</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">Ayarları Sıfırla</string>
+	<string
+        name="settings_reset_description"
+    >Tüm tercihleri temizle ve varsayılanları geri yükle</string>
+	<string name="settings_reset_success">Ayarlar varsayılana sıfırlandı</string>
+
+	<!-- Animations -->
+	<string name="settings_enable_animations">Animasyonları Etkinleştir</string>
+	<string
+        name="settings_enable_animations_description"
+    >Kayan yazı ve diğer görsel efektleri göster</string>
 </resources>

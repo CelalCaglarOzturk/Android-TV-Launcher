@@ -54,4 +54,17 @@
 	<string name="restore_success">Restore completed successfully</string>
 	<string name="restore_failed">Restore failed</string>
 	<string name="restore_not_found">No backup file found</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">Reset Settings</string>
+	<string
+        name="settings_reset_description"
+    >Clear all preferences and restore defaults</string>
+	<string name="settings_reset_success">Settings reset to default</string>
+
+	<!-- Animations -->
+	<string name="settings_enable_animations">Enable Animations</string>
+	<string
+        name="settings_enable_animations_description"
+    >Show marquee and other visual effects</string>
 </resources>

@@ -219,20 +219,30 @@ fun HomeTab(
                     { enabled: Boolean ->
                         focusedChannelId = channel.id
                         viewModel.setChannelEnabled(channel, enabled)
+                        Unit
                     }
                 }
 
                 val onMoveUp = remember(channel, viewModel) {
-                    { viewModel.moveChannelUp(channel) }
+                    {
+                        viewModel.moveChannelUp(channel)
+                        Unit
+                    }
                 }
 
                 val onMoveDown = remember(channel, viewModel) {
-                    { viewModel.moveChannelDown(channel) }
+                    {
+                        viewModel.moveChannelDown(channel)
+                        Unit
+                    }
                 }
 
                 val onRemoveProgram: ((nl.ndat.tvlauncher.data.sqldelight.ChannelProgram) -> Unit)? = if (isWatchNext) {
                     remember(viewModel) {
-                        { program -> viewModel.removeWatchNextProgram(program.id) }
+                        { program ->
+                            viewModel.removeWatchNextProgram(program.id)
+                            Unit
+                        }
                     }
                 } else null
 

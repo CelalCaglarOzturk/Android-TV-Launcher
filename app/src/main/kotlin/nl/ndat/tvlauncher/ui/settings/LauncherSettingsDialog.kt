@@ -147,11 +147,11 @@ fun LauncherSettingsDialog(
                         selected = false,
                         onClick = { settingsRepository.toggleEnableAnimations() },
                         headlineContent = {
-                            Text("Enable Animations")
+                            Text(stringResource(R.string.settings_enable_animations))
                         },
                         supportingContent = {
                             Text(
-                                text = "Show marquee and other visual effects",
+                                text = stringResource(R.string.settings_enable_animations_description),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             )
@@ -228,6 +228,26 @@ fun LauncherSettingsDialog(
                             }
                         },
                         headlineContent = { Text(stringResource(R.string.restore)) }
+                    )
+
+                    ListItem(
+                        selected = false,
+                        onClick = {
+                            settingsRepository.resetSettings()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.settings_reset_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        headlineContent = { Text(stringResource(R.string.settings_reset)) },
+                        supportingContent = {
+                            Text(
+                                text = stringResource(R.string.settings_reset_description),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            )
+                        }
                     )
                 }
             }

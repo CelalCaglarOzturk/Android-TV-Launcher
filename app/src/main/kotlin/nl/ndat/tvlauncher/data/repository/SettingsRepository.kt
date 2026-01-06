@@ -76,4 +76,13 @@ class SettingsRepository(
     fun toggleEnableAnimations() {
         setEnableAnimations(!_enableAnimations.value)
     }
+
+    fun resetSettings() {
+        prefs.edit { clear() }
+        _appCardSize.value = DEFAULT_APP_CARD_SIZE
+        _channelCardSize.value = DEFAULT_CHANNEL_CARD_SIZE
+        _hiddenInputs.value = emptySet()
+        _showMobileApps.value = false
+        _enableAnimations.value = true
+    }
 }
