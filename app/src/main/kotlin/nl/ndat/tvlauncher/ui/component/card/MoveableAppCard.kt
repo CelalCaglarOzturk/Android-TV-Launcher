@@ -334,11 +334,13 @@ private fun AppOptionsPopup(
         )
 
         // Add to Home / Remove from Home
-        KeyDownButton(
-            onClick = onToggleFavorite,
-            icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-            text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
-        )
+        if (app.hidden != 1L) {
+            KeyDownButton(
+                onClick = onToggleFavorite,
+                icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
+                text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
+            )
+        }
 
         // Hide App
         if (onToggleHidden != null) {
