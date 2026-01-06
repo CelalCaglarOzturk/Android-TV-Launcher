@@ -10,7 +10,6 @@ The app is currently in an early development stage.
 ## Features
 
 - App  has all of the features of Android Home
-- No animations
 - High performance
 
 
@@ -19,10 +18,6 @@ The app is currently in an early development stage.
 Some features are not implemented because of platform limitations. The following features can not be implemented:
 
 - Wallpapers
-
-  Android TV does not allow apps to set a wallpaper since there is no implementation for the
-  [WallpaperManager actions](https://developer.android.com/reference/android/app/WallpaperManager.html).
-
 - Search
 
 ### This is a fork of [https://github.com/nielsvanvelzen/tv-launcher](https://github.com/nielsvanvelzen/tv-launcher)
