@@ -140,7 +140,7 @@ fun AppsTab(
         LazyVerticalGrid(
             state = listState,
             contentPadding = PaddingValues(
-                vertical = 16.dp,
+                vertical = 4.dp,
                 horizontal = 48.dp,
             ),
             verticalArrangement = Arrangement.spacedBy(14.dp),
