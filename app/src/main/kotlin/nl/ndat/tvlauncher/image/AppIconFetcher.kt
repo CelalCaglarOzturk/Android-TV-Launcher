@@ -23,15 +23,34 @@ import nl.ndat.tvlauncher.data.sqldelight.App
  */
 class AppIconFetcher(
     private val app: App,
-    private val context: Context
+    private val context: Context,
+    private val options: Options
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult = withContext(Dispatchers.IO) {
-        val drawable = loadAppIcon()
+        var drawable = loadAppIcon()
+
+        // Downsample if a specific size is requested
+        val size = options.size
+        if (size is coil.size.PixelSize) {
+            val width = size.width
+            val height = size.height
+            if (width > 0 && height > 0) {
+                val bitmap = android.graphics.Bitmap.createBitmap(
+                    width,
+                    height,
+                    android.graphics.Bitmap.Config.ARGB_8888
+                )
+                val canvas = android.graphics.Canvas(bitmap)
+                drawable.setBounds(0, 0, width, height)
+                drawable.draw(canvas)
+                drawable = android.graphics.drawable.BitmapDrawable(context.resources, bitmap)
+            }
+        }
 
         DrawableResult(
             drawable = drawable,
-            isSampled = false,
+            isSampled = true,
             // Report MEMORY for settings icon (already in resources)
             // Report DISK for app icons loaded from package manager (cached by system)
             dataSource = if (app.packageName == SETTINGS_PACKAGE_NAME) {
@@ -93,14 +112,14 @@ class AppIconFetcher(
     class AppKeyer : Keyer<App> {
         override fun key(data: App, options: Options): String {
             // Use app ID as cache key - this is stable and unique per app
-            // Include a version suffix if we ever need to invalidate cache
-            return "app_icon:${data.id}"
+            // Include size to support different requested sizes (e.g. focused vs unfocused)
+            return "app_icon:${data.id}:${options.size}"
         }
     }
 
     class Factory(private val context: Context) : Fetcher.Factory<App> {
         override fun create(data: App, options: Options, imageLoader: ImageLoader): Fetcher {
-            return AppIconFetcher(data, context)
+            return AppIconFetcher(data, context, options)
         }
     }
 

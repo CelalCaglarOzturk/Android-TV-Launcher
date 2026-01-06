@@ -21,7 +21,6 @@ import nl.ndat.tvlauncher.ui.tab.home.HomeTab
 import nl.ndat.tvlauncher.ui.toolbar.Toolbar
 import nl.ndat.tvlauncher.util.composition.LocalBackStack
 import nl.ndat.tvlauncher.util.composition.ProvideNavigation
-import nl.ndat.tvlauncher.util.modifier.autoFocus
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -41,7 +40,6 @@ fun LauncherScreen() {
 
             Box(
                 modifier = Modifier
-                    .autoFocus()
                     .fillMaxSize()
             ) {
                 val backStack = LocalBackStack.current
