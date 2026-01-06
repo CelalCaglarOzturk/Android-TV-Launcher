@@ -3,11 +3,14 @@ package nl.ndat.tvlauncher.data.resolver
 import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
+import android.media.tv.TvInputManager
 import android.database.CursorIndexOutOfBoundsException
 import android.net.Uri
 import android.os.CancellationSignal
 import androidx.core.content.ContentResolverCompat
+import androidx.core.content.getSystemService
 import androidx.tvprovider.media.tv.PreviewChannel
 import androidx.tvprovider.media.tv.PreviewProgram
 import androidx.tvprovider.media.tv.TvContractCompat
@@ -135,6 +138,92 @@ class ChannelResolver {
                 PreviewProgram.fromCursor(cursor).toChannelProgram()
             }
         }
+
+    suspend fun getLiveChannels(context: Context): List<Channel> = withContext(Dispatchers.IO) {
+        val inputManager = context.getSystemService<TvInputManager>() ?: return@withContext emptyList()
+        val inputs = inputManager.tvInputList
+
+        // Find which inputs actually have channels
+        val inputsWithChannels = context.contentResolver.tryQuery(
+            TvContractCompat.Channels.CONTENT_URI,
+            arrayOf(TvContractCompat.Channels.COLUMN_INPUT_ID),
+            "${TvContractCompat.Channels.COLUMN_BROWSABLE} = 1",
+            null
+        ).processRows { it.getString(0) }.toSet()
+
+        inputs.filter { it.id in inputsWithChannels }.map { input ->
+            Channel(
+                id = "${CHANNEL_ID_PREFIX}live_input_${input.id}",
+                type = ChannelType.LIVE,
+                channelId = input.id.hashCode().toLong(),
+                displayName = input.loadLabel(context).toString(),
+                description = null,
+                packageName = input.serviceInfo.packageName,
+                appLinkIntentUri = null,
+                enabled = true,
+                displayOrder = null,
+            )
+        }
+    }
+
+    suspend fun getLiveChannelPrograms(
+        context: Context,
+        inputId: String,
+        channelRowId: String
+    ): List<ChannelProgram> = withContext(Dispatchers.IO) {
+        context.contentResolver.tryQuery(
+            TvContractCompat.Channels.CONTENT_URI,
+            arrayOf(
+                TvContractCompat.Channels._ID,
+                TvContractCompat.Channels.COLUMN_DISPLAY_NAME,
+                TvContractCompat.Channels.COLUMN_DISPLAY_NUMBER,
+                TvContractCompat.Channels.COLUMN_PACKAGE_NAME,
+            ),
+            "${TvContractCompat.Channels.COLUMN_INPUT_ID} = ? AND ${TvContractCompat.Channels.COLUMN_BROWSABLE} = 1",
+            arrayOf(inputId)
+        ).processRows { cursor ->
+            val id = cursor.getLong(0)
+            val displayName = cursor.getString(1)
+            val displayNumber = cursor.getString(2)
+            val packageName = cursor.getString(3)
+
+            val name = if (!displayNumber.isNullOrEmpty()) {
+                "$displayNumber ${displayName ?: ""}"
+            } else {
+                displayName ?: ""
+            }
+
+            val intent = Intent(Intent.ACTION_VIEW, TvContractCompat.buildChannelUri(id))
+            val logoUri = TvContractCompat.buildChannelLogoUri(id)
+
+            ChannelProgram(
+                id = "${CHANNEL_PROGRAM_ID_PREFIX}live_channel_$id",
+                channelId = channelRowId,
+                packageName = packageName ?: "",
+                weight = 0,
+                posterArtUri = logoUri.toString(),
+                posterArtAspectRatio = ChannelProgramAspectRatio.AR1_1,
+                lastPlaybackPositionMillis = -1,
+                durationMillis = -1,
+                type = ChannelProgramType.CHANNEL,
+                releaseDate = null,
+                itemCount = 0,
+                live = true,
+                interactionType = null,
+                interactionCount = 0,
+                author = null,
+                genre = null,
+                startTimeUtcMillis = 0,
+                endTimeUtcMillis = 0,
+                title = name.trim(),
+                episodeTitle = null,
+                seasonNumber = null,
+                episodeNumber = null,
+                description = null,
+                intentUri = intent.toUri(Intent.URI_INTENT_SCHEME)
+            )
+        }
+    }
 
     suspend fun getWatchNextPrograms(context: Context): List<ChannelProgram> = withContext(Dispatchers.IO) {
         context.contentResolver.tryQuery(
