@@ -65,6 +65,7 @@ fun HomeTab(
 
     // Use lifecycle-aware collection for better performance
     val apps by viewModel.apps.collectAsStateWithLifecycle()
+    val appsMap by viewModel.appsMap.collectAsStateWithLifecycle()
     val channels by viewModel.channels.collectAsStateWithLifecycle()
     val allAppChannels by viewModel.allAppChannels.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
@@ -167,8 +168,8 @@ fun HomeTab(
             contentType = { _, _ -> "channel_row" }
         ) { index, channel ->
             // Cache app lookup to avoid repeated filtering
-            val app = remember(channel.packageName, apps) {
-                apps.firstOrNull { app -> app.packageName == channel.packageName }
+            val app = remember(channel.packageName, appsMap) {
+                appsMap[channel.packageName]
             }
             val programs by remember(channel.id) {
                 viewModel.channelPrograms(channel.id)
@@ -214,6 +215,27 @@ fun HomeTab(
                     }
                 }
 
+                val onToggleEnabled = remember(channel, viewModel) {
+                    { enabled: Boolean ->
+                        focusedChannelId = channel.id
+                        viewModel.setChannelEnabled(channel, enabled)
+                    }
+                }
+
+                val onMoveUp = remember(channel, viewModel) {
+                    { viewModel.moveChannelUp(channel) }
+                }
+
+                val onMoveDown = remember(channel, viewModel) {
+                    { viewModel.moveChannelDown(channel) }
+                }
+
+                val onRemoveProgram: ((nl.ndat.tvlauncher.data.sqldelight.ChannelProgram) -> Unit)? = if (isWatchNext) {
+                    remember(viewModel) {
+                        { program -> viewModel.removeWatchNextProgram(program.id) }
+                    }
+                } else null
+
                 ChannelProgramCardRow(
                     modifier = Modifier
                         .focusRequester(focusRequester)
@@ -230,19 +252,10 @@ fun HomeTab(
                     isLast = index == enabledChannelsSize - 1,
                     baseHeight = channelCardSize.dp,
                     overrideAspectRatio = if (isWatchNext) 16f / 9f else null,
-                    onToggleEnabled = { enabled ->
-                        focusedChannelId = channel.id
-                        viewModel.setChannelEnabled(channel, enabled)
-                    },
-                    onMoveUp = {
-                        viewModel.moveChannelUp(channel)
-                    },
-                    onMoveDown = {
-                        viewModel.moveChannelDown(channel)
-                    },
-                    onRemoveProgram = if (isWatchNext) {
-                        { program -> viewModel.removeWatchNextProgram(program.id) }
-                    } else null
+                    onToggleEnabled = onToggleEnabled,
+                    onMoveUp = onMoveUp,
+                    onMoveDown = onMoveDown,
+                    onRemoveProgram = onRemoveProgram
                 )
             }
         }
@@ -278,8 +291,8 @@ fun HomeTab(
                             items = disabledChannels,
                             key = { _, channel -> "disabled_${channel.id}" }
                         ) { index, channel ->
-                            val app = remember(channel.packageName, apps) {
-                                apps.firstOrNull { app -> app.packageName == channel.packageName }
+                            val app = remember(channel.packageName, appsMap) {
+                                appsMap[channel.packageName]
                             }
 
                             val focusRequester = remember(channel.id) {

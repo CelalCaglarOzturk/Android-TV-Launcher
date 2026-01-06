@@ -40,6 +40,12 @@ class HomeTabViewModel(
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
+    // Optimized map for fast O(1) lookup by package name
+    val appsMap = apps
+        .map { it.associateBy { app -> app.packageName } }
+        .flowOn(Dispatchers.Default)
+        .stateIn(viewModelScope, SHARING_STARTED, emptyMap())
+
     val channels = channelRepository.getEnabledChannels()
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
