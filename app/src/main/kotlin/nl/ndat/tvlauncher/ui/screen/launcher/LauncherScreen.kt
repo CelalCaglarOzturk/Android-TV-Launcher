@@ -63,13 +63,7 @@ fun LauncherScreen() {
                         .fillMaxSize()
                         .graphicsLayer {
                             alpha = if (isHomeVisible) 1f else 0f
-                        }
-                        .focusGroup()
-                        .focusProperties {
-                            // Block all focus directions when not visible
-                            if (!isHomeVisible) {
-                                onEnter = { FocusRequester.Cancel }
-                            }
+                            translationX = if (isHomeVisible) 0f else 10000f
                         }
                 ) {
                     HomeTab(
@@ -84,13 +78,7 @@ fun LauncherScreen() {
                         .fillMaxSize()
                         .graphicsLayer {
                             alpha = if (isAppsVisible) 1f else 0f
-                        }
-                        .focusGroup()
-                        .focusProperties {
-                            // Block all focus directions when not visible
-                            if (!isAppsVisible) {
-                                onEnter = { FocusRequester.Cancel }
-                            }
+                            translationX = if (isAppsVisible) 0f else 10000f
                         }
                 ) {
                     AppsTab(
