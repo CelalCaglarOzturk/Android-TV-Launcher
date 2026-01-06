@@ -17,7 +17,7 @@ class DatabaseContainer(
     }
 
     private val driver = AndroidSqliteDriver(Database.Schema, context, DB_FILE)
-    private val database = Database(
+    val database = Database(
         driver = driver,
         ChannelAdapter = Channel.Adapter(
             typeAdapter = EnumColumnAdapter(),

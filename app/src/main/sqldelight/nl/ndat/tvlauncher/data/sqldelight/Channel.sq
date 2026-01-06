@@ -47,6 +47,12 @@ SELECT * FROM Channel WHERE type = :type;
 getByTypeEnabled:
 SELECT * FROM Channel WHERE type = :type AND enabled = 1 ORDER BY displayOrder ASC, displayName ASC;
 
+findPrevious:
+SELECT * FROM Channel WHERE enabled = 1 AND displayOrder < :displayOrder ORDER BY displayOrder DESC LIMIT 1;
+
+findNext:
+SELECT * FROM Channel WHERE enabled = 1 AND displayOrder > :displayOrder ORDER BY displayOrder ASC LIMIT 1;
+
 upsert {
 	UPDATE Channel SET
 		type = :type,

@@ -157,19 +157,27 @@ class ChannelRepository(
     }
 
     suspend fun moveChannelUp(channelId: String) = withContext(Dispatchers.IO) {
-        val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
-        val currentOrder = channel.displayOrder ?: return@withContext
-        if (currentOrder > 0L) {
-            database.channels.updateDisplayOrderShift(order = currentOrder - 1L, id = channelId)
+        database.database.transaction {
+            val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@transaction
+            val currentOrder = channel.displayOrder ?: return@transaction
+            val previousChannel =
+                database.channels.findPrevious(currentOrder).executeAsOneOrNull() ?: return@transaction
+            val previousOrder = previousChannel.displayOrder ?: return@transaction
+
+            database.channels.updateDisplayOrder(previousOrder, channel.id)
+            database.channels.updateDisplayOrder(currentOrder, previousChannel.id)
         }
     }
 
     suspend fun moveChannelDown(channelId: String) = withContext(Dispatchers.IO) {
-        val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@withContext
-        val currentOrder = channel.displayOrder ?: return@withContext
-        val maxOrder = database.channels.getAllEnabled().executeAsList().maxOfOrNull { it.displayOrder ?: 0L } ?: 0L
-        if (currentOrder < maxOrder) {
-            database.channels.updateDisplayOrderShift(order = currentOrder + 1L, id = channelId)
+        database.database.transaction {
+            val channel = database.channels.getById(channelId).executeAsOneOrNull() ?: return@transaction
+            val currentOrder = channel.displayOrder ?: return@transaction
+            val nextChannel = database.channels.findNext(currentOrder).executeAsOneOrNull() ?: return@transaction
+            val nextOrder = nextChannel.displayOrder ?: return@transaction
+
+            database.channels.updateDisplayOrder(nextOrder, channel.id)
+            database.channels.updateDisplayOrder(currentOrder, nextChannel.id)
         }
     }
 
