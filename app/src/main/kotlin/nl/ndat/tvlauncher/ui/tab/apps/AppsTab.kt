@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -138,7 +140,12 @@ fun AppsTab(
         }
 
         // Memoize the grid cell configuration
-        val gridCells = remember(appCardSize) { GridCells.Adaptive(appCardSize.dp * (16f / 9f)) }
+        val gridCells = remember(columnCount) { GridCells.Fixed(columnCount) }
+
+        // Calculate exact width needed for the grid to prevent stretching
+        val gridWidth = remember(columnCount, itemMinWidth, spacing, horizontalPadding) {
+            (itemMinWidth * columnCount) + (spacing * (columnCount - 1)) + horizontalPadding
+        }
 
         LazyVerticalGrid(
             state = listState,
@@ -146,11 +153,12 @@ fun AppsTab(
                 vertical = 4.dp,
                 horizontal = 48.dp,
             ),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             columns = gridCells,
             modifier = Modifier
-                .fillMaxSize()
+                .width(gridWidth)
+                .fillMaxHeight()
                 .focusProperties {
                     enter = {
                         if (it == FocusDirection.Down) {
