@@ -203,7 +203,7 @@ class ChannelRepository(
     // Getters
     fun getChannels() = database.channels.getAll().executeAsListFlow()
     fun getEnabledChannels() = database.channels.getAllEnabled().executeAsListFlow()
-    fun getProgramsByChannel(channel: Channel) = database.channelPrograms.getByChannel(channel.id).executeAsListFlow()
+    fun getProgramsByChannel(channelId: String) = database.channelPrograms.getByChannel(channelId).executeAsListFlow()
     fun getWatchNextPrograms() =
         database.channelPrograms.getByChannel(ChannelResolver.CHANNEL_ID_WATCH_NEXT).executeAsListFlow()
 

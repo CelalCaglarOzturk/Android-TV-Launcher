@@ -99,7 +99,7 @@ fun ChannelProgramCard(
                             isFocused,
                             Modifier.basicMarquee(
                                 iterations = Int.MAX_VALUE,
-                                initialDelayMillis = 0,
+                                initialDelayMillis = 2000,
                             ),
                         )
                         .padding(top = 6.dp),
