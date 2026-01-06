@@ -20,11 +20,11 @@ class AppsTabViewModel(
 ) : ViewModel() {
 
     companion object {
-        // Use WhileSubscribed with a 5 second timeout to keep data cached during tab switches
+        // Use WhileSubscribed with a 20 second timeout to keep data cached during tab switches
         // This prevents reloading when quickly switching tabs while still allowing cleanup
         // when the screen is completely left
         private val SHARING_STARTED = SharingStarted.WhileSubscribed(
-            stopTimeoutMillis = 5000L,
+            stopTimeoutMillis = 20000L,
             replayExpirationMillis = Long.MAX_VALUE // Never expire the replay cache
         )
     }
