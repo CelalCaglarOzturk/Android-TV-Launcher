@@ -10,8 +10,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -23,6 +26,7 @@ import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppCardRow(
     apps: List<App>,
@@ -51,6 +55,7 @@ fun AppCardRow(
             if (focusRequester != null) {
                 try {
                     focusRequester.requestFocus()
+                    focusedAppId = null
                 } catch (e: Exception) {
                     // Ignore focus request failures
                 }
@@ -59,7 +64,15 @@ fun AppCardRow(
     }
 
     CardRow(
-        modifier = modifier,
+        modifier = modifier.focusProperties {
+            enter = {
+                if (it == FocusDirection.Down) {
+                    firstItemFocusRequester
+                } else {
+                    FocusRequester.Default
+                }
+            }
+        },
         state = listState,
     ) { childFocusRequester ->
         itemsIndexed(

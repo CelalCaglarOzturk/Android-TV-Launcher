@@ -150,11 +150,47 @@ class AppRepository(
         database.apps.updateFavoriteRemove(id)
     }
 
-    suspend fun updateFavoriteOrder(id: String, order: Int) =
-        withContext(Dispatchers.IO) { database.apps.updateFavoriteOrder(id, order.toLong()) }
+    suspend fun updateFavoriteOrder(id: String, order: Int) = withContext(Dispatchers.IO) {
+        val app = database.apps.getById(id).executeAsOneOrNull() ?: return@withContext
+        val currentOrder = app.favoriteOrder ?: return@withContext
+
+        if (order > currentOrder) {
+            moveFavoriteAppDown(id)
+        } else if (order < currentOrder) {
+            moveFavoriteAppUp(id)
+        }
+    }
 
     suspend fun updateAllAppsOrder(id: String, order: Int) =
         withContext(Dispatchers.IO) { database.apps.updateAllAppsOrder(id, order.toLong()) }
+
+    suspend fun moveFavoriteAppUp(id: String) = withContext(Dispatchers.IO) {
+        database.database.transaction {
+            val app = database.apps.getById(id).executeAsOneOrNull() ?: return@transaction
+            val currentOrder = app.favoriteOrder ?: return@transaction
+            val previousApp =
+                database.apps.findPreviousFavorite(currentOrder).executeAsOneOrNull()
+                    ?: return@transaction
+            val previousOrder = previousApp.favoriteOrder ?: return@transaction
+
+            database.apps.updateFavoriteOrderSimple(previousOrder, app.id)
+            database.apps.updateFavoriteOrderSimple(currentOrder, previousApp.id)
+        }
+    }
+
+    suspend fun moveFavoriteAppDown(id: String) = withContext(Dispatchers.IO) {
+        database.database.transaction {
+            val app = database.apps.getById(id).executeAsOneOrNull() ?: return@transaction
+            val currentOrder = app.favoriteOrder ?: return@transaction
+            val nextApp =
+                database.apps.findNextFavorite(currentOrder).executeAsOneOrNull()
+                    ?: return@transaction
+            val nextOrder = nextApp.favoriteOrder ?: return@transaction
+
+            database.apps.updateFavoriteOrderSimple(nextOrder, app.id)
+            database.apps.updateFavoriteOrderSimple(currentOrder, nextApp.id)
+        }
+    }
 
     suspend fun hideApp(id: String) = withContext(Dispatchers.IO) {
         database.apps.hideApp(id)

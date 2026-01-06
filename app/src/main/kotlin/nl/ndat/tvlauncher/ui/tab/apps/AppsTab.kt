@@ -85,6 +85,7 @@ fun AppsTab(
             if (focusRequester != null) {
                 try {
                     focusRequester.requestFocus()
+                    focusedAppId = null
                 } catch (e: Exception) {
                     // Ignore focus request failures
                 }
@@ -102,6 +103,8 @@ fun AppsTab(
                     // Ignore
                 }
             }
+        } else {
+            focusedAppId = null
         }
     }
 

@@ -28,6 +28,18 @@ SELECT * FROM App WHERE hidden = 1 ORDER BY allAppsOrder ASC, displayName ASC;
 getAllFavorites:
 SELECT * FROM App WHERE favoriteOrder IS NOT NULL AND hidden = 0 ORDER BY favoriteOrder ASC;
 
+findPreviousFavorite:
+SELECT * FROM App WHERE favoriteOrder IS NOT NULL AND hidden = 0 AND favoriteOrder < :favoriteOrder ORDER BY favoriteOrder DESC LIMIT 1;
+
+findNextFavorite:
+SELECT * FROM App WHERE favoriteOrder IS NOT NULL AND hidden = 0 AND favoriteOrder > :favoriteOrder ORDER BY favoriteOrder ASC LIMIT 1;
+
+findPreviousAllApps:
+SELECT * FROM App WHERE hidden = 0 AND allAppsOrder < :allAppsOrder ORDER BY allAppsOrder DESC LIMIT 1;
+
+findNextAllApps:
+SELECT * FROM App WHERE hidden = 0 AND allAppsOrder > :allAppsOrder ORDER BY allAppsOrder ASC LIMIT 1;
+
 getById:
 SELECT * FROM App WHERE id = :id LIMIT 1;
 
@@ -76,6 +88,9 @@ updateFavoriteOrder {
 	UPDATE App SET favoriteOrder = :order WHERE id = :id;
 }
 
+updateFavoriteOrderSimple:
+UPDATE App SET favoriteOrder = :favoriteOrder WHERE id = :id;
+
 updateAllAppsOrderAdd:
 UPDATE App SET allAppsOrder = COALESCE((SELECT MAX(allAppsOrder) FROM App), -1) + 1 WHERE id = :id;
 
@@ -87,6 +102,9 @@ updateAllAppsOrder {
 	-- Update requested item
 	UPDATE App SET allAppsOrder = :order WHERE id = :id;
 }
+
+updateAllAppsOrderSimple:
+UPDATE App SET allAppsOrder = :allAppsOrder WHERE id = :id;
 
 hideApp:
 UPDATE App SET hidden = 1, favoriteOrder = NULL WHERE id = :id;

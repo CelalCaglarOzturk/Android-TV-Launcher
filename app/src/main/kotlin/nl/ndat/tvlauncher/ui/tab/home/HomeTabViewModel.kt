@@ -66,10 +66,32 @@ class HomeTabViewModel(
         else appRepository.unfavorite(app.id)
     }
 
-    fun setFavoriteOrder(app: App, order: Int) = viewModelScope.launch {
+    fun setFavoriteOrder(app: App, targetIndex: Int) = viewModelScope.launch {
         // Make sure app is favorite first
         if (app.favoriteOrder == null) appRepository.favorite(app.id)
-        appRepository.updateFavoriteOrder(app.id, order)
+
+        val currentList = apps.value
+        val currentIndex = currentList.indexOfFirst { it.id == app.id }
+
+        if (currentIndex == -1) return@launch
+
+        if (targetIndex > currentIndex) {
+            appRepository.moveFavoriteAppDown(app.id)
+        } else if (targetIndex < currentIndex) {
+            appRepository.moveFavoriteAppUp(app.id)
+        }
+    }
+
+    fun moveAppUp(app: App) = viewModelScope.launch {
+        if (app.favoriteOrder != null) {
+            appRepository.moveFavoriteAppUp(app.id)
+        }
+    }
+
+    fun moveAppDown(app: App) = viewModelScope.launch {
+        if (app.favoriteOrder != null) {
+            appRepository.moveFavoriteAppDown(app.id)
+        }
     }
 
     fun hideApp(app: App) = viewModelScope.launch {
