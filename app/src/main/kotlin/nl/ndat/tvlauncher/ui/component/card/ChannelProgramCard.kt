@@ -123,6 +123,9 @@ fun ChannelProgramCard(
                     .height(baseHeight)
                     .aspectRatio(aspectRatio),
                 interactionSource = interactionSource,
+                colors = CardDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                ),
                 border = CardDefaults.border(
                     focusedBorder = Border(
                         border = BorderStroke(2.dp, MaterialTheme.colorScheme.border),

@@ -16,18 +16,20 @@ class ChannelRepository(
     private val database: DatabaseContainer,
 ) {
     private suspend fun commitChannels(type: ChannelType, channels: Collection<Channel>) = withContext(Dispatchers.IO) {
-        // Remove channels found in database but not in committed list
-        val existingIds = database.channels.getByType(type).executeAsList().map { it.id }
-        val newIds = channels.map { it.id }.toSet()
-        val idsToRemove = existingIds.subtract(newIds)
+        database.database.transaction {
+            // Remove channels found in database but not in committed list
+            val existingIds = database.channels.getByType(type).executeAsList().map { it.id }
+            val newIds = channels.map { it.id }.toSet()
+            val idsToRemove = existingIds.subtract(newIds)
 
-        idsToRemove.forEach { id ->
-            database.channels.removeById(id)
-        }
+            idsToRemove.forEach { id ->
+                database.channels.removeById(id)
+            }
 
-        // Upsert channels (preserving enabled and displayOrder)
-        channels.forEach { channel ->
-            commitChannel(channel)
+            // Upsert channels (preserving enabled and displayOrder)
+            channels.forEach { channel ->
+                commitChannel(channel)
+            }
         }
     }
 
@@ -55,18 +57,20 @@ class ChannelRepository(
         channelId: String,
         programs: Collection<ChannelProgram>,
     ) = withContext(Dispatchers.IO) {
-        // Remove channels found in database but not in committed list
-        val existingIds = database.channelPrograms.getByChannel(channelId).executeAsList().map { it.id }
-        val newIds = programs.map { it.id }.toSet()
-        val idsToRemove = existingIds.subtract(newIds)
+        database.database.transaction {
+            // Remove channels found in database but not in committed list
+            val existingIds = database.channelPrograms.getByChannel(channelId).executeAsList().map { it.id }
+            val newIds = programs.map { it.id }.toSet()
+            val idsToRemove = existingIds.subtract(newIds)
 
-        idsToRemove.forEach { id ->
-            database.channelPrograms.removeById(id)
-        }
+            idsToRemove.forEach { id ->
+                database.channelPrograms.removeById(id)
+            }
 
-        // Upsert channels
-        programs.forEach { program ->
-            commitChannelProgram(program)
+            // Upsert channels
+            programs.forEach { program ->
+                commitChannelProgram(program)
+            }
         }
     }
 
