@@ -74,6 +74,31 @@ fun ChannelProgramCardRow(
     // State for watch next program popup
     var watchNextPopupProgram by remember { mutableStateOf<ChannelProgram?>(null) }
 
+    // Track which program should receive focus after recomposition
+    var focusedProgramId by remember { mutableStateOf<String?>(null) }
+    val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    // Restore focus to the program that was being removed/moved after list recomposes
+    LaunchedEffect(focusedProgramId, programs) {
+        if (focusedProgramId != null) {
+            val focusRequester = focusRequesters[focusedProgramId]
+            if (focusRequester != null) {
+                try {
+                    focusRequester.requestFocus()
+                    focusedProgramId = null
+                } catch (e: Exception) {
+                    // Ignore focus request failures
+                }
+            }
+        }
+    }
+
+    // Clean up focus requesters for programs that are no longer in the list
+    LaunchedEffect(programs) {
+        val currentProgramIds = programs.map { it.id }.toSet()
+        focusRequesters.keys.retainAll(currentProgramIds)
+    }
+
     val childFocusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
 
@@ -132,6 +157,11 @@ fun ChannelProgramCardRow(
                                 key = { _, program -> program.id },
                                 contentType = { _, _ -> "program_card" }
                             ) { index, program ->
+                                // Get or create a focus requester for this program
+                                val programFocusRequester = remember(program.id) {
+                                    focusRequesters.getOrPut(program.id) { FocusRequester() }
+                                }
+
                                 Box {
                                     // Time-based long press detection
                                     var isKeyHeld by remember { mutableStateOf(false) }
@@ -158,6 +188,7 @@ fun ChannelProgramCardRow(
                                         baseHeight = baseHeight,
                                         overrideAspectRatio = overrideAspectRatio,
                                         modifier = Modifier
+                                            .focusRequester(programFocusRequester)
                                             .ifElse(
                                                 condition = index == 0,
                                                 positiveModifier = Modifier.focusRequester(childFocusRequester)
@@ -244,6 +275,22 @@ fun ChannelProgramCardRow(
                         WatchNextProgramPopup(
                             programName = program.title ?: "Watch Next Item",
                             onRemove = {
+                                // Calculate focus target before removal
+                                val index = programs.indexOfFirst { it.id == program.id }
+                                if (index != -1) {
+                                    val nextProgram = if (index < programs.size - 1) {
+                                        programs[index + 1]
+                                    } else if (index > 0) {
+                                        programs[index - 1]
+                                    } else {
+                                        null
+                                    }
+
+                                    if (nextProgram != null) {
+                                        focusedProgramId = nextProgram.id
+                                    }
+                                }
+
                                 onRemoveProgram?.invoke(program)
                                 watchNextPopupProgram = null
                             },
