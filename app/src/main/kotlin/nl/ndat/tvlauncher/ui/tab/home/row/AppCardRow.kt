@@ -149,6 +149,20 @@ fun AppCardRow(
                         }
                     },
                     onToggleFavorite = { favorite ->
+                        if (!favorite) {
+                            // When removing an app, focus the next one (or previous if last)
+                            val nextApp = if (index < apps.size - 1) {
+                                apps[index + 1]
+                            } else if (index > 0) {
+                                apps[index - 1]
+                            } else {
+                                null
+                            }
+
+                            if (nextApp != null) {
+                                focusedAppId = nextApp.id
+                            }
+                        }
                         viewModel.favoriteApp(app, favorite)
                     }
                 )
