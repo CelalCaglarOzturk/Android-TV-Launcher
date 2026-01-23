@@ -221,7 +221,8 @@ class ChannelRepository(
         val internalId = programId.removePrefix(ChannelResolver.CHANNEL_PROGRAM_ID_PREFIX).toLongOrNull()
         if (internalId != null) {
             channelResolver.removeWatchNextProgram(context, internalId)
-            refreshWatchNextChannels()
+            // Optimize: remove from local DB directly to avoid full refresh
+            database.channelPrograms.removeById(programId)
         }
     }
 
