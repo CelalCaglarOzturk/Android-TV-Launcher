@@ -26,15 +26,15 @@ class BackupRepository(
     private val backupFileName = "tv_launcher_backup.json"
 
     private fun getBackupDirectory(): File {
-        // Use Android/media/nl.ndat.tvlauncher/Backup/ directory
-        val mediaDir = File(
-            Environment.getExternalStorageDirectory(),
-            "Android/media/${context.packageName}/Backup"
+        // Use Documents/TVLauncher directory to persist files after uninstall
+        val backupDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+            "TVLauncher"
         )
-        if (!mediaDir.exists()) {
-            mediaDir.mkdirs()
+        if (!backupDir.exists()) {
+            backupDir.mkdirs()
         }
-        return mediaDir
+        return backupDir
     }
 
     private fun getBackupFile(): File {
