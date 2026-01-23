@@ -1,5 +1,6 @@
 package nl.ndat.tvlauncher.ui.screen.launcher
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.foundation.layout.Box
@@ -21,10 +22,18 @@ import nl.ndat.tvlauncher.ui.tab.home.HomeTab
 import nl.ndat.tvlauncher.ui.toolbar.Toolbar
 import nl.ndat.tvlauncher.util.composition.LocalBackStack
 import nl.ndat.tvlauncher.util.composition.ProvideNavigation
+import nl.ndat.tvlauncher.util.FocusController
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LauncherScreen() {
+    val focusController = koinInject<FocusController>()
+
+    BackHandler {
+        focusController.requestFocusReset()
+    }
+
     ProvideNavigation {
         Column(
             modifier = Modifier
