@@ -2,11 +2,14 @@ package nl.ndat.tvlauncher.ui.component.card
 
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -14,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -92,6 +97,17 @@ fun ChannelProgramCard(
     // Memoize whether we have a title to display
     val hasTitle = remember(program.title) { !program.title.isNullOrEmpty() }
 
+    // Calculate progress for watch next items
+    val progress = remember(program.lastPlaybackPositionMillis, program.durationMillis) {
+        val current = program.lastPlaybackPositionMillis
+        val total = program.durationMillis
+        if (current != null && total != null && total > 0 && current > 0) {
+            (current.toFloat() / total.toFloat()).coerceIn(0f, 1f)
+        } else {
+            null
+        }
+    }
+
     StandardCardContainer(
         modifier = modifier.width(cardWidth),
         interactionSource = interactionSource,
@@ -137,12 +153,33 @@ fun ChannelProgramCard(
                     }
                 },
             ) {
-                AsyncImage(
-                    modifier = Modifier.fillMaxSize(),
-                    model = imageRequest,
-                    contentDescription = program.title,
-                    contentScale = ContentScale.Crop,
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AsyncImage(
+                        modifier = Modifier.fillMaxSize(),
+                        model = imageRequest,
+                        contentDescription = program.title,
+                        contentScale = ContentScale.Crop,
+                    )
+
+                    if (progress != null) {
+                        // Background bar (semi-transparent black)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(4.dp)
+                                .align(Alignment.BottomStart)
+                                .background(Color.Black.copy(alpha = 0.5f))
+                        )
+                        // Progress bar (red)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(progress)
+                                .height(4.dp)
+                                .align(Alignment.BottomStart)
+                                .background(Color.Red)
+                        )
+                    }
+                }
             }
         }
     )
