@@ -178,8 +178,8 @@ fun HomeTab(
             val isLive = remember(channel.type) { channel.type == ChannelType.LIVE }
 
             // Early return if not displayable - memoize the condition check
-            val shouldDisplay = remember(isWatchNext, isLive, app, programs) {
-                (isWatchNext || isLive || app != null) && programs.isNotEmpty()
+            val shouldDisplay = remember(isWatchNext, isLive, app) {
+                isWatchNext || isLive || app != null
             }
 
             if (shouldDisplay) {
@@ -264,7 +264,7 @@ fun HomeTab(
                     isFirst = index == 0,
                     isLast = index == enabledChannelsSize - 1,
                     baseHeight = channelCardSize.dp,
-                    overrideAspectRatio = if (isWatchNext) 16f / 9f else if (isLive) 1f else null,
+                    overrideAspectRatio = 16f / 9f,
                     onToggleEnabled = onToggleEnabled,
                     onMoveUp = onMoveUp,
                     onMoveDown = onMoveDown,

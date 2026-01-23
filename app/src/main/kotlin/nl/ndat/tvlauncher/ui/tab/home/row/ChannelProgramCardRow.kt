@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -76,193 +77,192 @@ fun ChannelProgramCardRow(
     val childFocusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
 
-    if (programs.isNotEmpty()) {
-        // Popup for channel options (non-watch-next channels)
-        PopupContainer(
-            visible = popupVisible && channel != null && onToggleEnabled != null,
-            onDismiss = { popupVisible = false },
-            content = {
-                // Popup for individual watch next program removal
-                PopupContainer(
-                    visible = watchNextPopupProgram != null && onRemoveProgram != null,
-                    onDismiss = { watchNextPopupProgram = null },
-                    content = {
-                        Column(modifier = modifier) {
-                            // Row title (non-focusable, just a label)
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = 4.dp,
-                                        horizontal = 48.dp,
-                                    )
-                                    .ifElse(
-                                        isInMoveMode,
-                                        Modifier
-                                            .border(
-                                                BorderStroke(2.dp, Color.White),
-                                                shape = MaterialTheme.shapes.small
-                                            )
-                                            .padding(4.dp)
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = title,
-                                    fontSize = 18.sp,
-                                    color = if (isInMoveMode) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                )
-                            }
-
-                            LazyRow(
-                                state = listState,
-                                contentPadding = PaddingValues(
+    // Popup for channel options (non-watch-next channels)
+    PopupContainer(
+        visible = popupVisible && channel != null && onToggleEnabled != null,
+        onDismiss = { popupVisible = false },
+        content = {
+            // Popup for individual watch next program removal
+            PopupContainer(
+                visible = watchNextPopupProgram != null && onRemoveProgram != null,
+                onDismiss = { watchNextPopupProgram = null },
+                content = {
+                    Column(modifier = modifier) {
+                        // Row title (non-focusable, just a label)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
                                     vertical = 4.dp,
                                     horizontal = 48.dp,
+                                )
+                                .ifElse(
+                                    isInMoveMode,
+                                    Modifier
+                                        .border(
+                                            BorderStroke(2.dp, Color.White),
+                                            shape = MaterialTheme.shapes.small
+                                        )
+                                        .padding(4.dp)
                                 ),
-                                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .focusRestorer(childFocusRequester),
-                            ) {
-                                itemsIndexed(
-                                    items = programs,
-                                    key = { _, program -> program.id },
-                                    contentType = { _, _ -> "program_card" }
-                                ) { index, program ->
-                                    Box {
-                                        // Time-based long press detection
-                                        var isKeyHeld by remember { mutableStateOf(false) }
-                                        var isLongPressTriggered by remember { mutableStateOf(false) }
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = title,
+                                fontSize = 18.sp,
+                                color = if (isInMoveMode) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
 
-                                        // Launch effect to detect long press after delay
-                                        LaunchedEffect(isKeyHeld) {
+                        LazyRow(
+                            state = listState,
+                            contentPadding = PaddingValues(
+                                vertical = 4.dp,
+                                horizontal = 48.dp,
+                            ),
+                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(baseHeight + 8.dp)
+                                .focusRestorer(childFocusRequester),
+                        ) {
+                            itemsIndexed(
+                                items = programs,
+                                key = { _, program -> program.id },
+                                contentType = { _, _ -> "program_card" }
+                            ) { index, program ->
+                                Box {
+                                    // Time-based long press detection
+                                    var isKeyHeld by remember { mutableStateOf(false) }
+                                    var isLongPressTriggered by remember { mutableStateOf(false) }
+
+                                    // Launch effect to detect long press after delay
+                                    LaunchedEffect(isKeyHeld) {
+                                        if (isKeyHeld) {
+                                            delay(LONG_PRESS_DELAY_MS)
                                             if (isKeyHeld) {
-                                                delay(LONG_PRESS_DELAY_MS)
-                                                if (isKeyHeld) {
-                                                    isLongPressTriggered = true
-                                                    // Trigger long press action immediately
-                                                    if (onRemoveProgram != null) {
-                                                        watchNextPopupProgram = program
-                                                    } else if (channel != null && onToggleEnabled != null) {
-                                                        popupVisible = true
-                                                    }
+                                                isLongPressTriggered = true
+                                                // Trigger long press action immediately
+                                                if (onRemoveProgram != null) {
+                                                    watchNextPopupProgram = program
+                                                } else if (channel != null && onToggleEnabled != null) {
+                                                    popupVisible = true
                                                 }
                                             }
                                         }
+                                    }
 
-                                        ChannelProgramCard(
-                                            program = program,
-                                            baseHeight = baseHeight,
-                                            overrideAspectRatio = overrideAspectRatio,
-                                            modifier = Modifier
-                                                .ifElse(
-                                                    condition = index == 0,
-                                                    positiveModifier = Modifier.focusRequester(childFocusRequester)
-                                                )
-                                                .onPreviewKeyEvent { event ->
-                                                    // Consume KeyUp events when ignoreNextKeyUp is set (after exiting move mode)
-                                                    if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
+                                    ChannelProgramCard(
+                                        program = program,
+                                        baseHeight = baseHeight,
+                                        overrideAspectRatio = overrideAspectRatio,
+                                        modifier = Modifier
+                                            .ifElse(
+                                                condition = index == 0,
+                                                positiveModifier = Modifier.focusRequester(childFocusRequester)
+                                            )
+                                            .onPreviewKeyEvent { event ->
+                                                // Consume KeyUp events when ignoreNextKeyUp is set (after exiting move mode)
+                                                if (ignoreNextKeyUp && event.type == KeyEventType.KeyUp) {
+                                                    when (event.key.nativeKeyCode) {
+                                                        KeyEvent.KEYCODE_DPAD_CENTER,
+                                                        KeyEvent.KEYCODE_ENTER -> {
+                                                            ignoreNextKeyUp = false
+                                                            return@onPreviewKeyEvent true
+                                                        }
+                                                    }
+                                                }
+
+                                                // Handle move mode key events
+                                                if (isInMoveMode) {
+                                                    if (event.type == KeyEventType.KeyDown) {
                                                         when (event.key.nativeKeyCode) {
+                                                            KeyEvent.KEYCODE_DPAD_UP -> {
+                                                                onMoveUp?.invoke()
+                                                                return@onPreviewKeyEvent true
+                                                            }
+
+                                                            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                                                                onMoveDown?.invoke()
+                                                                return@onPreviewKeyEvent true
+                                                            }
+
                                                             KeyEvent.KEYCODE_DPAD_CENTER,
                                                             KeyEvent.KEYCODE_ENTER -> {
-                                                                ignoreNextKeyUp = false
+                                                                isInMoveMode = false
+                                                                ignoreNextKeyUp = true
+                                                                return@onPreviewKeyEvent true
+                                                            }
+
+                                                            KeyEvent.KEYCODE_BACK -> {
+                                                                isInMoveMode = false
+                                                                return@onPreviewKeyEvent true
+                                                            }
+                                                        }
+                                                    } else if (event.type == KeyEventType.KeyUp) {
+                                                        // Consume all KeyUp events while in move mode to prevent card activation
+                                                        when (event.key.nativeKeyCode) {
+                                                            KeyEvent.KEYCODE_DPAD_CENTER,
+                                                            KeyEvent.KEYCODE_ENTER,
+                                                            KeyEvent.KEYCODE_DPAD_UP,
+                                                            KeyEvent.KEYCODE_DPAD_DOWN -> {
                                                                 return@onPreviewKeyEvent true
                                                             }
                                                         }
                                                     }
+                                                }
 
-                                                    // Handle move mode key events
-                                                    if (isInMoveMode) {
-                                                        if (event.type == KeyEventType.KeyDown) {
-                                                            when (event.key.nativeKeyCode) {
-                                                                KeyEvent.KEYCODE_DPAD_UP -> {
-                                                                    onMoveUp?.invoke()
-                                                                    return@onPreviewKeyEvent true
-                                                                }
-
-                                                                KeyEvent.KEYCODE_DPAD_DOWN -> {
-                                                                    onMoveDown?.invoke()
-                                                                    return@onPreviewKeyEvent true
-                                                                }
-
-                                                                KeyEvent.KEYCODE_DPAD_CENTER,
-                                                                KeyEvent.KEYCODE_ENTER -> {
-                                                                    isInMoveMode = false
-                                                                    ignoreNextKeyUp = true
-                                                                    return@onPreviewKeyEvent true
-                                                                }
-
-                                                                KeyEvent.KEYCODE_BACK -> {
-                                                                    isInMoveMode = false
-                                                                    return@onPreviewKeyEvent true
-                                                                }
-                                                            }
-                                                        } else if (event.type == KeyEventType.KeyUp) {
-                                                            // Consume all KeyUp events while in move mode to prevent card activation
-                                                            when (event.key.nativeKeyCode) {
-                                                                KeyEvent.KEYCODE_DPAD_CENTER,
-                                                                KeyEvent.KEYCODE_ENTER,
-                                                                KeyEvent.KEYCODE_DPAD_UP,
-                                                                KeyEvent.KEYCODE_DPAD_DOWN -> {
-                                                                    return@onPreviewKeyEvent true
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-                                                    // Handle long press for popup or remove program (time-based)
-                                                    if (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                                        event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER
-                                                    ) {
-                                                        if (event.type == KeyEventType.KeyDown && event.nativeKeyEvent.repeatCount == 0) {
-                                                            // Start tracking key hold
-                                                            isKeyHeld = true
+                                                // Handle long press for popup or remove program (time-based)
+                                                if (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER
+                                                ) {
+                                                    if (event.type == KeyEventType.KeyDown && event.nativeKeyEvent.repeatCount == 0) {
+                                                        // Start tracking key hold
+                                                        isKeyHeld = true
+                                                        isLongPressTriggered = false
+                                                    } else if (event.type == KeyEventType.KeyUp) {
+                                                        isKeyHeld = false
+                                                        if (isLongPressTriggered) {
+                                                            // Long press was already handled, consume the event
                                                             isLongPressTriggered = false
-                                                        } else if (event.type == KeyEventType.KeyUp) {
-                                                            isKeyHeld = false
-                                                            if (isLongPressTriggered) {
-                                                                // Long press was already handled, consume the event
-                                                                isLongPressTriggered = false
-                                                                return@onPreviewKeyEvent true
-                                                            }
-                                                            // Short press - don't consume, let it through for onClick
+                                                            return@onPreviewKeyEvent true
                                                         }
+                                                        // Short press - don't consume, let it through for onClick
                                                     }
-                                                    false
-                                                },
-                                        )
-                                    }
+                                                }
+                                                false
+                                            },
+                                    )
                                 }
                             }
                         }
-                    },
-                    popupContent = {
-                        watchNextPopupProgram?.let { program ->
-                            WatchNextProgramPopup(
-                                programName = program.title ?: "Watch Next Item",
-                                onRemove = {
-                                    onRemoveProgram?.invoke(program)
-                                    watchNextPopupProgram = null
-                                },
-                                onDismiss = { watchNextPopupProgram = null }
-                            )
-                        }
                     }
-                )
-            },
-            popupContent = {
-                if (channel != null && onToggleEnabled != null) {
-                    ChannelPopup(
-                        channelName = channel.displayName,
-                        isEnabled = channel.enabled,
-                        onToggleEnabled = onToggleEnabled,
-                        onEnterMoveMode = { isInMoveMode = true },
-                        onDismiss = { popupVisible = false }
-                    )
+                },
+                popupContent = {
+                    watchNextPopupProgram?.let { program ->
+                        WatchNextProgramPopup(
+                            programName = program.title ?: "Watch Next Item",
+                            onRemove = {
+                                onRemoveProgram?.invoke(program)
+                                watchNextPopupProgram = null
+                            },
+                            onDismiss = { watchNextPopupProgram = null }
+                        )
+                    }
                 }
+            )
+        },
+        popupContent = {
+            if (channel != null && onToggleEnabled != null) {
+                ChannelPopup(
+                    channelName = channel.displayName,
+                    isEnabled = channel.enabled,
+                    onToggleEnabled = onToggleEnabled,
+                    onEnterMoveMode = { isInMoveMode = true },
+                    onDismiss = { popupVisible = false }
+                )
             }
-        )
-    }
+        }
+    )
 }
