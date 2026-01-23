@@ -2,7 +2,9 @@ package nl.ndat.tvlauncher.data.repository
 
 import android.content.Context
 import android.os.Environment
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -64,20 +66,26 @@ class BackupRepository(
         }
     }
 
-    suspend fun restoreBackup() = withContext(Dispatchers.IO) {
+    suspend fun restoreBackup() {
         try {
-            val backupFile = getBackupFile()
-            if (!backupFile.exists()) {
-                throw IllegalStateException("Backup file not found at: ${backupFile.absolutePath}")
-            }
+            withContext(Dispatchers.IO + NonCancellable) {
+                try {
+                    val backupFile = getBackupFile()
+                    if (!backupFile.exists()) {
+                        throw IllegalStateException("Backup file not found at: ${backupFile.absolutePath}")
+                    }
 
-            val jsonString = backupFile.readText()
-            val backupData = json.decodeFromString<BackupData>(jsonString)
-            restoreBackupData(backupData)
-            Timber.d("Backup restored from: ${backupFile.absolutePath}")
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to restore backup")
-            throw e
+                    val jsonString = backupFile.readText()
+                    val backupData = json.decodeFromString<BackupData>(jsonString)
+                    restoreBackupData(backupData)
+                    Timber.d("Backup restored from: ${backupFile.absolutePath}")
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to restore backup")
+                    throw e
+                }
+            }
+        } catch (e: CancellationException) {
+            // Ignore cancellation as the operation completed via NonCancellable
         }
     }
 

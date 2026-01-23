@@ -29,6 +29,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.BackupRepository
@@ -220,6 +221,8 @@ fun LauncherSettingsDialog(
                                         context.getString(R.string.restore_success),
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                } catch (e: CancellationException) {
+                                    // Ignore
                                 } catch (e: Exception) {
                                     Toast.makeText(
                                         context,
