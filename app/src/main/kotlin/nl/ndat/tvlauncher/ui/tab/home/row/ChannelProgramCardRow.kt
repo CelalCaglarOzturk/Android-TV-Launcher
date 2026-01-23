@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -124,7 +124,7 @@ fun ChannelProgramCardRow(
                             horizontalArrangement = Arrangement.spacedBy(14.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(baseHeight + 8.dp)
+                                .heightIn(min = baseHeight + 8.dp)
                                 .focusRestorer(childFocusRequester),
                         ) {
                             itemsIndexed(
