@@ -57,10 +57,11 @@ class AppRepository(
             )
 
             // If this is a new app, automatically add it to favorites (Home)
-            // Don't add Launcher Settings to favorites
+            // Don't add Launcher Settings or the Launcher itself to favorites
             // Only add TV apps (apps with leanback intent) to favorites automatically
             if (addToFavorites &&
                 app.packageName != "nl.ndat.tvlauncher.settings" &&
+                app.packageName != context.packageName &&
                 app.launchIntentUriLeanback != null
             ) {
                 Timber.d("AppRepository: Auto-adding ${app.displayName} to favorites")

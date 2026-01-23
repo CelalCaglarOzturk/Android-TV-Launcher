@@ -34,8 +34,11 @@ class HomeTabViewModel(
 
     val apps = appRepository.getFavoriteApps()
         .map { apps ->
-            // Filter out Launcher Settings from Home tab
-            apps.filterNot { it.packageName == "nl.ndat.tvlauncher.settings" }
+            // Filter out Launcher Settings and the Launcher itself from Home tab
+            apps.filterNot {
+                it.packageName == "nl.ndat.tvlauncher.settings" ||
+                        it.packageName == "nl.ndat.tvlauncher"
+            }
         }
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
