@@ -1,5 +1,6 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -26,7 +27,7 @@ import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppCardRow(
     apps: List<App>,
@@ -86,7 +87,7 @@ fun AppCardRow(
                 focusRequesters.getOrPut(app.id) { FocusRequester() }
             }
 
-            Box {
+            Box(modifier = Modifier.animateItem()) {
                 MoveableAppCard(
                     app = app,
                     baseHeight = baseHeight,
@@ -114,15 +115,6 @@ fun AppCardRow(
                                     // Track the app to restore focus
                                     focusedAppId = app.id
                                     viewModel.setFavoriteOrder(app, index - 1)
-                                    coroutineScope.launch {
-                                        listState.animateScrollToItem(maxOf(0, index - 1))
-                                        // Request focus after scroll
-                                        try {
-                                            appFocusRequester.requestFocus()
-                                        } catch (e: Exception) {
-                                            // Ignore
-                                        }
-                                    }
                                 }
                             }
 
@@ -131,15 +123,6 @@ fun AppCardRow(
                                     // Track the app to restore focus
                                     focusedAppId = app.id
                                     viewModel.setFavoriteOrder(app, index + 1)
-                                    coroutineScope.launch {
-                                        listState.animateScrollToItem(minOf(apps.size - 1, index + 1))
-                                        // Request focus after scroll
-                                        try {
-                                            appFocusRequester.requestFocus()
-                                        } catch (e: Exception) {
-                                            // Ignore
-                                        }
-                                    }
                                 }
                             }
 
