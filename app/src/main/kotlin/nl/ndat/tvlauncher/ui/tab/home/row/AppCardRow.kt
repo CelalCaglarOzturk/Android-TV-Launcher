@@ -53,6 +53,20 @@ fun AppCardRow(
     LaunchedEffect(apps, focusedAppId) {
         if (focusedAppId != null) {
             val focusRequester = focusRequesters[focusedAppId]
+
+            // Ensure the app is visible before requesting focus
+            val index = apps.indexOfFirst { it.id == focusedAppId }
+            if (index != -1) {
+                val layoutInfo = listState.layoutInfo
+                val visibleItems = layoutInfo.visibleItemsInfo
+                val itemInfo = visibleItems.find { it.index == index }
+
+                // Scroll if item is not visible or partially hidden on the left
+                if (itemInfo == null || itemInfo.offset < layoutInfo.viewportStartOffset) {
+                    listState.scrollToItem(index)
+                }
+            }
+
             if (focusRequester != null) {
                 try {
                     focusRequester.requestFocus()
