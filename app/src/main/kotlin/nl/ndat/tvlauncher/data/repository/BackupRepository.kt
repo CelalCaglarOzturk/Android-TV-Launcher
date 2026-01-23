@@ -16,6 +16,7 @@ class BackupRepository(
     private val context: Context,
     private val database: DatabaseContainer,
     private val settingsRepository: SettingsRepository,
+    private val channelRepository: ChannelRepository,
 ) {
     private val json = Json {
         ignoreUnknownKeys = true
@@ -137,6 +138,7 @@ class BackupRepository(
         data.watchNextBlacklist.forEach { packageName ->
             database.watchNextBlacklist.insert(packageName)
         }
+        channelRepository.refreshWatchNextChannels()
 
         // Restore Apps
         val appsBackup = data.apps

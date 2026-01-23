@@ -32,6 +32,7 @@ import androidx.tv.material3.Text
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.BackupRepository
+import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import org.koin.compose.koinInject
 
@@ -42,6 +43,7 @@ fun LauncherSettingsDialog(
     val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
     val backupRepository = koinInject<BackupRepository>()
+    val channelRepository = koinInject<ChannelRepository>()
     val appCardSize by settingsRepository.appCardSize.collectAsState()
     val channelCardSize by settingsRepository.channelCardSize.collectAsState()
     val showMobileApps by settingsRepository.showMobileApps.collectAsState()
@@ -233,12 +235,15 @@ fun LauncherSettingsDialog(
                     ListItem(
                         selected = false,
                         onClick = {
-                            settingsRepository.resetSettings()
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.settings_reset_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            scope.launch {
+                                settingsRepository.resetSettings()
+                                channelRepository.clearWatchNextBlacklist()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.settings_reset_success),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         },
                         headlineContent = { Text(stringResource(R.string.settings_reset)) },
                         supportingContent = {

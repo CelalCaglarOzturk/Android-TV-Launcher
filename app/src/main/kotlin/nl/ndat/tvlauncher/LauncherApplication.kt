@@ -40,7 +40,7 @@ private val launcherModule = module {
     single { InputResolver() }
 
     single { SettingsRepository(get()) }
-    single { BackupRepository(get(), get(), get()) }
+    single { BackupRepository(get(), get(), get(), get()) }
 
     viewModel { HomeTabViewModel(get(), get(), get()) }
     viewModel { AppsTabViewModel(get(), get()) }
