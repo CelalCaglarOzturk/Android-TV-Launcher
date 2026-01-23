@@ -1,17 +1,27 @@
 package nl.ndat.tvlauncher.ui.tab.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.ndat.tvlauncher.R
@@ -54,7 +64,7 @@ import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeTab(
     modifier: Modifier = Modifier,
@@ -162,6 +172,13 @@ fun HomeTab(
             )
         }
 
+        // Skeleton loading state
+        if (allAppChannels.isEmpty() && enabledChannels.isEmpty()) {
+            items(3) {
+                SkeletonChannelRow(channelCardSize.dp)
+            }
+        }
+
         itemsIndexed(
             items = enabledChannels,
             key = { _, channel -> channel.id },
@@ -251,6 +268,7 @@ fun HomeTab(
 
                 ChannelProgramCardRow(
                     modifier = Modifier
+                        .animateItem()
                         .focusRequester(focusRequester)
                         .ifElse(
                             condition = index == 0 && apps.isEmpty(),
@@ -395,4 +413,33 @@ private fun DisabledChannelCard(
         },
         title = { }
     )
+}
+
+@Composable
+fun SkeletonChannelRow(baseHeight: Dp) {
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
+        // Title Skeleton
+        Box(
+            modifier = Modifier
+                .padding(start = 48.dp, bottom = 8.dp)
+                .size(width = 150.dp, height = 20.dp)
+                .background(Color.Gray.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+        )
+
+        // Cards Skeleton
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 48.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            items(5) {
+                Box(
+                    modifier = Modifier
+                        .height(baseHeight)
+                        .width(baseHeight * (16f / 9f))
+                        .graphicsLayer { alpha = 0.99f } // GPU optimization hint
+                        .background(Color.Gray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                )
+            }
+        }
+    }
 }
