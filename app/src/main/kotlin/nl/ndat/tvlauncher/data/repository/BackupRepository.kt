@@ -106,7 +106,10 @@ class BackupRepository(
 
         // Settings
         val settings = SettingsBackup(
-            appCardSize = settingsRepository.appCardSize.value
+            appCardSize = settingsRepository.appCardSize.value,
+            channelCardSize = settingsRepository.channelCardSize.value,
+            showMobileApps = settingsRepository.showMobileApps.value,
+            enableAnimations = settingsRepository.enableAnimations.value
         )
 
         return BackupData(
@@ -121,8 +124,16 @@ class BackupRepository(
     private suspend fun restoreBackupData(data: BackupData) {
         // Restore Settings
         settingsRepository.setAppCardSize(data.settings.appCardSize)
+        settingsRepository.setChannelCardSize(data.settings.channelCardSize)
+        settingsRepository.setShowMobileApps(data.settings.showMobileApps)
+        settingsRepository.setEnableAnimations(data.settings.enableAnimations)
 
         // Restore Watch Next Blacklist
+        val currentBlacklist = database.watchNextBlacklist.getAll().executeAsList()
+        currentBlacklist.forEach { packageName ->
+            database.watchNextBlacklist.delete(packageName)
+        }
+
         data.watchNextBlacklist.forEach { packageName ->
             database.watchNextBlacklist.insert(packageName)
         }
@@ -207,7 +218,10 @@ data class BackupData(
 
 @Serializable
 data class SettingsBackup(
-    val appCardSize: Int
+    val appCardSize: Int,
+    val channelCardSize: Int = 90,
+    val showMobileApps: Boolean = false,
+    val enableAnimations: Boolean = true
 )
 
 @Serializable
