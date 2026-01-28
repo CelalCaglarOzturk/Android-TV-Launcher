@@ -17,24 +17,26 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Toolbar(
-	modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
+    onOpenLauncherSettings: () -> Unit,
 ) {
-	val focusRequester = remember { FocusRequester() }
-	Row(
-		modifier = Modifier
-			.fillMaxWidth()
-			.focusRestorer(focusRequester)
-			.then(modifier),
-		horizontalArrangement = Arrangement.spacedBy(10.dp),
-		verticalAlignment = Alignment.CenterVertically,
-	) {
-		ToolbarTabs(
-			modifier = Modifier
-				.focusRequester(focusRequester)
-		)
-		Spacer(modifier = Modifier.weight(1f))
-		ToolbarInputsButton()
-		ToolbarSettingsButton()
-		ToolbarClock()
-	}
+    val focusRequester = remember { FocusRequester() }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRestorer(focusRequester)
+            .then(modifier),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        ToolbarTabs(
+            modifier = Modifier
+                .focusRequester(focusRequester)
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        ToolbarInputsButton()
+        ToolbarLauncherSettingsButton(onClick = onOpenLauncherSettings)
+        ToolbarSettingsButton()
+        ToolbarClock()
+    }
 }

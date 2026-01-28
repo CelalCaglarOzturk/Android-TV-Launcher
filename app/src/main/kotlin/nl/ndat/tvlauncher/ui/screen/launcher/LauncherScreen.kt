@@ -10,13 +10,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import nl.ndat.tvlauncher.data.Destinations
+import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
 import nl.ndat.tvlauncher.ui.tab.apps.AppsTab
 import nl.ndat.tvlauncher.ui.tab.home.HomeTab
 import nl.ndat.tvlauncher.ui.toolbar.Toolbar
@@ -29,6 +32,11 @@ import org.koin.compose.koinInject
 @Composable
 fun LauncherScreen() {
     val focusController = koinInject<FocusController>()
+    var showLauncherSettings by remember { mutableStateOf(false) }
+
+    if (showLauncherSettings) {
+        LauncherSettingsDialog(onDismissRequest = { showLauncherSettings = false })
+    }
 
     BackHandler {
         focusController.requestFocusReset()
@@ -44,7 +52,8 @@ fun LauncherScreen() {
                     .padding(
                         vertical = 27.dp,
                         horizontal = 48.dp,
-                    )
+                    ),
+                onOpenLauncherSettings = { showLauncherSettings = true }
             )
 
             Box(

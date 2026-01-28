@@ -84,22 +84,6 @@ class AppRepository(
         try {
             val apps = appResolver.getApplications(context).toMutableList()
 
-            // Add Launcher Settings app
-            val settingsApp = App(
-                id = "settings",
-                displayName = "Launcher Settings",
-                packageName = "nl.ndat.tvlauncher.settings",
-                launchIntentUriDefault = null,
-                launchIntentUriLeanback = null,
-                favoriteOrder = null,
-                hidden = 0,
-                allAppsOrder = null
-            )
-
-            if (apps.none { it.packageName == settingsApp.packageName }) {
-                apps.add(settingsApp)
-            }
-
             Timber.d("AppRepository: Resolver returned ${apps.size} apps")
 
             if (apps.isNotEmpty()) {

@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveDirection
-import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
 import nl.ndat.tvlauncher.util.FocusController
 import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
@@ -65,7 +64,6 @@ fun AppsTab(
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
     val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
 
-    var showSettings by remember { mutableStateOf(false) }
     var moveAppId by remember { mutableStateOf<String?>(null) }
 
     // Track which app should receive focus after recomposition
@@ -115,10 +113,6 @@ fun AppsTab(
     LaunchedEffect(apps) {
         val currentAppIds = apps.map { it.id }.toSet()
         focusRequesters.keys.retainAll(currentAppIds)
-    }
-
-    if (showSettings) {
-        LauncherSettingsDialog(onDismissRequest = { showSettings = false })
     }
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
@@ -178,9 +172,6 @@ fun AppsTab(
                     contentType = { _, _ -> "app_card" }
                 ) { index, app ->
                     // Memoize per-item calculations
-                    val isSettings = remember(app.packageName) {
-                        app.packageName == "nl.ndat.tvlauncher.settings"
-                    }
                     val isInMoveMode = moveAppId == app.id
                     val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
 
@@ -275,15 +266,9 @@ fun AppsTab(
                                     }
                                 }
                             },
-                            onToggleFavorite = if (!isSettings) {
-                                { favorite -> viewModel.favoriteApp(app, favorite) }
-                            } else null,
-                            onToggleHidden = if (!isSettings) {
-                                { _ -> viewModel.hideApp(app) }
-                            } else null,
-                            onClick = if (isSettings) {
-                                { showSettings = true }
-                            } else null
+                            onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
+                            onToggleHidden = { _ -> viewModel.hideApp(app) },
+                            onClick = null
                         )
                     }
                 }
