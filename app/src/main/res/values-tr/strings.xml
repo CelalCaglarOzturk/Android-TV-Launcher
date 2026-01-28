@@ -12,15 +12,8 @@
 	<string name="channel_enable">Kanalı Etkinleştir</string>
 	<string name="channel_disable">Kanalı Devre Dışı Bırak</string>
 	<string name="channel_move">Kanalı Taşı</string>
-	<string name="channel_move_up">Yukarı</string>
-	<string name="channel_move_down">Aşağı</string>
-	<string
-        name="channel_move_mode"
-    >Kanalı yeniden sıralamak için Yukarı/Aşağı kullanın</string>
-	<string name="done">Tamam</string>
-	<string name="close">Kapat</string>
-	<string name="channels_settings">Kanallar</string>
-	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
+    <string name="close">Kapat</string>
+    <string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
 
 	<!-- Settings -->
 	<string name="settings_app_card_size">Uygulama Kart Boyutu: %1$d dp</string>
@@ -46,9 +39,8 @@
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
 	<string name="apps_hidden_title">Gizli Uygulamalar</string>
-	<string name="apps_mobile_available">%1$d mobil uygulama mevcut</string>
 
-	<!-- Backup/Restore -->
+    <!-- Backup/Restore -->
 	<string name="backup">Yedekle</string>
 	<string name="restore">Geri Yükle</string>
 	<string name="backup_success">Yedekleme başarılı</string>

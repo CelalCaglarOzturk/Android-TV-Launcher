@@ -1,8 +1,6 @@
 package nl.ndat.tvlauncher.ui.screen.launcher
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.focusGroup
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import nl.ndat.tvlauncher.data.Destinations
@@ -23,9 +20,9 @@ import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
 import nl.ndat.tvlauncher.ui.tab.apps.AppsTab
 import nl.ndat.tvlauncher.ui.tab.home.HomeTab
 import nl.ndat.tvlauncher.ui.toolbar.Toolbar
+import nl.ndat.tvlauncher.util.FocusController
 import nl.ndat.tvlauncher.util.composition.LocalBackStack
 import nl.ndat.tvlauncher.util.composition.ProvideNavigation
-import nl.ndat.tvlauncher.util.FocusController
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)

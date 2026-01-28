@@ -19,11 +19,10 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.data.sqldelight.App
-import nl.ndat.tvlauncher.util.MoveDirection
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
+import nl.ndat.tvlauncher.util.MoveDirection
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)

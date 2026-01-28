@@ -83,11 +83,11 @@
 
 #### Phase 2: Home Tab Testing
 
-5. **View Favorite Apps**
+1. **View Favorite Apps**
    - Verify: Apps appear in horizontal row at top
    - Verify: New apps are automatically added to favorites
 
-6. **Reorder Favorite Apps**
+2. **Reorder Favorite Apps**
    - Navigate to an app in the favorites row
    - Long-press (hold SELECT for 2 seconds)
    - Select "Move" from popup
@@ -95,186 +95,186 @@
    - Press SELECT to confirm position
    - Verify: App order persists after restart
 
-7. **Remove App from Home**
+3. **Remove App from Home**
    - Long-press on a favorite app
    - Select "Remove from Home"
    - Verify: App disappears from favorites row
    - Verify: App still visible in Apps tab
 
-8. **Test Preview Channels**
+4. **Test Preview Channels**
    - Verify: Channels from apps like Netflix, YouTube appear
    - Navigate to a program card
    - Press SELECT to launch content
    - Verify: Correct app opens with content
 
-9. **Test Watch Next Channel**
+5. **Test Watch Next Channel**
    - Start watching content in any app
    - Return to launcher
    - Verify: Content appears in "Watch Next" row
    - Long-press on Watch Next item to remove it
 
-10. **Disable a Channel**
-    - Navigate to a channel title
-    - Long-press on the channel title
-    - Select "Disable Channel"
-    - Verify: Channel moves to "Disabled Channels" section
+6. **Disable a Channel**
+   - Navigate to a channel title
+   - Long-press on the channel title
+   - Select "Disable Channel"
+   - Verify: Channel moves to "Disabled Channels" section
 
-11. **Reorder Channels**
-    - Long-press on a channel title
-    - Select "Move Channel"
-    - Use UP/DOWN to reposition
-    - Press SELECT to confirm
-    - Verify: Channel order persists
+7. **Reorder Channels**
+   - Long-press on a channel title
+   - Select "Move Channel"
+   - Use UP/DOWN to reposition
+   - Press SELECT to confirm
+   - Verify: Channel order persists
 
-12. **Re-enable a Channel**
-    - Scroll to "Disabled Channels" section
-    - Select a disabled channel card
-    - Press SELECT to enable
-    - Verify: Channel reappears in main list
+8. **Re-enable a Channel**
+   - Scroll to "Disabled Channels" section
+   - Select a disabled channel card
+   - Press SELECT to enable
+   - Verify: Channel reappears in main list
 
 #### Phase 3: Apps Tab Testing
 
-13. **Navigate to Apps Tab**
-    - Press UP to reach toolbar
-    - Navigate to "All apps" tab
-    - Verify: Full app grid displayed
+1. **Navigate to Apps Tab**
+   - Press UP to reach toolbar
+   - Navigate to "All apps" tab
+   - Verify: Full app grid displayed
 
-14. **Toggle Mobile Apps**
-    - If "Show mobile apps" toggle appears
-    - Press SELECT to toggle
-    - Verify: Additional apps appear/disappear
+2. **Toggle Mobile Apps**
+   - If "Show mobile apps" toggle appears
+   - Press SELECT to toggle
+   - Verify: Additional apps appear/disappear
 
-15. **Reorder Apps in Grid**
-    - Long-press on any app
-    - Select "Move"
-    - Use D-pad to reposition
-    - Press SELECT to confirm
-    - Verify: New position persists
+3. **Reorder Apps in Grid**
+   - Long-press on any app
+   - Select "Move"
+   - Use D-pad to reposition
+   - Press SELECT to confirm
+   - Verify: New position persists
 
-16. **Hide an App**
-    - Long-press on any app
-    - Select "Add to Home" if not already favorited
-    - Long-press again
-    - Open the app's long-press menu
-    - Scroll down to "Hidden Apps" section
-    - Navigate to the app and long-press
-    - Select "Hide App"
-    - Verify: App moves to "Hidden Apps" section
+4. **Hide an App**
+   - Long-press on any app
+   - Select "Add to Home" if not already favorited
+   - Long-press again
+   - Open the app's long-press menu
+   - Scroll down to "Hidden Apps" section
+   - Navigate to the app and long-press
+   - Select "Hide App"
+   - Verify: App moves to "Hidden Apps" section
 
-17. **Unhide an App**
-    - Navigate to "Hidden Apps" section
-    - Long-press on hidden app
-    - Select "Unhide App"
-    - Verify: App returns to main grid
+5. **Unhide an App**
+   - Navigate to "Hidden Apps" section
+   - Long-press on hidden app
+   - Select "Unhide App"
+   - Verify: App returns to main grid
 
-18. **Access App Info**
-    - Long-press on any app
-    - Select "Info"
-    - Verify: System app settings page opens
+6. **Access App Info**
+   - Long-press on any app
+   - Select "Info"
+   - Verify: System app settings page opens
 
 #### Phase 4: Toolbar Testing
 
-19. **Test Input Switching**
-    - Press UP to toolbar
-    - Navigate to input button (antenna icon)
-    - Press SELECT
-    - Verify: Input list appears
-    - Select an input
-    - Verify: TV switches to that input
+1. **Test Input Switching**
+   - Press UP to toolbar
+   - Navigate to input button (antenna icon)
+   - Press SELECT
+   - Verify: Input list appears
+   - Select an input
+   - Verify: TV switches to that input
 
-20. **Test System Settings**
-    - Navigate to settings button (gear icon)
-    - Press SELECT
-    - Verify: Android TV settings open
+2. **Test System Settings**
+   - Navigate to settings button (gear icon)
+   - Press SELECT
+   - Verify: Android TV settings open
 
-21. **Test Clock**
-    - Verify: Clock displays in toolbar
-    - Wait 1+ minute
-    - Verify: Time updates correctly
+3. **Test Clock**
+   - Verify: Clock displays in toolbar
+   - Wait 1+ minute
+   - Verify: Time updates correctly
 
 #### Phase 5: Launcher Settings Testing
 
-22. **Open Launcher Settings**
-    - Navigate to Apps tab
-    - Find "Launcher Settings" app
-    - Press SELECT
-    - Verify: Settings dialog opens
+1. **Open Launcher Settings**
+   - Navigate to Apps tab
+   - Find "Launcher Settings" app
+   - Press SELECT
+   - Verify: Settings dialog opens
 
-23. **Adjust App Card Size**
-    - In settings, locate "App Card Size"
-    - Press + or - buttons
-    - Verify: Size value changes (50-200 range)
-    - Close settings
-    - Verify: App cards reflect new size
+2. **Adjust App Card Size**
+   - In settings, locate "App Card Size"
+   - Press + or - buttons
+   - Verify: Size value changes (50-200 range)
+   - Close settings
+   - Verify: App cards reflect new size
 
-24. **Configure Watch Next Blacklist**
-    - Select "Watch Next" in settings
-    - Toggle apps on/off
-    - Close settings
-    - Verify: Blacklisted apps don't show in Watch Next
+3. **Configure Watch Next Blacklist**
+   - Select "Watch Next" in settings
+   - Toggle apps on/off
+   - Close settings
+   - Verify: Blacklisted apps don't show in Watch Next
 
-25. **Configure Input Visibility**
-    - Select "Inputs" in settings
-    - Uncheck an input
-    - Close settings
-    - Verify: Input no longer appears in toolbar
+4. **Configure Input Visibility**
+   - Select "Inputs" in settings
+   - Uncheck an input
+   - Close settings
+   - Verify: Input no longer appears in toolbar
 
-26. **Test Backup**
-    - Select "Backup" in settings
-    - Verify: "Backup completed successfully" message
-    - Verify: File exists at `Android/media/nl.ndat.tvlauncher/Backup/tv_launcher_backup.json`
+5. **Test Backup**
+   - Select "Backup" in settings
+   - Verify: "Backup completed successfully" message
+   - Verify: File exists at `Android/media/nl.ndat.tvlauncher/Backup/tv_launcher_backup.json`
 
-27. **Test Restore**
-    - Make some configuration changes
-    - Select "Restore" in settings
-    - Verify: "Restore completed successfully" message
-    - Verify: Configuration reverts to backup state
+6. **Test Restore**
+   - Make some configuration changes
+   - Select "Restore" in settings
+   - Verify: "Restore completed successfully" message
+   - Verify: Configuration reverts to backup state
 
 #### Phase 6: System Integration Testing
 
-28. **Test App Installation Detection**
-    - Install a new app via ADB
-    ```bash
-    adb install some-app.apk
-    ```
-    - Verify: New app appears in Apps tab automatically
-    - Verify: New app added to Home favorites
+1. **Test App Installation Detection**
+   - Install a new app via ADB
+   ```bash
+   adb install some-app.apk
+   ```
+   - Verify: New app appears in Apps tab automatically
+   - Verify: New app added to Home favorites
 
-29. **Test App Uninstallation Detection**
-    - Uninstall an app via ADB
-    ```bash
-    adb uninstall com.example.app
-    ```
-    - Verify: App removed from both tabs
+2. **Test App Uninstallation Detection**
+   - Uninstall an app via ADB
+   ```bash
+   adb uninstall com.example.app
+   ```
+   - Verify: App removed from both tabs
 
-30. **Test Boot Persistence**
-    - Reboot the device
-    ```bash
-    adb reboot
-    ```
-    - Verify: TV Launcher loads as home
-    - Verify: All favorites preserved
-    - Verify: All channel settings preserved
-    - Verify: Hidden apps remain hidden
+3. **Test Boot Persistence**
+   - Reboot the device
+   ```bash
+   adb reboot
+   ```
+   - Verify: TV Launcher loads as home
+   - Verify: All favorites preserved
+   - Verify: All channel settings preserved
+   - Verify: Hidden apps remain hidden
 
 #### Phase 7: Navigation Edge Cases
 
-31. **Test Home Button**
-    - Navigate deep into any tab
-    - Press HOME button on remote
-    - Verify: Focus resets to first item
-    - Verify: Scrolls back to top
+1. **Test Home Button**
+   - Navigate deep into any tab
+   - Press HOME button on remote
+   - Verify: Focus resets to first item
+   - Verify: Scrolls back to top
 
-32. **Test Back Button**
-    - Open any popup/dialog
-    - Press BACK button
-    - Verify: Popup closes
-    - Verify: Focus returns to previous item
+2. **Test Back Button**
+   - Open any popup/dialog
+   - Press BACK button
+   - Verify: Popup closes
+   - Verify: Focus returns to previous item
 
-33. **Test Menu Button**
-    - Focus on any app card
-    - Press MENU button on remote
-    - Verify: Context popup appears (same as long-press)
+3. **Test Menu Button**
+   - Focus on any app card
+   - Press MENU button on remote
+   - Verify: Context popup appears (same as long-press)
 
 ### Test Checklist Summary
 
