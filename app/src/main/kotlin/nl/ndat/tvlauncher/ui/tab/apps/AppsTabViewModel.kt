@@ -16,7 +16,7 @@ import nl.ndat.tvlauncher.data.sqldelight.App
 
 class AppsTabViewModel(
     private val appRepository: AppRepository,
-    private val settingsRepository: SettingsRepository,
+    settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     companion object {

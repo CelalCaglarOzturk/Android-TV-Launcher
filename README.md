@@ -5,6 +5,7 @@ Chromecast with Google TV.
 
 The app is currently in an early development stage.
 
+<!--suppress HtmlRequiredAltAttribute -->
 <img src="https://user-images.githubusercontent.com/2305178/186512479-e94bf85d-ac09-4f9d-b54e-24bcf43c82da.png" height="400" />
 
 ## Features

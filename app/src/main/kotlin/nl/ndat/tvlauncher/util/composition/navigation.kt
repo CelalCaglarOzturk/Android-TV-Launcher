@@ -14,8 +14,8 @@ val LocalBackStack = staticCompositionLocalOf<SnapshotStateList<Any>> {
 
 @Composable
 fun ProvideNavigation(
-    backStack: SnapshotStateList<Any> = remember { mutableStateListOf<Any>(DefaultDestination) },
-    content: @Composable () -> Unit,
+	backStack: SnapshotStateList<Any> = remember { mutableStateListOf(DefaultDestination) },
+	content: @Composable () -> Unit,
 ) = CompositionLocalProvider(
     LocalBackStack provides backStack,
     content = content,

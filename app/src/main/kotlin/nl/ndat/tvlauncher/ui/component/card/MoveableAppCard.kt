@@ -48,6 +48,7 @@ import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.util.MoveDirection
 import org.koin.compose.koinInject
+import androidx.core.net.toUri
 
 @Composable
 fun MoveableAppCard(

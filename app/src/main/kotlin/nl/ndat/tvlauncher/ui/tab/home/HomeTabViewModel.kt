@@ -19,7 +19,7 @@ import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 class HomeTabViewModel(
     private val appRepository: AppRepository,
     private val channelRepository: ChannelRepository,
-    private val settingsRepository: SettingsRepository,
+    settingsRepository: SettingsRepository,
 ) : ViewModel() {
 
     companion object {

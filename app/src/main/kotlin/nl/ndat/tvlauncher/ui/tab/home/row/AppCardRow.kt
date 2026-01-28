@@ -42,7 +42,7 @@ fun AppCardRow(
     var focusedAppId by remember { mutableStateOf<String?>(null) }
 
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+	rememberCoroutineScope()
 
     // Create a map of focus requesters for each app
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }

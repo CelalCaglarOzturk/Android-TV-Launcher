@@ -48,7 +48,7 @@ class AppsTabViewModelTest {
     }
 
     @Test
-    fun `apps flow filters out current application`() = runTest {
+    fun `apps flow filters out current application`(): runTest = runTest {
         val currentApp = createApp(BuildConfig.APPLICATION_ID, leanback = true)
         val otherApp = createApp("com.example.app", leanback = true)
 
@@ -67,7 +67,7 @@ class AppsTabViewModelTest {
     }
 
     @Test
-    fun `apps flow always shows settings app`() = runTest {
+    fun `apps flow always shows settings app`(): runTest = runTest {
         val settingsApp = createApp("nl.ndat.tvlauncher.settings", leanback = false) // Not leanback
         // Should be shown even if showMobileApps is false (default)
 
@@ -85,7 +85,7 @@ class AppsTabViewModelTest {
     }
 
     @Test
-    fun `apps flow shows mobile apps when setting enabled`() = runTest {
+    fun `apps flow shows mobile apps when setting enabled`(): runTest = runTest {
         val mobileApp = createApp("com.mobile.app", leanback = false)
         val tvApp = createApp("com.tv.app", leanback = true)
 
@@ -104,7 +104,7 @@ class AppsTabViewModelTest {
     }
 
     @Test
-    fun `apps flow hides mobile apps when setting disabled`() = runTest {
+    fun `apps flow hides mobile apps when setting disabled`(): runTest = runTest {
         val mobileApp = createApp("com.mobile.app", leanback = false)
         val tvApp = createApp("com.tv.app", leanback = true)
 
