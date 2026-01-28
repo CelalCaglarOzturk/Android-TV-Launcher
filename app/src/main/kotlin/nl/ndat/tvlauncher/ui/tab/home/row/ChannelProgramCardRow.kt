@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import kotlinx.coroutines.delay
-import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 import nl.ndat.tvlauncher.ui.component.PopupContainer
@@ -55,11 +54,8 @@ fun ChannelProgramCardRow(
     modifier: Modifier = Modifier,
     title: String,
     programs: List<ChannelProgram>,
-    app: App?,
-    channel: Channel? = null,
-    isFirst: Boolean = false,
-    isLast: Boolean = false,
-    baseHeight: Dp = 90.dp,
+	channel: Channel? = null,
+	baseHeight: Dp = 90.dp,
     overrideAspectRatio: Float? = null,
     onToggleEnabled: ((enabled: Boolean) -> Unit)? = null,
     onMoveUp: (() -> Unit)? = null,

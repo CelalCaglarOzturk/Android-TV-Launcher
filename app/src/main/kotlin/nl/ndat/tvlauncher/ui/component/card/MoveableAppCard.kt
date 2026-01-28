@@ -1,7 +1,6 @@
 package nl.ndat.tvlauncher.ui.component.card
 
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
@@ -114,7 +113,7 @@ fun MoveableAppCard(
     // Memoize app info intent
     val appInfoIntent = remember(app.packageName) {
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.parse("package:${app.packageName}")
+            data = "package:${app.packageName}".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
@@ -232,8 +231,7 @@ fun MoveableAppCard(
         },
         popupContent = {
             AppOptionsPopup(
-                app = app,
-                isFavorite = isFavorite,
+				isFavorite = isFavorite,
                 onOpen = {
                     menuVisible = false
                     if (onClick != null) {

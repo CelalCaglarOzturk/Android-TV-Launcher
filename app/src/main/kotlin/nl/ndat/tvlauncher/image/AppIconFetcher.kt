@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.sqldelight.App
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
 
 /**
  * Custom Coil fetcher for loading app icons efficiently.
@@ -39,21 +41,17 @@ class AppIconFetcher(
             val w = width.px
             val h = height.px
             if (w > 0 && h > 0) {
-                val bitmap = android.graphics.Bitmap.createBitmap(
-                    w,
-                    h,
-                    android.graphics.Bitmap.Config.ARGB_8888
-                )
+                val bitmap = createBitmap(w, h)
                 val canvas = android.graphics.Canvas(bitmap)
                 drawable.setBounds(0, 0, w, h)
                 drawable.draw(canvas)
-                drawable = android.graphics.drawable.BitmapDrawable(context.resources, bitmap)
+                drawable = bitmap.toDrawable(context.resources)
             }
         }
 
         DrawableResult(
             drawable = drawable,
-            isSampled = true,
+			isSampled = true,
             // Report MEMORY for settings icon (already in resources)
             // Report DISK for app icons loaded from package manager (cached by system)
             dataSource = if (app.packageName == SETTINGS_PACKAGE_NAME) {

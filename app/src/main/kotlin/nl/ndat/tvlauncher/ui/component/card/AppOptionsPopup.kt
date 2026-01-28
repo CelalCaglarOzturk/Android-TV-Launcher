@@ -34,12 +34,10 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
-import nl.ndat.tvlauncher.data.sqldelight.App
 
 @Composable
 fun AppOptionsPopup(
-    app: App,
-    isFavorite: Boolean,
+	isFavorite: Boolean,
     onOpen: () -> Unit,
     onMove: () -> Unit,
     onToggleFavorite: (favorite: Boolean) -> Unit,
