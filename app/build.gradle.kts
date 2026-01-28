@@ -60,4 +60,10 @@ dependencies {
 	implementation(libs.androidx.tv.material)
 	implementation(libs.coil.compose)
 	debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

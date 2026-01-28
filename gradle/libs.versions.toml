@@ -24,6 +24,10 @@ kotlin = "2.3.0"
 kotlinx-serialization = "1.9.0"
 sqldelight = "2.2.1"
 timber = "5.0.1"
+junit = "4.13.2"
+mockk = "1.13.9"
+coroutines-test = "1.7.3"
+turbine = "1.0.0"
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "android-plugin" }
@@ -57,6 +61,11 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
 androidx-compose = [
