@@ -3,6 +3,7 @@ package nl.ndat.tvlauncher.ui.component.card
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,13 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-
 import androidx.tv.material3.Border
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
@@ -37,7 +38,6 @@ import coil.request.ImageRequest
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
-import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.compose.koinInject
 
 @Composable
@@ -55,7 +55,6 @@ fun AppCard(
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
-    val focused by interactionSource.collectIsFocusedAsState()
 
     // Cache launch intent - only recompute when app changes
     // Parse the intent once and reuse
@@ -109,23 +108,10 @@ fun AppCard(
                 modifier = modifier.width(cardWidth),
                 interactionSource = interactionSource,
                 title = {
-                    Text(
-                        text = app.displayName,
-                        maxLines = 1,
-                        overflow = TextOverflow.Clip,
-                        softWrap = false,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        modifier = Modifier
-                            .ifElse(
-                                focused && enableAnimations,
-                                Modifier.basicMarquee(
-                                    iterations = Int.MAX_VALUE,
-                                    initialDelayMillis = 0,
-                                ),
-                            )
-                            .padding(top = 6.dp),
+                    AppCardTitle(
+                        title = app.displayName,
+                        interactionSource = interactionSource,
+                        enableAnimations = enableAnimations
                     )
                 },
                 imageCard = { _ ->
@@ -161,6 +147,7 @@ fun AppCard(
                             modifier = Modifier.fillMaxSize(),
                             model = imageRequest,
                             contentDescription = app.displayName,
+                            contentScale = ContentScale.Fit,
                         )
                     }
                 }
@@ -169,5 +156,36 @@ fun AppCard(
         popupContent = {
             if (popupContent != null) popupContent()
         }
+    )
+}
+
+@Composable
+private fun AppCardTitle(
+    title: String,
+    interactionSource: InteractionSource,
+    enableAnimations: Boolean
+) {
+    val focused by interactionSource.collectIsFocusedAsState()
+
+    Text(
+        text = title,
+        maxLines = 1,
+        overflow = TextOverflow.Clip,
+        softWrap = false,
+        style = MaterialTheme.typography.bodyMedium.copy(
+            fontWeight = FontWeight.SemiBold
+        ),
+        modifier = Modifier
+            .then(
+                if (focused && enableAnimations) {
+                    Modifier.basicMarquee(
+                        iterations = Int.MAX_VALUE,
+                        initialDelayMillis = 0,
+                    )
+                } else {
+                    Modifier
+                }
+            )
+            .padding(top = 6.dp),
     )
 }

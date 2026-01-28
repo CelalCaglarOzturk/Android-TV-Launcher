@@ -60,7 +60,7 @@ import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
 import nl.ndat.tvlauncher.util.FocusController
-import nl.ndat.tvlauncher.util.modifier.ifElse
+
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -270,10 +270,7 @@ fun HomeTab(
                     modifier = Modifier
                         .animateItem()
                         .focusRequester(focusRequester)
-                        .ifElse(
-                            condition = index == 0 && apps.isEmpty(),
-                            positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
-                        )
+                        .let { if (index == 0 && apps.isEmpty()) it.focusRequester(firstItemFocusRequester) else it }
                         .focusGroup(),
                     title = displayTitle,
                     programs = programs,

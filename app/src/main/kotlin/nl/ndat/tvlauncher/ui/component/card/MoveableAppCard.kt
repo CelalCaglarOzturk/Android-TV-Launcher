@@ -6,11 +6,11 @@ import android.provider.Settings
 import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -60,10 +62,10 @@ import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import nl.ndat.tvlauncher.R
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
-import nl.ndat.tvlauncher.util.modifier.ifElse
-import nl.ndat.tvlauncher.data.repository.SettingsRepository
+import nl.ndat.tvlauncher.util.MoveDirection
 import org.koin.compose.koinInject
 
 @Composable
@@ -85,7 +87,6 @@ fun MoveableAppCard(
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
-    val focused by interactionSource.collectIsFocusedAsState()
 
     // Cache and parse launch intent - only recompute when app changes
     val launchIntent = remember(app.id) {
@@ -199,23 +200,11 @@ fun MoveableAppCard(
                     },
                 interactionSource = interactionSource,
                 title = {
-                    Text(
-                        text = app.displayName,
-                        maxLines = 1,
-                        overflow = TextOverflow.Clip,
-                        softWrap = false,
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        modifier = Modifier
-                            .ifElse(
-                                focused && !isInMoveMode && enableAnimations,
-                                Modifier.basicMarquee(
-                                    iterations = Int.MAX_VALUE,
-                                    initialDelayMillis = 0,
-                                ),
-                            )
-                            .padding(top = 6.dp),
+                    MoveableAppCardTitle(
+                        title = app.displayName,
+                        interactionSource = interactionSource,
+                        enableAnimations = enableAnimations,
+                        isInMoveMode = isInMoveMode
                     )
                 },
                 imageCard = { _ ->
@@ -253,6 +242,7 @@ fun MoveableAppCard(
                             modifier = Modifier.fillMaxSize(),
                             model = imageRequest,
                             contentDescription = app.displayName,
+                            contentScale = ContentScale.Fit,
                         )
                     }
                 }
@@ -296,127 +286,33 @@ fun MoveableAppCard(
 }
 
 @Composable
-private fun AppOptionsPopup(
-    app: App,
-    isFavorite: Boolean,
-    onOpen: () -> Unit,
-    onMove: () -> Unit,
-    onToggleFavorite: () -> Unit,
-    onToggleHidden: (() -> Unit)?,
-    onInfo: () -> Unit,
+private fun MoveableAppCardTitle(
+    title: String,
+    interactionSource: InteractionSource,
+    enableAnimations: Boolean,
+    isInMoveMode: Boolean
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Text(
-            text = app.displayName,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+    val focused by interactionSource.collectIsFocusedAsState()
 
-        // Open
-        KeyDownButton(
-            onClick = onOpen,
-            icon = Icons.Default.PlayArrow,
-            text = stringResource(R.string.app_open)
-        )
-
-        // Move
-        KeyDownButton(
-            onClick = onMove,
-            icon = Icons.Default.Menu,
-            text = stringResource(R.string.app_move)
-        )
-
-        // Add to Home / Remove from Home
-        if (app.hidden != 1L) {
-            KeyDownButton(
-                onClick = onToggleFavorite,
-                icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-                text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
-            )
-        }
-
-        // Hide App
-        if (onToggleHidden != null) {
-            KeyDownButton(
-                onClick = onToggleHidden,
-                icon = Icons.Default.Delete,
-                text = stringResource(R.string.app_hide)
-            )
-        }
-
-        // Info
-        KeyDownButton(
-            onClick = onInfo,
-            icon = Icons.Default.Settings,
-            text = stringResource(R.string.app_info)
-        )
-    }
-}
-
-/**
- * A button that triggers onClick on key DOWN instead of key UP.
- * This prevents accidental clicks when releasing a long press.
- */
-@Composable
-private fun KeyDownButton(
-    onClick: () -> Unit,
-    icon: ImageVector,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    var hasTriggered by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = { /* Disabled - we handle click on key down */ },
-        modifier = modifier
-            .width(200.dp)
-            .onPreviewKeyEvent { event ->
-                when {
-                    event.type == KeyEventType.KeyDown &&
-                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
-                        if (!hasTriggered) {
-                            if (event.nativeKeyEvent.repeatCount == 0) {
-                                hasTriggered = true
-                                onClick()
-                            }
-                        }
-                        true
-                    }
-
-                    event.type == KeyEventType.KeyUp &&
-                            (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                    event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
-                        hasTriggered = false
-                        true
-                    }
-
-                    else -> false
+    Text(
+        text = title,
+        maxLines = 1,
+        overflow = TextOverflow.Clip,
+        softWrap = false,
+        style = MaterialTheme.typography.bodyMedium.copy(
+            fontWeight = FontWeight.SemiBold
+        ),
+        modifier = Modifier
+            .then(
+                if (focused && !isInMoveMode && enableAnimations) {
+                    Modifier.basicMarquee(
+                        iterations = Int.MAX_VALUE,
+                        initialDelayMillis = 0,
+                    )
+                } else {
+                    Modifier
                 }
-            }
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize)
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(text = text)
-        }
-    }
-}
-
-enum class MoveDirection {
-    LEFT, RIGHT, UP, DOWN
+            .padding(top = 6.dp),
+    )
 }

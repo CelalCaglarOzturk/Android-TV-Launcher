@@ -21,10 +21,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.data.sqldelight.App
-import nl.ndat.tvlauncher.ui.component.card.MoveDirection
+import nl.ndat.tvlauncher.util.MoveDirection
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
-import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
@@ -107,11 +106,14 @@ fun AppCardRow(
                     baseHeight = baseHeight,
                     modifier = Modifier
                         .focusRequester(appFocusRequester)
-                        .ifElse(
-                            condition = index == 0,
-                            positiveModifier = Modifier
-                                .focusRequester(childFocusRequester)
-                                .focusRequester(firstItemFocusRequester)
+                        .then(
+                            if (index == 0) {
+                                Modifier
+                                    .focusRequester(childFocusRequester)
+                                    .focusRequester(firstItemFocusRequester)
+                            } else {
+                                Modifier
+                            }
                         ),
                     isInMoveMode = isInMoveMode,
                     isFavorite = app.favoriteOrder != null,

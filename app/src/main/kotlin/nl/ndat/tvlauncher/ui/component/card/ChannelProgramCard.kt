@@ -38,7 +38,7 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
-import nl.ndat.tvlauncher.util.modifier.ifElse
+
 import org.koin.compose.koinInject
 
 @Composable
@@ -122,13 +122,10 @@ fun ChannelProgramCard(
                         fontWeight = FontWeight.SemiBold
                     ),
                     modifier = Modifier
-                        .ifElse(
-                            isFocused && enableAnimations,
-                            Modifier.basicMarquee(
+                        .let { if (isFocused && enableAnimations) it.then(Modifier.basicMarquee(
                                 iterations = Int.MAX_VALUE,
                                 initialDelayMillis = 2000,
-                            ),
-                        )
+                            )) else it }
                         .padding(top = 6.dp),
                 )
             }

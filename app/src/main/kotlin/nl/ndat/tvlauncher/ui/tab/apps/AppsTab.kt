@@ -39,9 +39,8 @@ import androidx.compose.ui.focus.focusRestorer
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
-import nl.ndat.tvlauncher.ui.component.card.MoveDirection
+import nl.ndat.tvlauncher.util.MoveDirection
 import nl.ndat.tvlauncher.util.FocusController
-import nl.ndat.tvlauncher.util.modifier.ifElse
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -186,9 +185,9 @@ fun AppsTab(
                             baseHeight = appCardSize.dp,
                             modifier = Modifier
                                 .focusRequester(appFocusRequester)
-                                .ifElse(
-                                    condition = index == 0,
-                                    positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
+                                .then(
+                                    if (index == 0) Modifier.focusRequester(firstItemFocusRequester)
+                                    else Modifier
                                 ),
                             isInMoveMode = isInMoveMode,
                             isFavorite = isFavorite,
@@ -301,9 +300,9 @@ fun AppsTab(
                         AppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
-                            modifier = Modifier.ifElse(
-                                condition = !hasApps && index == 0,
-                                positiveModifier = Modifier.focusRequester(firstItemFocusRequester)
+                            modifier = Modifier.then(
+                                if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)
+                                else Modifier
                             ),
                             popupContent = {
                                 AppPopup(

@@ -45,7 +45,6 @@ import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.ui.component.card.ChannelProgramCard
 import nl.ndat.tvlauncher.ui.tab.home.ChannelPopup
 import nl.ndat.tvlauncher.ui.tab.home.WatchNextProgramPopup
-import nl.ndat.tvlauncher.util.modifier.ifElse
 
 // Long press delay in milliseconds - reduced for faster response
 private const val LONG_PRESS_DELAY_MS = 300L
@@ -121,14 +120,17 @@ fun ChannelProgramCardRow(
                                     vertical = 4.dp,
                                     horizontal = 48.dp,
                                 )
-                                .ifElse(
-                                    isInMoveMode,
-                                    Modifier
-                                        .border(
-                                            BorderStroke(2.dp, Color.White),
-                                            shape = MaterialTheme.shapes.small
-                                        )
-                                        .padding(4.dp)
+                                .then(
+                                    if (isInMoveMode) {
+                                        Modifier
+                                            .border(
+                                                BorderStroke(2.dp, Color.White),
+                                                shape = MaterialTheme.shapes.small
+                                            )
+                                            .padding(4.dp)
+                                    } else {
+                                        Modifier
+                                    }
                                 ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
@@ -189,9 +191,9 @@ fun ChannelProgramCardRow(
                                         overrideAspectRatio = overrideAspectRatio,
                                         modifier = Modifier
                                             .focusRequester(programFocusRequester)
-                                            .ifElse(
-                                                condition = index == 0,
-                                                positiveModifier = Modifier.focusRequester(childFocusRequester)
+                                            .then(
+                                                if (index == 0) Modifier.focusRequester(childFocusRequester)
+                                                else Modifier
                                             )
                                             .onPreviewKeyEvent { event ->
                                                 // Consume KeyUp events when ignoreNextKeyUp is set (after exiting move mode)
