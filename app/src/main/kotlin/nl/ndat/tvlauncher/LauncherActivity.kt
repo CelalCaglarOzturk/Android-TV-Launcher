@@ -20,7 +20,6 @@ import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.ui.AppBase
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
 import nl.ndat.tvlauncher.util.FocusController
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
