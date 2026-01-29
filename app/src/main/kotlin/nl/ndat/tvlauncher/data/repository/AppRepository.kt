@@ -153,6 +153,9 @@ class AppRepository(
     suspend fun updateAllAppsOrder(id: String, order: Int) =
         withContext(Dispatchers.IO) { database.apps.updateAllAppsOrder(id, order.toLong()) }
 
+    suspend fun swapAppOrder(id1: String, id2: String) =
+        withContext(Dispatchers.IO) { database.apps.swapAllAppsOrder(id1, id2) }
+
     suspend fun moveFavoriteAppUp(id: String) = withContext(Dispatchers.IO) {
         database.database.transaction {
             val app = database.apps.getById(id).executeAsOneOrNull() ?: return@transaction

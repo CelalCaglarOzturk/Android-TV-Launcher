@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.BuildConfig
@@ -29,7 +28,6 @@ class AppsTabViewModel(
         )
     }
 
-    // Use showMobileApps from SettingsRepository (persisted setting)
     val showMobileApps = settingsRepository.showMobileApps
         .stateIn(viewModelScope, SHARING_STARTED, false)
 
@@ -66,18 +64,6 @@ class AppsTabViewModel(
         .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SHARING_STARTED, emptyList())
 
-    // Count of mobile-only apps (apps without leanback intent)
-    val mobileOnlyAppsCount = appRepository.getApps()
-        .map { apps ->
-            apps.count { app ->
-                app.packageName != BuildConfig.APPLICATION_ID &&
-                        app.launchIntentUriLeanback == null &&
-                        app.launchIntentUriDefault != null
-            }
-        }
-        .flowOn(Dispatchers.Default)
-        .stateIn(viewModelScope, SHARING_STARTED, 0)
-
     fun favoriteApp(app: App, favorite: Boolean) = viewModelScope.launch {
         if (favorite) appRepository.favorite(app.id)
         else appRepository.unfavorite(app.id)
@@ -91,7 +77,7 @@ class AppsTabViewModel(
         appRepository.unhideApp(app.id)
     }
 
-    fun moveApp(app: App, order: Int) = viewModelScope.launch {
-        appRepository.updateAllAppsOrder(app.id, order)
+    fun swapApps(app1: App, app2: App) = viewModelScope.launch {
+        appRepository.swapAppOrder(app1.id, app2.id)
     }
 }
