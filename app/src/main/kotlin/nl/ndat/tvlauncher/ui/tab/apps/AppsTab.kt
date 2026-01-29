@@ -1,21 +1,16 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
-import android.view.KeyEvent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -23,21 +18,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
@@ -46,21 +34,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.key.KeyEventType
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.tv.material3.Button
-import androidx.tv.material3.ButtonDefaults
-import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
@@ -232,7 +211,8 @@ fun AppsTab(
                             if (targetIndex != -1) {
                                 focusedAppId = app.id
                                 val targetApp = apps[targetIndex]
-                                viewModel.swapApps(app, targetApp)
+                                val targetOrder = targetApp.allAppsOrder?.toInt() ?: targetIndex
+                                viewModel.moveApp(app, targetOrder)
                             }
                         },
                         onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
@@ -297,10 +277,11 @@ fun AppsTab(
                             )
                             .focusGroup(),
                         popupContent = {
-                            HiddenAppPopup(
+                            AppPopup(
                                 isFavorite = isFavorite,
+                                isHidden = true,
                                 onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
-                                onUnhide = {
+                                onToggleHidden = {
                                     focusedAppId = app.id
                                     viewModel.unhideApp(app)
                                 }
@@ -322,90 +303,4 @@ fun SkeletonAppCard(baseHeight: Dp) {
             .graphicsLayer { alpha = 0.99f }
             .background(Color.Gray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
     )
-}
-
-@Composable
-private fun HiddenAppPopup(
-    isFavorite: Boolean,
-    onToggleFavorite: (Boolean) -> Unit,
-    onUnhide: () -> Unit
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.app_options),
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-
-        KeyDownButton(
-            onClick = { onToggleFavorite(!isFavorite) },
-            icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-            text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
-        )
-
-        KeyDownButton(
-            onClick = onUnhide,
-            icon = Icons.Default.Add,
-            text = stringResource(R.string.app_unhide)
-        )
-    }
-}
-
-@Composable
-private fun KeyDownButton(
-    onClick: () -> Unit,
-    icon: ImageVector,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    var hasTriggered by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = { },
-        modifier = modifier.onPreviewKeyEvent { event ->
-            when {
-                event.type == KeyEventType.KeyDown &&
-                        (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
-                    if (!hasTriggered && event.nativeKeyEvent.repeatCount == 0) {
-                        hasTriggered = true
-                        onClick()
-                    }
-                    true
-                }
-
-                event.type == KeyEventType.KeyUp &&
-                        (event.key.nativeKeyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-                                event.key.nativeKeyCode == KeyEvent.KEYCODE_ENTER) -> {
-                    hasTriggered = false
-                    true
-                }
-
-                else -> false
-            }
-        },
-        colors = ButtonDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            focusedContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            focusedContentColor = MaterialTheme.colorScheme.secondaryContainer,
-        )
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text)
-        }
-    }
 }

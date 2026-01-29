@@ -77,7 +77,7 @@ class AppsTabViewModel(
         appRepository.unhideApp(app.id)
     }
 
-    fun swapApps(app1: App, app2: App) = viewModelScope.launch {
-        appRepository.swapAppOrder(app1.id, app2.id)
+    fun moveApp(app: App, order: Int) = viewModelScope.launch {
+        appRepository.updateAllAppsOrder(app.id, order)
     }
 }
