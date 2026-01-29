@@ -1,11 +1,14 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -28,8 +32,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
@@ -43,7 +50,7 @@ import nl.ndat.tvlauncher.util.MoveDirection
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun AppsTab(
     modifier: Modifier = Modifier,
@@ -57,8 +64,7 @@ fun AppsTab(
     val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
     val appCardSize by viewModel.appCardSize.collectAsStateWithLifecycle()
 
-    // Use derivedStateOf to avoid unnecessary recompositions - no keys needed
-    // since derivedStateOf already tracks dependencies automatically
+    // Use derivedStateOf to avoid unnecessary recompositions
     val hasApps by remember { derivedStateOf { apps.isNotEmpty() } }
     val hasHiddenApps by remember { derivedStateOf { hiddenApps.isNotEmpty() } }
 
@@ -72,20 +78,19 @@ fun AppsTab(
     val coroutineScope = rememberCoroutineScope()
 
     // Create a stable map of focus requesters for each app
-    // Use remember with no keys to make it stable across recompositions
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
 
     // Restore focus to the app that was being moved after list recomposes
-    // Use a more targeted effect that only runs when focusedAppId changes and tab is active
-    LaunchedEffect(focusedAppId, isActive) {
-        if (isActive && focusedAppId != null) {
-            val focusRequester = focusRequesters[focusedAppId]
-            if (focusRequester != null) {
-                try {
-                    focusRequester.requestFocus()
-                    focusedAppId = null
-                } catch (e: Exception) {
-                    // Ignore focus request failures
+    LaunchedEffect(focusedAppId, apps, hiddenApps) {
+        focusedAppId?.let { id ->
+            val index = apps.indexOfFirst { it.id == id }
+            if (index != -1) {
+                listState.scrollToItem(index)
+            } else {
+                val hiddenIndex = hiddenApps.indexOfFirst { it.id == id }
+                if (hiddenIndex != -1) {
+                    // + apps.size + header
+                    listState.scrollToItem(apps.size + 1 + hiddenIndex)
                 }
             }
         }
@@ -107,9 +112,8 @@ fun AppsTab(
     }
 
     // Clean up focus requesters for apps that are no longer in the list
-    // This runs only when apps list changes
-    LaunchedEffect(apps) {
-        val currentAppIds = apps.map { it.id }.toSet()
+    LaunchedEffect(apps, hiddenApps) {
+        val currentAppIds = (apps + hiddenApps).map { it.id }.toSet()
         focusRequesters.keys.retainAll(currentAppIds)
     }
 
@@ -121,7 +125,7 @@ fun AppsTab(
         val spacing = remember { 14.dp }
         val horizontalPadding = remember { 96.dp } // 48.dp * 2
 
-        // Memoize column count calculation to avoid recalculating on every frame
+        // Memoize column count calculation
         val columnCount = remember(maxWidth, itemMinWidth, spacing, horizontalPadding) {
             val availableWidth = maxWidth - horizontalPadding
             val itemWidthPx = with(density) { itemMinWidth.toPx() }
@@ -131,10 +135,8 @@ fun AppsTab(
             ((availableWidthPx + spacingPx) / (itemWidthPx + spacingPx)).toInt().coerceAtLeast(1)
         }
 
-        // Memoize the grid cell configuration
         val gridCells = remember(columnCount) { GridCells.Fixed(columnCount) }
 
-        // Calculate exact width needed for the grid to prevent stretching
         val gridWidth = remember(columnCount, itemMinWidth, spacing, horizontalPadding) {
             (itemMinWidth * columnCount) + (spacing * (columnCount - 1)) + horizontalPadding
         }
@@ -169,16 +171,28 @@ fun AppsTab(
                     key = { _, app -> app.id },
                     contentType = { _, _ -> "app_card" }
                 ) { index, app ->
-                    // Memoize per-item calculations
                     val isInMoveMode = moveAppId == app.id
                     val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
 
-                    // Get or create a focus requester for this app - stable reference
                     val appFocusRequester = remember(app.id) {
                         focusRequesters.getOrPut(app.id) { FocusRequester() }
                     }
 
-                    Box {
+                    LaunchedEffect(focusedAppId) {
+                        if (focusedAppId == app.id) {
+                            try {
+                                appFocusRequester.requestFocus()
+                                // Don't clear focusedAppId here if moving, as we might move again
+                                if (!isInMoveMode) {
+                                    focusedAppId = null
+                                }
+                            } catch (e: Exception) {
+                                // Ignore
+                            }
+                        }
+                    }
+
+                    Box(modifier = Modifier.animateItem().fillMaxSize()) {
                         MoveableAppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
@@ -192,76 +206,25 @@ fun AppsTab(
                             isFavorite = isFavorite,
                             onMoveModeChanged = { inMoveMode ->
                                 moveAppId = if (inMoveMode) app.id else null
-                                // Track focused app when entering move mode
                                 if (inMoveMode) {
                                     focusedAppId = app.id
                                 }
                             },
                             onMove = { direction ->
+                                var targetIndex = -1
                                 when (direction) {
-                                    MoveDirection.LEFT -> {
-                                        if (index > 0) {
-                                            focusedAppId = app.id
-                                            val targetApp = apps[index - 1]
-                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - 1)
-                                            viewModel.moveApp(app, targetOrder)
-                                            coroutineScope.launch {
-                                                try {
-                                                    appFocusRequester.requestFocus()
-                                                } catch (e: Exception) {
-                                                    // Ignore
-                                                }
-                                            }
-                                        }
-                                    }
+                                    MoveDirection.LEFT -> if (index > 0) targetIndex = index - 1
+                                    MoveDirection.RIGHT -> if (index < apps.size - 1) targetIndex = index + 1
+                                    MoveDirection.UP -> if (index >= columnCount) targetIndex = index - columnCount
+                                    MoveDirection.DOWN -> if (index + columnCount < apps.size) targetIndex =
+                                        index + columnCount
+                                }
 
-                                    MoveDirection.RIGHT -> {
-                                        if (index < apps.size - 1) {
-                                            focusedAppId = app.id
-                                            val targetApp = apps[index + 1]
-                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + 1)
-                                            viewModel.moveApp(app, targetOrder)
-                                            coroutineScope.launch {
-                                                try {
-                                                    appFocusRequester.requestFocus()
-                                                } catch (e: Exception) {
-                                                    // Ignore
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    MoveDirection.UP -> {
-                                        if (index >= columnCount) {
-                                            focusedAppId = app.id
-                                            val targetApp = apps[index - columnCount]
-                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index - columnCount)
-                                            viewModel.moveApp(app, targetOrder)
-                                            coroutineScope.launch {
-                                                try {
-                                                    appFocusRequester.requestFocus()
-                                                } catch (e: Exception) {
-                                                    // Ignore
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    MoveDirection.DOWN -> {
-                                        if (index + columnCount < apps.size) {
-                                            focusedAppId = app.id
-                                            val targetApp = apps[index + columnCount]
-                                            val targetOrder = targetApp.allAppsOrder?.toInt() ?: (index + columnCount)
-                                            viewModel.moveApp(app, targetOrder)
-                                            coroutineScope.launch {
-                                                try {
-                                                    appFocusRequester.requestFocus()
-                                                } catch (e: Exception) {
-                                                    // Ignore
-                                                }
-                                            }
-                                        }
-                                    }
+                                if (targetIndex != -1) {
+                                    focusedAppId = app.id
+                                    val targetApp = apps[targetIndex]
+                                    val targetOrder = targetApp.allAppsOrder?.toInt() ?: targetIndex
+                                    viewModel.moveApp(app, targetOrder)
                                 }
                             },
                             onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
@@ -269,6 +232,13 @@ fun AppsTab(
                             onClick = null
                         )
                     }
+                }
+            }
+
+            // Skeleton loading state
+            if (!hasApps && !hasHiddenApps) {
+                items(15) {
+                    SkeletonAppCard(appCardSize.dp)
                 }
             }
 
@@ -292,17 +262,33 @@ fun AppsTab(
                     key = { _, app -> "hidden_${app.id}" },
                     contentType = { _, _ -> "app_card" }
                 ) { index, app ->
-                    // Memoize favorite status
                     val isFavorite = remember(app.favoriteOrder) { app.favoriteOrder != null }
 
-                    Box {
+                    val appFocusRequester = remember(app.id) {
+                        focusRequesters.getOrPut(app.id) { FocusRequester() }
+                    }
+
+                    LaunchedEffect(focusedAppId) {
+                        if (focusedAppId == app.id) {
+                            try {
+                                appFocusRequester.requestFocus()
+                                focusedAppId = null
+                            } catch (e: Exception) {
+                                // Ignore
+                            }
+                        }
+                    }
+
+                    Box(modifier = Modifier.animateItem().fillMaxSize()) {
                         AppCard(
                             app = app,
                             baseHeight = appCardSize.dp,
-                            modifier = Modifier.then(
-                                if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)
-                                else Modifier
-                            ),
+                            modifier = Modifier
+                                .focusRequester(appFocusRequester)
+                                .then(
+                                    if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)
+                                    else Modifier
+                                ),
                             popupContent = {
                                 AppPopup(
                                     isFavorite = isFavorite,
@@ -311,6 +297,7 @@ fun AppsTab(
                                         viewModel.favoriteApp(app, favorite)
                                     },
                                     onToggleHidden = {
+                                        focusedAppId = app.id
                                         viewModel.unhideApp(app)
                                     }
                                 )
@@ -321,4 +308,15 @@ fun AppsTab(
             }
         }
     }
+}
+
+@Composable
+fun SkeletonAppCard(baseHeight: Dp) {
+    Box(
+        modifier = Modifier
+            .height(baseHeight)
+            .width(baseHeight * (16f / 9f))
+            .graphicsLayer { alpha = 0.99f }
+            .background(Color.Gray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+    )
 }
