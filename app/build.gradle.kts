@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.android.app)
-	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.kotlin.compose)
 	alias(libs.plugins.sqldelight)
 	alias(libs.plugins.kotlin.serialization)
@@ -33,7 +32,7 @@ sqldelight {
 	databases {
 		create("Database") {
 			packageName.set("nl.ndat.tvlauncher.data.sqldelight")
-			generateAsync.set(false)
+			generateAsync.set(true)
 		}
 	}
 }
@@ -60,10 +59,4 @@ dependencies {
 	implementation(libs.androidx.tv.material)
 	implementation(libs.coil.compose)
 	debugImplementation(libs.androidx.compose.ui.tooling)
-
-    // Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
 }

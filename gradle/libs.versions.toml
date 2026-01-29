@@ -10,7 +10,6 @@ androidx-compose-runtime = "1.10.2"
 androidx-compose-ui = "1.10.2"
 androidx-core = "1.17.0"
 androidx-core-role = "1.1.0"
-androidx-lifecycle = "2.10.0"
 androidx-navigation3 = "1.0.0"
 androidx-palette = "1.0.0"
 androidx-savedstate = "1.4.0"
@@ -24,14 +23,9 @@ kotlin = "2.3.0"
 kotlinx-serialization = "1.10.0"
 sqldelight = "2.2.1"
 timber = "5.0.1"
-junit = "4.13.2"
-mockk = "1.14.9"
-coroutines-test = "1.10.2"
-turbine = "1.2.1"
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "android-plugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
@@ -48,7 +42,6 @@ androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", versi
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose-ui" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-core-role = { module = "androidx.core:core-role", version.ref = "androidx-core-role" }
-androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidx-navigation3" }
 androidx-palette = { module = "androidx.palette:palette-ktx", version.ref = "androidx-palette" }
 androidx-savedstate = { module = "androidx.savedstate:savedstate", version.ref = "androidx-savedstate" }
@@ -62,11 +55,6 @@ sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.re
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-junit = { module = "junit:junit", version.ref = "junit" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-
 [bundles]
 androidx-compose = [
     "androidx-compose-foundation",
@@ -74,7 +62,6 @@ androidx-compose = [
     "androidx-compose-runtime-savable",
     "androidx-compose-ui",
     "androidx-compose-ui-tooling-preview",
-    "androidx-lifecycle-runtime-compose",
 ]
 androidx-core = [
     "androidx-core",
