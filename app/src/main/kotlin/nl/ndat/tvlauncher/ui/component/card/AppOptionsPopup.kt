@@ -3,9 +3,11 @@ package nl.ndat.tvlauncher.ui.component.card
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
@@ -37,7 +39,7 @@ import nl.ndat.tvlauncher.R
 
 @Composable
 fun AppOptionsPopup(
-	isFavorite: Boolean,
+    isFavorite: Boolean,
     onOpen: () -> Unit,
     onMove: () -> Unit,
     onToggleFavorite: (favorite: Boolean) -> Unit,
@@ -46,8 +48,8 @@ fun AppOptionsPopup(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(8.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(4.dp)
     ) {
         Text(
             text = stringResource(R.string.app_options),
@@ -109,6 +111,7 @@ private fun KeyDownButton(
 
     Button(
         onClick = { /* Disabled - we handle click on key down */ },
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         modifier = modifier
             .onPreviewKeyEvent { event ->
                 when {
@@ -144,20 +147,15 @@ private fun KeyDownButton(
         ),
         scale = ButtonDefaults.scale(),
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.size(4.dp))
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelSmall
-            )
-        }
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }

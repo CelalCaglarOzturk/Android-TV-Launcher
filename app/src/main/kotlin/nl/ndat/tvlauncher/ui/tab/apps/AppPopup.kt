@@ -3,6 +3,7 @@ package nl.ndat.tvlauncher.ui.tab.apps
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -44,8 +45,8 @@ fun AppPopup(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(8.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(4.dp)
     ) {
         Text(
             text = stringResource(R.string.app_options),
@@ -88,6 +89,7 @@ private fun KeyDownButton(
 
     Button(
         onClick = { /* Disabled - we handle click on key down */ },
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         modifier = modifier
             .onPreviewKeyEvent { event ->
                 when {
@@ -123,17 +125,12 @@ private fun KeyDownButton(
         ),
         scale = ButtonDefaults.scale(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text)
-        }
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(text = text)
     }
 }
