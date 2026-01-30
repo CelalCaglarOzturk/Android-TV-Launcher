@@ -40,8 +40,7 @@ fun AppCardRow(
 
     // Track which app should receive focus after recomposition
     var focusedAppId by remember { mutableStateOf<String?>(null) }
-
-    val listState = rememberLazyListState()
+	val listState = rememberLazyListState()
 	rememberCoroutineScope()
 
     // Create a map of focus requesters for each app
