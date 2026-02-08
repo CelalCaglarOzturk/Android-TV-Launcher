@@ -1,6 +1,8 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
 import android.view.KeyEvent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,10 +25,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
@@ -54,8 +59,8 @@ fun ChannelProgramCardRow(
     modifier: Modifier = Modifier,
     title: String,
     programs: List<ChannelProgram>,
-	channel: Channel? = null,
-	baseHeight: Dp = 90.dp,
+    channel: Channel? = null,
+    baseHeight: Dp = 90.dp,
     overrideAspectRatio: Float? = null,
     onToggleEnabled: ((enabled: Boolean) -> Unit)? = null,
     onMoveUp: (() -> Unit)? = null,
@@ -65,6 +70,7 @@ fun ChannelProgramCardRow(
     var popupVisible by remember { mutableStateOf(false) }
     var isInMoveMode by remember { mutableStateOf(false) }
     var ignoreNextKeyUp by remember { mutableStateOf(false) }
+    var isFocused by remember { mutableStateOf(false) }
 
     // State for watch next program popup
     var watchNextPopupProgram by remember { mutableStateOf<ChannelProgram?>(null) }
@@ -72,6 +78,18 @@ fun ChannelProgramCardRow(
     // Track which program should receive focus after recomposition
     var focusedProgramId by remember { mutableStateOf<String?>(null) }
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
+
+    // Animation states
+    val alpha by animateFloatAsState(
+        targetValue = if (isFocused) 1f else 0.5f,
+        animationSpec = tween(durationMillis = 300),
+        label = "rowAlpha"
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (isFocused) 1f else 0.95f,
+        animationSpec = tween(durationMillis = 300),
+        label = "rowScale"
+    )
 
     // Restore focus to the program that was being removed/moved after list recomposes
     LaunchedEffect(focusedProgramId, programs) {
@@ -107,7 +125,15 @@ fun ChannelProgramCardRow(
                 visible = watchNextPopupProgram != null && onRemoveProgram != null,
                 onDismiss = { watchNextPopupProgram = null },
                 content = {
-                    Column(modifier = modifier) {
+                    Column(
+                        modifier = modifier
+                            .onFocusChanged { isFocused = it.hasFocus }
+                            .alpha(alpha)
+                            .graphicsLayer {
+                                scaleX = scale
+                                scaleY = scale
+                            }
+                    ) {
                         // Row title (non-focusable, just a label)
                         Row(
                             modifier = Modifier
