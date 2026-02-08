@@ -3,8 +3,13 @@ package nl.ndat.tvlauncher.ui.tab.home
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -30,7 +35,9 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 
@@ -49,12 +56,16 @@ fun ChannelPopup(
     }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(8.dp)
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier
+            .width(IntrinsicSize.Max)
+            .padding(4.dp)
     ) {
         Text(
             text = channelName,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
             modifier = Modifier.padding(bottom = 4.dp)
         )
 
@@ -69,7 +80,9 @@ fun ChannelPopup(
                 stringResource(R.string.channel_disable)
             else
                 stringResource(R.string.channel_enable),
-            modifier = Modifier.focusRequester(focusRequester)
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
         )
 
         // Move button (only shown for enabled channels)
@@ -80,7 +93,8 @@ fun ChannelPopup(
                     onDismiss()
                 },
                 icon = Icons.Default.Menu,
-                text = stringResource(R.string.channel_move)
+                text = stringResource(R.string.channel_move),
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -88,7 +102,8 @@ fun ChannelPopup(
         KeyDownButton(
             onClick = onDismiss,
             icon = Icons.Default.Clear,
-            text = stringResource(R.string.close)
+            text = stringResource(R.string.close),
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -110,6 +125,7 @@ private fun KeyDownButton(
     Button(
         onClick = { /* Disabled - we handle click on key down */ },
         enabled = enabled,
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         modifier = modifier
             .onPreviewKeyEvent { event ->
                 if (!enabled) return@onPreviewKeyEvent false
@@ -136,13 +152,32 @@ private fun KeyDownButton(
 
                     else -> false
                 }
-            }
+            },
+        colors = ButtonDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            focusedContainerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            focusedContentColor = MaterialTheme.colorScheme.secondaryContainer,
+            pressedContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
+            pressedContentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        scale = ButtonDefaults.scale(),
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = text
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = text)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelSmall
+            )
+        }
     }
 }
