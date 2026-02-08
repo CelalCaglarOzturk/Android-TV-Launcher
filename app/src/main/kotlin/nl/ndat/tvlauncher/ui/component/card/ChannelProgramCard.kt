@@ -1,6 +1,7 @@
 package nl.ndat.tvlauncher.ui.component.card
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -78,7 +79,8 @@ fun ChannelProgramCard(
             .diskCacheKey("program:${program.id}")
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
-            .allowHardware(false)
+            .allowHardware(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
             .crossfade(enableAnimations)
             .size(requestWidth, requestHeight)
             .build()
