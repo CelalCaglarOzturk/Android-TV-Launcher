@@ -2,6 +2,7 @@ package nl.ndat.tvlauncher.ui.settings
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +20,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.tv.material3.Button
-import androidx.tv.material3.ListItem
+import androidx.tv.material3.ButtonDefaults
+import androidx.tv.material3.Card
+import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Switch
@@ -60,16 +64,21 @@ fun LauncherSettingsDialog(
         InputsSettingsDialog(onDismissRequest = { showInputsSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
-            Surface(shape = MaterialTheme.shapes.medium) {
+            // Use Surface for the dialog background (non-clickable)
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.width(400.dp)
+            ) {
                 Column(
                     modifier = Modifier
                         .padding(16.dp)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.settings_launcher),
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
 
                     // App Card Size
@@ -78,15 +87,30 @@ fun LauncherSettingsDialog(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 4.dp, horizontal = 4.dp)
                     ) {
-                        Text(stringResource(R.string.settings_app_card_size, appCardSize))
+                        Text(
+                            text = stringResource(R.string.settings_app_card_size, appCardSize),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                         Row {
-                            Button(onClick = { settingsRepository.setAppCardSize((appCardSize - 10).coerceAtLeast(50)) }) {
+                            SmallButton(onClick = {
+                                settingsRepository.setAppCardSize(
+                                    (appCardSize - 10).coerceAtLeast(
+                                        50
+                                    )
+                                )
+                            }) {
                                 Text("-")
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = { settingsRepository.setAppCardSize((appCardSize + 10).coerceAtMost(200)) }) {
+                            SmallButton(onClick = {
+                                settingsRepository.setAppCardSize(
+                                    (appCardSize + 10).coerceAtMost(
+                                        200
+                                    )
+                                )
+                            }) {
                                 Text("+")
                             }
                         }
@@ -98,25 +122,24 @@ fun LauncherSettingsDialog(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp)
+                            .padding(vertical = 4.dp, horizontal = 4.dp)
                     ) {
-                        Text(stringResource(R.string.settings_channel_card_size, channelCardSize))
+                        Text(
+                            text = stringResource(R.string.settings_channel_card_size, channelCardSize),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                         Row {
-                            Button(onClick = {
+                            SmallButton(onClick = {
                                 settingsRepository.setChannelCardSize(
-                                    (channelCardSize - 10).coerceAtLeast(
-                                        50
-                                    )
+                                    (channelCardSize - 10).coerceAtLeast(50)
                                 )
                             }) {
                                 Text("-")
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = {
+                            SmallButton(onClick = {
                                 settingsRepository.setChannelCardSize(
-                                    (channelCardSize + 10).coerceAtMost(
-                                        200
-                                    )
+                                    (channelCardSize + 10).coerceAtMost(200)
                                 )
                             }) {
                                 Text("+")
@@ -125,62 +148,45 @@ fun LauncherSettingsDialog(
                     }
 
                     // Show Mobile Apps Toggle
-                    ListItem(
-                        selected = false,
+                    CompactSettingsItem(
+                        title = stringResource(R.string.apps_show_mobile),
+                        description = stringResource(R.string.settings_show_mobile_apps_description),
                         onClick = { settingsRepository.toggleShowMobileApps() },
-                        headlineContent = {
-                            Text(stringResource(R.string.apps_show_mobile))
-                        },
-                        supportingContent = {
-                            Text(
-                                text = stringResource(R.string.settings_show_mobile_apps_description),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                            )
-                        },
                         trailingContent = {
                             Switch(
                                 checked = showMobileApps,
-                                onCheckedChange = null
+                                onCheckedChange = null,
+                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     )
 
-                    ListItem(
-                        selected = false,
+                    // Enable Animations Toggle
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_enable_animations),
+                        description = stringResource(R.string.settings_enable_animations_description),
                         onClick = { settingsRepository.toggleEnableAnimations() },
-                        headlineContent = {
-                            Text(stringResource(R.string.settings_enable_animations))
-                        },
-                        supportingContent = {
-                            Text(
-                                text = stringResource(R.string.settings_enable_animations_description),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                            )
-                        },
                         trailingContent = {
                             Switch(
                                 checked = enableAnimations,
-                                onCheckedChange = null
+                                onCheckedChange = null,
+                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     )
 
-                    ListItem(
-                        selected = false,
-                        onClick = { showWatchNextSettings = true },
-                        headlineContent = { Text(stringResource(R.string.channel_watch_next)) }
+                    CompactSettingsItem(
+                        title = stringResource(R.string.channel_watch_next),
+                        onClick = { showWatchNextSettings = true }
                     )
 
-                    ListItem(
-                        selected = false,
-                        onClick = { showInputsSettings = true },
-                        headlineContent = { Text(stringResource(R.string.settings_inputs)) }
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_inputs),
+                        onClick = { showInputsSettings = true }
                     )
 
-                    ListItem(
-                        selected = false,
+                    CompactSettingsItem(
+                        title = stringResource(R.string.backup),
                         onClick = {
                             scope.launch {
                                 try {
@@ -198,12 +204,11 @@ fun LauncherSettingsDialog(
                                     ).show()
                                 }
                             }
-                        },
-                        headlineContent = { Text(stringResource(R.string.backup)) }
+                        }
                     )
 
-                    ListItem(
-                        selected = false,
+                    CompactSettingsItem(
+                        title = stringResource(R.string.restore),
                         onClick = {
                             scope.launch {
                                 try {
@@ -231,12 +236,12 @@ fun LauncherSettingsDialog(
                                     ).show()
                                 }
                             }
-                        },
-                        headlineContent = { Text(stringResource(R.string.restore)) }
+                        }
                     )
 
-                    ListItem(
-                        selected = false,
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_reset),
+                        description = stringResource(R.string.settings_reset_description),
                         onClick = {
                             scope.launch {
                                 settingsRepository.resetSettings()
@@ -247,18 +252,74 @@ fun LauncherSettingsDialog(
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
-                        },
-                        headlineContent = { Text(stringResource(R.string.settings_reset)) },
-                        supportingContent = {
-                            Text(
-                                text = stringResource(R.string.settings_reset_description),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                            )
                         }
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun CompactSettingsItem(
+    title: String,
+    description: String? = null,
+    onClick: () -> Unit,
+    trailingContent: (@Composable () -> Unit)? = null
+) {
+    Card(
+        onClick = onClick,
+        shape = CardDefaults.shape(shape = MaterialTheme.shapes.small),
+        colors = CardDefaults.colors(
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            focusedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+            pressedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
+        ),
+        scale = CardDefaults.scale(focusedScale = 1.0f),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                if (description != null) {
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                    )
+                }
+            }
+            if (trailingContent != null) {
+                Box(modifier = Modifier.padding(start = 8.dp)) {
+                    trailingContent()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SmallButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        scale = ButtonDefaults.scale(focusedScale = 1.05f),
+        contentPadding = ButtonDefaults.ContentPadding
+    ) {
+        content()
     }
 }
