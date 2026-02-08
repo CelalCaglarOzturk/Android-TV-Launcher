@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,11 +20,13 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.ui.tab.home.HomeTabViewModel
 import nl.ndat.tvlauncher.util.MoveDirection
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -34,14 +37,19 @@ fun AppCardRow(
     firstItemFocusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
+    val settingsRepository = koinInject<SettingsRepository>()
+
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
+    val animAppMove by settingsRepository.animAppMove.collectAsState(initial = true)
+    val areAppMoveAnimationsEnabled = enableAnimations && animAppMove
 
     // Track which app is in move mode (only one at a time)
     var moveAppId by remember { mutableStateOf<String?>(null) }
 
     // Track which app should receive focus after recomposition
     var focusedAppId by remember { mutableStateOf<String?>(null) }
-	val listState = rememberLazyListState()
-	rememberCoroutineScope()
+    val listState = rememberLazyListState()
+    rememberCoroutineScope()
 
     // Create a map of focus requesters for each app
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
@@ -98,7 +106,7 @@ fun AppCardRow(
                 focusRequesters.getOrPut(app.id) { FocusRequester() }
             }
 
-            Box(modifier = Modifier.animateItem()) {
+            Box(modifier = if (areAppMoveAnimationsEnabled) Modifier.animateItem() else Modifier) {
                 MoveableAppCard(
                     app = app,
                     baseHeight = baseHeight,

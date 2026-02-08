@@ -1,6 +1,7 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +28,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Text
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -35,16 +39,21 @@ fun CardRow(
     state: LazyListState = rememberLazyListState(),
     content: LazyListScope.(childFocusRequester: FocusRequester) -> Unit,
 ) {
+    val settingsRepository = koinInject<SettingsRepository>()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
+    val animChannelRow by settingsRepository.animChannelRow.collectAsState(initial = true)
+    val areRowAnimationsEnabled = enableAnimations && animChannelRow
+
     var isFocused by remember { mutableStateOf(false) }
 
     val alpha by animateFloatAsState(
         targetValue = if (isFocused) 1f else 0.5f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowAlpha"
     )
     val scale by animateFloatAsState(
         targetValue = if (isFocused) 1f else 0.95f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowScale"
     )
 

@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.ui.component.card.AppCard
 import nl.ndat.tvlauncher.ui.component.card.MoveableAppCard
 import nl.ndat.tvlauncher.util.FocusController
@@ -58,6 +59,11 @@ fun AppsTab(
 ) {
     val viewModel = koinViewModel<AppsTabViewModel>()
     val focusController = koinInject<FocusController>()
+    val settingsRepository = koinInject<SettingsRepository>()
+
+    val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
+    val animAppMove by settingsRepository.animAppMove.collectAsStateWithLifecycle()
+    val areAppMoveAnimationsEnabled = enableAnimations && animAppMove
 
     val apps by viewModel.apps.collectAsStateWithLifecycle()
     val hiddenApps by viewModel.hiddenApps.collectAsStateWithLifecycle()
@@ -184,7 +190,7 @@ fun AppsTab(
                         app = app,
                         baseHeight = appCardSize.dp,
                         modifier = Modifier
-                            .animateItem()
+                            .run { if (areAppMoveAnimationsEnabled) animateItem() else this }
                             .zIndex(if (isInMoveMode) 1f else 0f)
                             .focusRequester(appFocusRequester)
                             .then(
@@ -269,7 +275,7 @@ fun AppsTab(
                         app = app,
                         baseHeight = appCardSize.dp,
                         modifier = Modifier
-                            .animateItem()
+                            .run { if (areAppMoveAnimationsEnabled) animateItem() else this }
                             .focusRequester(appFocusRequester)
                             .then(
                                 if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)

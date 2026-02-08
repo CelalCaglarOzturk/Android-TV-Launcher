@@ -52,6 +52,7 @@ import androidx.tv.material3.StandardCardContainer
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.model.ChannelType
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.ui.tab.home.row.AppCardRow
 import nl.ndat.tvlauncher.ui.tab.home.row.ChannelProgramCardRow
@@ -67,6 +68,11 @@ fun HomeTab(
 ) {
     val viewModel = koinViewModel<HomeTabViewModel>()
     val focusController = koinInject<FocusController>()
+    val settingsRepository = koinInject<SettingsRepository>()
+
+    val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
+    val animChannelMove by settingsRepository.animChannelMove.collectAsStateWithLifecycle()
+    val areMoveAnimationsEnabled = enableAnimations && animChannelMove
 
     // Use lifecycle-aware collection for better performance
     val apps by viewModel.apps.collectAsStateWithLifecycle()
@@ -261,7 +267,7 @@ fun HomeTab(
                     }
                 } else null
 
-                Box(modifier = Modifier.animateItem()) {
+                Box(modifier = if (areMoveAnimationsEnabled) Modifier.animateItem() else Modifier) {
                     ChannelProgramCardRow(
                         modifier = Modifier
                             .focusRequester(focusRequester)

@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,12 +48,14 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import kotlinx.coroutines.delay
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 import nl.ndat.tvlauncher.ui.component.PopupContainer
 import nl.ndat.tvlauncher.ui.component.card.ChannelProgramCard
 import nl.ndat.tvlauncher.ui.tab.home.ChannelPopup
 import nl.ndat.tvlauncher.ui.tab.home.WatchNextProgramPopup
+import org.koin.compose.koinInject
 
 // Long press delay in milliseconds - reduced for faster response
 private const val LONG_PRESS_DELAY_MS = 300L
@@ -70,6 +74,11 @@ fun ChannelProgramCardRow(
     onMoveDown: (() -> Unit)? = null,
     onRemoveProgram: ((program: ChannelProgram) -> Unit)? = null,
 ) {
+    val settingsRepository = koinInject<SettingsRepository>()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
+    val animChannelRow by settingsRepository.animChannelRow.collectAsState(initial = true)
+    val areRowAnimationsEnabled = enableAnimations && animChannelRow
+
     var popupVisible by remember { mutableStateOf(false) }
     var isInMoveMode by remember { mutableStateOf(false) }
     var ignoreNextKeyUp by remember { mutableStateOf(false) }
@@ -85,7 +94,7 @@ fun ChannelProgramCardRow(
     // Animation states
     val alpha by animateFloatAsState(
         targetValue = if (isFocused) 1f else 0.5f,
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowAlpha"
     )
     val scale by animateFloatAsState(
@@ -94,15 +103,17 @@ fun ChannelProgramCardRow(
             isFocused -> 1f
             else -> 0.95f
         },
-        animationSpec = tween(durationMillis = 300),
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowScale"
     )
     val borderWidth by animateDpAsState(
         targetValue = if (isInMoveMode) 4.dp else 0.dp,
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowBorderWidth"
     )
     val borderColor by animateColorAsState(
         targetValue = if (isInMoveMode) MaterialTheme.colorScheme.primary else Color.Transparent,
+        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
         label = "rowBorderColor"
     )
 

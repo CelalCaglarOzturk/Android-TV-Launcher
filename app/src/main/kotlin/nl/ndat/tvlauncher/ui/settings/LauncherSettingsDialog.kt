@@ -57,11 +57,14 @@ fun LauncherSettingsDialog(
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
     var showInputsSettings by remember { mutableStateOf(false) }
+    var showAnimationsSettings by remember { mutableStateOf(false) }
 
     if (showWatchNextSettings) {
         WatchNextSettingsDialog(onDismissRequest = { showWatchNextSettings = false })
     } else if (showInputsSettings) {
         InputsSettingsDialog(onDismissRequest = { showInputsSettings = false })
+    } else if (showAnimationsSettings) {
+        AnimationsSettingsDialog(onDismissRequest = { showAnimationsSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             // Use Surface for the dialog background (non-clickable)
@@ -161,18 +164,11 @@ fun LauncherSettingsDialog(
                         }
                     )
 
-                    // Enable Animations Toggle
+                    // Animations Settings
                     CompactSettingsItem(
-                        title = stringResource(R.string.settings_enable_animations),
+                        title = stringResource(R.string.settings_animations),
                         description = stringResource(R.string.settings_enable_animations_description),
-                        onClick = { settingsRepository.toggleEnableAnimations() },
-                        trailingContent = {
-                            Switch(
-                                checked = enableAnimations,
-                                onCheckedChange = null,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
+                        onClick = { showAnimationsSettings = true }
                     )
 
                     CompactSettingsItem(

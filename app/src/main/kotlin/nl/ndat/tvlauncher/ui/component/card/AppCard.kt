@@ -52,6 +52,8 @@ fun AppCard(
     val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
     val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
+    val animAppIcon by settingsRepository.animAppIcon.collectAsState(initial = true)
+    val areAnimationsEnabled = enableAnimations && animAppIcon
 
     // Stable interaction source - remember without keys since it's per-composition
     val interactionSource = remember { MutableInteractionSource() }
@@ -85,14 +87,14 @@ fun AppCard(
 
     // Memoize the image request to prevent recreating on every recomposition
     // Key on app.id since that uniquely identifies the app and its icon
-    val imageRequest = remember(app.id, context, enableAnimations, requestWidth, requestHeight) {
+    val imageRequest = remember(app.id, context, areAnimationsEnabled, requestWidth, requestHeight) {
         ImageRequest.Builder(context)
             .data(app)
             .memoryCacheKey("app_icon:${app.id}")
             .diskCacheKey("app_icon:${app.id}")
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
-            .crossfade(enableAnimations)
+            .crossfade(areAnimationsEnabled)
             .size(requestWidth, requestHeight)
             .build()
     }
@@ -111,7 +113,7 @@ fun AppCard(
                     AppCardTitle(
                         title = app.displayName,
                         interactionSource = interactionSource,
-                        enableAnimations = enableAnimations
+                        enableAnimations = areAnimationsEnabled
                     )
                 },
                 imageCard = { _ ->

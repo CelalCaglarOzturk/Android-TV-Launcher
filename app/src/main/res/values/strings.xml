@@ -57,8 +57,25 @@
 	<string name="settings_reset_success">Settings reset to default</string>
 
 	<!-- Animations -->
-	<string name="settings_enable_animations">Enable Animations</string>
+	<string name="settings_animations">Animations</string>
+	<string name="settings_enable_animations">Enable All Animations</string>
 	<string
         name="settings_enable_animations_description"
-    >Show marquee and other visual effects</string>
+    >Toggle all visual effects</string>
+	<string name="settings_anim_app_icon">App Icon Animations</string>
+	<string name="settings_anim_app_icon_desc">Marquee text on focus</string>
+	<string name="settings_anim_channel_row">Channel Row Animations</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Scale and fade effects on focus</string>
+	<string name="settings_anim_channel_move">Channel Movement</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Smooth reordering of channels</string>
+	<string name="settings_anim_app_move">App Movement</string>
+	<string name="settings_anim_app_move_desc">Smooth reordering of apps</string>
+	<string name="settings_anim_transition">General Transitions</string>
+	<string
+        name="settings_anim_transition_desc"
+    >Screen and dialog transitions</string>
 </resources>
