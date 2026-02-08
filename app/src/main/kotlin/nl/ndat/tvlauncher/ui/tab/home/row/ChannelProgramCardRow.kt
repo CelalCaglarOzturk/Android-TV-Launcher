@@ -1,12 +1,12 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
 import android.view.KeyEvent
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -92,30 +92,53 @@ fun ChannelProgramCardRow(
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
 
     // Animation states
-    val alpha by animateFloatAsState(
-        targetValue = if (isFocused) 1f else 0.5f,
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
-        label = "rowAlpha"
-    )
-    val scale by animateFloatAsState(
-        targetValue = when {
-            isInMoveMode -> 1.02f
-            isFocused -> 1f
-            else -> 0.95f
+    val targetState = when {
+        isInMoveMode -> RowState.Move
+        isFocused -> RowState.Focused
+        else -> RowState.Normal
+    }
+
+    val transition = updateTransition(targetState, label = "rowTransition")
+
+    val alpha by transition.animateFloat(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
         },
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
+        label = "rowAlpha"
+    ) { state ->
+        if (state == RowState.Focused || state == RowState.Move) 1f else 0.5f
+    }
+
+    val scale by transition.animateFloat(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+        },
         label = "rowScale"
-    )
-    val borderWidth by animateDpAsState(
-        targetValue = if (isInMoveMode) 4.dp else 0.dp,
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
+    ) { state ->
+        when (state) {
+            RowState.Move -> 1.02f
+            RowState.Focused -> 1f
+            RowState.Normal -> 0.95f
+        }
+    }
+
+    val borderWidth by transition.animateDp(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+        },
         label = "rowBorderWidth"
-    )
-    val borderColor by animateColorAsState(
-        targetValue = if (isInMoveMode) MaterialTheme.colorScheme.primary else Color.Transparent,
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
+    ) { state ->
+        if (state == RowState.Move) 4.dp else 0.dp
+    }
+
+    val borderColor by transition.animateColor(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+        },
         label = "rowBorderColor"
-    )
+    ) { state ->
+        if (state == RowState.Move) MaterialTheme.colorScheme.primary else Color.Transparent
+    }
 
     // Restore focus to the program that was being removed/moved after list recomposes
     LaunchedEffect(focusedProgramId, programs) {
@@ -357,4 +380,8 @@ fun ChannelProgramCardRow(
             }
         }
     )
+}
+
+private enum class RowState {
+    Normal, Focused, Move
 }

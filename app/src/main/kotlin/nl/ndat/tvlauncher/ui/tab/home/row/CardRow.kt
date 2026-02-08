@@ -1,8 +1,9 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -46,16 +47,25 @@ fun CardRow(
 
     var isFocused by remember { mutableStateOf(false) }
 
-    val alpha by animateFloatAsState(
-        targetValue = if (isFocused) 1f else 0.5f,
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
+    val transition = updateTransition(targetState = isFocused, label = "rowTransition")
+
+    val alpha by transition.animateFloat(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+        },
         label = "rowAlpha"
-    )
-    val scale by animateFloatAsState(
-        targetValue = if (isFocused) 1f else 0.95f,
-        animationSpec = if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap(),
+    ) { focused ->
+        if (focused) 1f else 0.5f
+    }
+
+    val scale by transition.animateFloat(
+        transitionSpec = {
+            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+        },
         label = "rowScale"
-    )
+    ) { focused ->
+        if (focused) 1f else 0.95f
+    }
 
     Column(
         modifier = modifier
