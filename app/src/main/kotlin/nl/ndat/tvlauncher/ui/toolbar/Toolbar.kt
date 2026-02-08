@@ -35,6 +35,8 @@ fun Toolbar(
         )
         Spacer(modifier = Modifier.weight(1f))
         ToolbarInputsButton()
+        ToolbarNotificationsButton()
+        ToolbarWifiButton()
         ToolbarLauncherSettingsButton(onClick = onOpenLauncherSettings)
         ToolbarSettingsButton()
         ToolbarClock()
