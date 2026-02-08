@@ -123,15 +123,6 @@ fun ChannelProgramCardRow(
         }
     }
 
-    val borderWidth by transition.animateDp(
-        transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
-        },
-        label = "rowBorderWidth"
-    ) { state ->
-        if (state == RowState.Move) 4.dp else 0.dp
-    }
-
     val borderColor by transition.animateColor(
         transitionSpec = {
             if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
@@ -184,11 +175,10 @@ fun ChannelProgramCardRow(
                                 scaleY = scale
                             }
                             .border(
-                                width = borderWidth,
+                                width = 4.dp,
                                 color = borderColor,
                                 shape = RoundedCornerShape(12.dp)
                             )
-                            .padding(if (isInMoveMode) 4.dp else 0.dp)
                     ) {
                         // Row title (non-focusable, just a label)
                         Row(
