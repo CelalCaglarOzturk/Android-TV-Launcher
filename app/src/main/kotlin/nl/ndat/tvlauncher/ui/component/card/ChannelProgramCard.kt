@@ -47,6 +47,7 @@ fun ChannelProgramCard(
     modifier: Modifier = Modifier,
     baseHeight: Dp = 100.dp,
     overrideAspectRatio: Float? = null,
+    isMoving: Boolean = false,
 ) {
     val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
@@ -122,10 +123,14 @@ fun ChannelProgramCard(
                         fontWeight = FontWeight.SemiBold
                     ),
                     modifier = Modifier
-                        .let { if (isFocused && enableAnimations) it.then(Modifier.basicMarquee(
-                                iterations = Int.MAX_VALUE,
-                                initialDelayMillis = 2000,
-                            )) else it }
+                        .let {
+                            if (isFocused && enableAnimations && !isMoving) it.then(
+                                Modifier.basicMarquee(
+                                    iterations = Int.MAX_VALUE,
+                                    initialDelayMillis = 2000,
+                                )
+                            ) else it
+                        }
                         .padding(top = 6.dp),
                 )
             }

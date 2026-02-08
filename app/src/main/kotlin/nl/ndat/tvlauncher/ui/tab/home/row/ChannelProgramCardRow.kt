@@ -231,6 +231,7 @@ fun ChannelProgramCardRow(
                                         program = program,
                                         baseHeight = baseHeight,
                                         overrideAspectRatio = overrideAspectRatio,
+                                        isMoving = isInMoveMode,
                                         modifier = Modifier
                                             .focusRequester(programFocusRequester)
                                             .then(
