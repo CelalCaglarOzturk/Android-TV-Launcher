@@ -22,6 +22,7 @@
         name="settings_show_mobile_apps_description"
     >Show apps without TV interface</string>
 	<string name="settings_inputs">Inputs</string>
+	<string name="settings_no_inputs">No inputs found</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remove from Watch Next</string>

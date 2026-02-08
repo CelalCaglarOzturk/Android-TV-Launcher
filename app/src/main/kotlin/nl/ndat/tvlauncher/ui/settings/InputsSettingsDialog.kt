@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.tv.material3.Checkbox
@@ -42,20 +43,27 @@ fun InputsSettingsDialog(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                LazyColumn {
-                    items(inputs) { input ->
-                        val isHidden = hiddenInputs.contains(input.id)
-                        ListItem(
-                            selected = false,
-                            onClick = { settingsRepository.toggleInputHidden(input.id) },
-                            headlineContent = { Text(input.displayName) },
-                            trailingContent = {
-                                Checkbox(
-                                    checked = !isHidden,
-                                    onCheckedChange = null
-                                )
-                            }
-                        )
+                if (inputs.isEmpty()) {
+                    Text(
+                        text = stringResource(nl.ndat.tvlauncher.R.string.settings_no_inputs),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
+                    LazyColumn {
+                        items(inputs) { input ->
+                            val isHidden = hiddenInputs.contains(input.id)
+                            ListItem(
+                                selected = false,
+                                onClick = { settingsRepository.toggleInputHidden(input.id) },
+                                headlineContent = { Text(input.displayName) },
+                                trailingContent = {
+                                    Checkbox(
+                                        checked = !isHidden,
+                                        onCheckedChange = null
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
