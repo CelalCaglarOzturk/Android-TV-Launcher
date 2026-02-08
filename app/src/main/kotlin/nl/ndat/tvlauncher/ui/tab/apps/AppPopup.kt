@@ -3,9 +3,11 @@ package nl.ndat.tvlauncher.ui.tab.apps
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -44,9 +46,11 @@ fun AppPopup(
     onToggleHidden: ((hidden: Boolean) -> Unit)? = null,
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier.padding(4.dp)
+        modifier = Modifier
+            .width(IntrinsicSize.Max)
+            .padding(4.dp)
     ) {
         Text(
             text = stringResource(R.string.app_options),
@@ -59,7 +63,8 @@ fun AppPopup(
             KeyDownButton(
                 onClick = { onToggleFavorite(!isFavorite) },
                 icon = if (isFavorite) Icons.Default.Clear else Icons.Default.Home,
-                text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home)
+                text = if (isFavorite) stringResource(R.string.app_remove_from_home) else stringResource(R.string.app_add_to_home),
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -68,7 +73,8 @@ fun AppPopup(
             KeyDownButton(
                 onClick = { onToggleHidden(!isHidden) },
                 icon = if (isHidden) Icons.Default.Add else Icons.Default.Delete,
-                text = if (isHidden) stringResource(R.string.app_unhide) else stringResource(R.string.app_hide)
+                text = if (isHidden) stringResource(R.string.app_unhide) else stringResource(R.string.app_hide),
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -125,12 +131,18 @@ private fun KeyDownButton(
         ),
         scale = ButtonDefaults.scale(),
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(ButtonDefaults.IconSize)
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(text = text)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = text)
+        }
     }
 }
