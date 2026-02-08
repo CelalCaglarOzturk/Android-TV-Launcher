@@ -103,7 +103,7 @@ fun ChannelProgramCardRow(
 
     val alpha by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
         },
         label = "rowAlpha"
     ) { state ->
@@ -112,7 +112,7 @@ fun ChannelProgramCardRow(
 
     val scale by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
         },
         label = "rowScale"
     ) { state ->
@@ -125,7 +125,7 @@ fun ChannelProgramCardRow(
 
     val borderColor by transition.animateColor(
         transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
         },
         label = "rowBorderColor"
     ) { state ->

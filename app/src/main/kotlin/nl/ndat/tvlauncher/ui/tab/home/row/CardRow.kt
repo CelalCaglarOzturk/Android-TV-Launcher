@@ -52,7 +52,7 @@ fun CardRow(
 
     val alpha by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
         },
         label = "rowAlpha"
     ) { focused ->
@@ -61,7 +61,7 @@ fun CardRow(
 
     val scale by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
         },
         label = "rowScale"
     ) { focused ->
