@@ -1,10 +1,15 @@
 package nl.ndat.tvlauncher
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.SystemClock
+import android.provider.Settings
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,7 +30,8 @@ import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
 val PERMISSION_READ_CHANNELS = TvContractCompat.PERMISSION_READ_TV_LISTINGS
-val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS)
+val PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS, PERMISSION_WRITE_STORAGE)
 
 class LauncherActivity : ComponentActivity() {
     private val defaultLauncherHelper: DefaultLauncherHelper by inject()
@@ -39,6 +45,8 @@ class LauncherActivity : ComponentActivity() {
             // Refresh channels when permission is granted
             if (permissions[PERMISSION_READ_CHANNELS] == true) lifecycleScope.launch { channelRepository.refreshAllChannels() }
         }
+
+    private var shouldCheckAllFilesAccess = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,19 +85,76 @@ class LauncherActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Request missing permissions
+        // Request missing permissions (excluding storage on Android 11+ which needs special handling)
         val missingPermissions = PERMISSIONS
-            .filter { permission -> checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED }
+            .filter { permission ->
+                // On Android 11+, WRITE_EXTERNAL_STORAGE is not requestable normally
+                // We need MANAGE_EXTERNAL_STORAGE instead
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && permission == PERMISSION_WRITE_STORAGE) {
+                    return@filter false
+                }
+                checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED
+            }
             .toTypedArray()
         if (missingPermissions.isNotEmpty()) permissionsLauncher.launch(missingPermissions)
+
+        // For Android 11+, check and request MANAGE_EXTERNAL_STORAGE if needed
+        // Note: This requires user to go to settings, so we don't auto-request it
+        // But we check if it's granted for backup functionality
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                // Log that all files access is not granted - user can enable it via backup dialog
+                Timber.d("MANAGE_EXTERNAL_STORAGE permission not granted - backup will prompt user")
+            }
+        }
     }
 
     private fun validateDefaultLauncher() {
         if (!defaultLauncherHelper.isDefaultLauncher() && defaultLauncherHelper.canRequestDefaultLauncher()) {
             val intent = defaultLauncherHelper.requestDefaultLauncherIntent()
             @Suppress("DEPRECATION")
-            if (intent != null) startActivityForResult(intent, 0)
+            if (intent != null) {
+                shouldCheckAllFilesAccess = true
+                startActivityForResult(intent, REQUEST_DEFAULT_LAUNCHER)
+            }
         }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_DEFAULT_LAUNCHER) {
+            // User returned from default launcher selection
+            // Check if we need to prompt for all files access
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && shouldCheckAllFilesAccess) {
+                shouldCheckAllFilesAccess = false
+                if (!Environment.isExternalStorageManager()) {
+                    showAllFilesAccessDialog()
+                }
+            }
+        }
+    }
+
+    private fun showAllFilesAccessDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.backup_permission_title))
+            .setMessage(getString(R.string.backup_permission_message))
+            .setPositiveButton(getString(R.string.backup_permission_open_settings)) { _, _ ->
+                // Open app settings where user can manage permissions
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            }
+            .setNegativeButton(getString(R.string.close)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    companion object {
+        private const val REQUEST_DEFAULT_LAUNCHER = 100
     }
 
     override fun onNewIntent(intent: Intent) {

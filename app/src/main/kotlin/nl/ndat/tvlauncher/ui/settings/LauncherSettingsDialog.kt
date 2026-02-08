@@ -1,5 +1,10 @@
 package nl.ndat.tvlauncher.ui.settings
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,8 +64,21 @@ fun LauncherSettingsDialog(
     var showWatchNextSettings by remember { mutableStateOf(false) }
     var showInputsSettings by remember { mutableStateOf(false) }
     var showAnimationsSettings by remember { mutableStateOf(false) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
 
-    if (showWatchNextSettings) {
+    if (showPermissionDialog) {
+        PermissionRequiredDialog(
+            onDismissRequest = { showPermissionDialog = false },
+            onOpenSettings = {
+                showPermissionDialog = false
+                // Open app settings where user can manage permissions
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.parse("package:${context.packageName}")
+                }
+                context.startActivity(intent)
+            }
+        )
+    } else if (showWatchNextSettings) {
         WatchNextSettingsDialog(onDismissRequest = { showWatchNextSettings = false })
     } else if (showInputsSettings) {
         InputsSettingsDialog(onDismissRequest = { showInputsSettings = false })
@@ -185,6 +203,10 @@ fun LauncherSettingsDialog(
                     CompactSettingsItem(
                         title = stringResource(R.string.backup),
                         onClick = {
+                            if (!backupRepository.hasStoragePermission()) {
+                                showPermissionDialog = true
+                                return@CompactSettingsItem
+                            }
                             scope.launch {
                                 try {
                                     backupRepository.createBackup()
@@ -207,6 +229,10 @@ fun LauncherSettingsDialog(
                     CompactSettingsItem(
                         title = stringResource(R.string.restore),
                         onClick = {
+                            if (!backupRepository.hasStoragePermission()) {
+                                showPermissionDialog = true
+                                return@CompactSettingsItem
+                            }
                             scope.launch {
                                 try {
                                     if (!backupRepository.backupExists()) {
@@ -318,5 +344,49 @@ private fun SmallButton(
         contentPadding = ButtonDefaults.ContentPadding
     ) {
         content()
+    }
+}
+
+@Composable
+private fun PermissionRequiredDialog(
+    onDismissRequest: () -> Unit,
+    onOpenSettings: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.width(400.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.backup_permission_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(R.string.backup_permission_message),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.colors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Text(stringResource(R.string.close))
+                    }
+                    Button(onClick = onOpenSettings) {
+                        Text(stringResource(R.string.backup_permission_open_settings))
+                    }
+                }
+            }
+        }
     }
 }

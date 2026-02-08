@@ -186,45 +186,49 @@ fun AppsTab(
                         }
                     }
 
-                    MoveableAppCard(
-                        app = app,
-                        baseHeight = appCardSize.dp,
+                    Box(
                         modifier = Modifier
                             .run { if (areAppMoveAnimationsEnabled) animateItem() else this }
                             .zIndex(if (isInMoveMode) 1f else 0f)
-                            .focusRequester(appFocusRequester)
-                            .then(
-                                if (index == 0) Modifier.focusRequester(firstItemFocusRequester)
-                                else Modifier
-                            )
-                            .focusGroup(),
-                        isInMoveMode = isInMoveMode,
-                        isFavorite = isFavorite,
-                        onMoveModeChanged = { inMoveMode ->
-                            moveAppId = if (inMoveMode) app.id else null
-                            if (inMoveMode) focusedAppId = app.id
-                        },
-                        onMove = { direction ->
-                            var targetIndex = -1
-                            when (direction) {
-                                MoveDirection.LEFT -> if (index > 0) targetIndex = index - 1
-                                MoveDirection.RIGHT -> if (index < apps.size - 1) targetIndex = index + 1
-                                MoveDirection.UP -> if (index >= columnCount) targetIndex = index - columnCount
-                                MoveDirection.DOWN -> if (index + columnCount < apps.size) targetIndex =
-                                    index + columnCount
-                            }
+                    ) {
+                        MoveableAppCard(
+                            app = app,
+                            baseHeight = appCardSize.dp,
+                            modifier = Modifier
+                                .focusRequester(appFocusRequester)
+                                .then(
+                                    if (index == 0) Modifier.focusRequester(firstItemFocusRequester)
+                                    else Modifier
+                                )
+                                .focusGroup(),
+                            isInMoveMode = isInMoveMode,
+                            isFavorite = isFavorite,
+                            onMoveModeChanged = { inMoveMode ->
+                                moveAppId = if (inMoveMode) app.id else null
+                                if (inMoveMode) focusedAppId = app.id
+                            },
+                            onMove = { direction ->
+                                var targetIndex = -1
+                                when (direction) {
+                                    MoveDirection.LEFT -> if (index > 0) targetIndex = index - 1
+                                    MoveDirection.RIGHT -> if (index < apps.size - 1) targetIndex = index + 1
+                                    MoveDirection.UP -> if (index >= columnCount) targetIndex = index - columnCount
+                                    MoveDirection.DOWN -> if (index + columnCount < apps.size) targetIndex =
+                                        index + columnCount
+                                }
 
-                            if (targetIndex != -1) {
-                                focusedAppId = app.id
-                                val targetApp = apps[targetIndex]
-                                val targetOrder = targetApp.allAppsOrder?.toInt() ?: targetIndex
-                                viewModel.moveApp(app, targetOrder)
-                            }
-                        },
-                        onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
-                        onToggleHidden = { _ -> viewModel.hideApp(app) },
-                        onClick = null
-                    )
+                                if (targetIndex != -1) {
+                                    focusedAppId = app.id
+                                    val targetApp = apps[targetIndex]
+                                    val targetOrder = targetApp.allAppsOrder?.toInt() ?: targetIndex
+                                    viewModel.moveApp(app, targetOrder)
+                                }
+                            },
+                            onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
+                            onToggleHidden = { _ -> viewModel.hideApp(app) },
+                            onClick = null
+                        )
+                    }
                 }
             }
 
@@ -271,29 +275,32 @@ fun AppsTab(
                         }
                     }
 
-                    AppCard(
-                        app = app,
-                        baseHeight = appCardSize.dp,
-                        modifier = Modifier
-                            .run { if (areAppMoveAnimationsEnabled) animateItem() else this }
-                            .focusRequester(appFocusRequester)
-                            .then(
-                                if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)
-                                else Modifier
-                            )
-                            .focusGroup(),
-                        popupContent = {
-                            AppPopup(
-                                isFavorite = isFavorite,
-                                isHidden = true,
-                                onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
-                                onToggleHidden = {
-                                    focusedAppId = app.id
-                                    viewModel.unhideApp(app)
-                                }
-                            )
-                        }
-                    )
+                    Box(
+                        modifier = Modifier.run { if (areAppMoveAnimationsEnabled) animateItem() else this }
+                    ) {
+                        AppCard(
+                            app = app,
+                            baseHeight = appCardSize.dp,
+                            modifier = Modifier
+                                .focusRequester(appFocusRequester)
+                                .then(
+                                    if (!hasApps && index == 0) Modifier.focusRequester(firstItemFocusRequester)
+                                    else Modifier
+                                )
+                                .focusGroup(),
+                            popupContent = {
+                                AppPopup(
+                                    isFavorite = isFavorite,
+                                    isHidden = true,
+                                    onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
+                                    onToggleHidden = {
+                                        focusedAppId = app.id
+                                        viewModel.unhideApp(app)
+                                    }
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

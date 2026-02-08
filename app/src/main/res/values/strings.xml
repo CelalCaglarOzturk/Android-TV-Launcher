@@ -51,6 +51,9 @@
 	<string name="restore_success">Restore completed successfully</string>
 	<string name="restore_failed">Restore failed</string>
 	<string name="restore_not_found">No backup file found</string>
+	<string name="backup_permission_title">Storage Permission Required</string>
+	<string name="backup_permission_message">Please enable storage permissions for TV Launcher to backup and restore your settings. Open Settings > Permissions, then enable "Files and media" or "All files access" permission.</string>
+	<string name="backup_permission_open_settings">Open Settings</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Reset Settings</string>
