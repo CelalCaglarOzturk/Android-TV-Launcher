@@ -261,22 +261,27 @@ fun HomeTab(
                     }
                 } else null
 
-                ChannelProgramCardRow(
-                    modifier = Modifier
-                        .animateItem()
-                        .focusRequester(focusRequester)
-                        .let { if (index == 0 && apps.isEmpty()) it.focusRequester(firstItemFocusRequester) else it }
-                        .focusGroup(),
-                    title = displayTitle,
-                    programs = programs,
-					channel = channel,
-					baseHeight = channelCardSize.dp,
-                    overrideAspectRatio = 16f / 9f,
-                    onToggleEnabled = onToggleEnabled,
-                    onMoveUp = onMoveUp,
-                    onMoveDown = onMoveDown,
-                    onRemoveProgram = onRemoveProgram
-                )
+                Box(modifier = Modifier.animateItem()) {
+                    ChannelProgramCardRow(
+                        modifier = Modifier
+                            .focusRequester(focusRequester)
+                            .let {
+                                if (index == 0 && apps.isEmpty()) it.focusRequester(
+                                    firstItemFocusRequester
+                                ) else it
+                            }
+                            .focusGroup(),
+                        title = displayTitle,
+                        programs = programs,
+                        channel = channel,
+                        baseHeight = channelCardSize.dp,
+                        overrideAspectRatio = 16f / 9f,
+                        onToggleEnabled = onToggleEnabled,
+                        onMoveUp = onMoveUp,
+                        onMoveDown = onMoveDown,
+                        onRemoveProgram = onRemoveProgram
+                    )
+                }
             }
         }
 

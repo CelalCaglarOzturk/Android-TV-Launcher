@@ -1,6 +1,8 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
 import android.view.KeyEvent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -86,9 +89,21 @@ fun ChannelProgramCardRow(
         label = "rowAlpha"
     )
     val scale by animateFloatAsState(
-        targetValue = if (isFocused) 1f else 0.95f,
+        targetValue = when {
+            isInMoveMode -> 1.02f
+            isFocused -> 1f
+            else -> 0.95f
+        },
         animationSpec = tween(durationMillis = 300),
         label = "rowScale"
+    )
+    val borderWidth by animateDpAsState(
+        targetValue = if (isInMoveMode) 4.dp else 0.dp,
+        label = "rowBorderWidth"
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (isInMoveMode) MaterialTheme.colorScheme.primary else Color.Transparent,
+        label = "rowBorderColor"
     )
 
     // Restore focus to the program that was being removed/moved after list recomposes
@@ -133,6 +148,12 @@ fun ChannelProgramCardRow(
                                 scaleX = scale
                                 scaleY = scale
                             }
+                            .border(
+                                width = borderWidth,
+                                color = borderColor,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(if (isInMoveMode) 4.dp else 0.dp)
                     ) {
                         // Row title (non-focusable, just a label)
                         Row(
@@ -141,18 +162,6 @@ fun ChannelProgramCardRow(
                                 .padding(
                                     vertical = 4.dp,
                                     horizontal = 48.dp,
-                                )
-                                .then(
-                                    if (isInMoveMode) {
-                                        Modifier
-                                            .border(
-                                                BorderStroke(2.dp, Color.White),
-                                                shape = MaterialTheme.shapes.small
-                                            )
-                                            .padding(4.dp)
-                                    } else {
-                                        Modifier
-                                    }
                                 ),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
