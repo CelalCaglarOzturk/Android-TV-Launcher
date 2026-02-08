@@ -2,10 +2,11 @@ package nl.ndat.tvlauncher.ui.tab.home.row
 
 import android.view.KeyEvent
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -102,7 +103,7 @@ fun ChannelProgramCardRow(
 
     val alpha by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowAlpha"
     ) { state ->
@@ -111,7 +112,7 @@ fun ChannelProgramCardRow(
 
     val scale by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowScale"
     ) { state ->
@@ -124,7 +125,7 @@ fun ChannelProgramCardRow(
 
     val borderWidth by transition.animateDp(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowBorderWidth"
     ) { state ->
@@ -133,7 +134,7 @@ fun ChannelProgramCardRow(
 
     val borderColor by transition.animateColor(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowBorderColor"
     ) { state ->

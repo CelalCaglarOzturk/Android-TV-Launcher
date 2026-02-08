@@ -1,8 +1,9 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,7 @@ fun CardRow(
 
     val alpha by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowAlpha"
     ) { focused ->
@@ -60,7 +61,7 @@ fun CardRow(
 
     val scale by transition.animateFloat(
         transitionSpec = {
-            if (areRowAnimationsEnabled) tween(durationMillis = 300) else snap()
+            if (areRowAnimationsEnabled) spring(stiffness = Spring.StiffnessMediumLow) else snap()
         },
         label = "rowScale"
     ) { focused ->
