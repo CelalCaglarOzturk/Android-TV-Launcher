@@ -64,6 +64,7 @@ fun LauncherSettingsDialog(
     var showWatchNextSettings by remember { mutableStateOf(false) }
     var showInputsSettings by remember { mutableStateOf(false) }
     var showAnimationsSettings by remember { mutableStateOf(false) }
+    var showToolbarPlacementSettings by remember { mutableStateOf(false) }
     var showPermissionDialog by remember { mutableStateOf(false) }
 
     if (showPermissionDialog) {
@@ -84,6 +85,8 @@ fun LauncherSettingsDialog(
         InputsSettingsDialog(onDismissRequest = { showInputsSettings = false })
     } else if (showAnimationsSettings) {
         AnimationsSettingsDialog(onDismissRequest = { showAnimationsSettings = false })
+    } else if (showToolbarPlacementSettings) {
+        ToolbarPlacementSettingsDialog(onDismissRequest = { showToolbarPlacementSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             // Use Surface for the dialog background (non-clickable)
@@ -188,6 +191,11 @@ fun LauncherSettingsDialog(
                         title = stringResource(R.string.settings_animations),
                         description = stringResource(R.string.settings_enable_animations_description),
                         onClick = { showAnimationsSettings = true }
+                    )
+
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_toolbar_placement),
+                        onClick = { showToolbarPlacementSettings = true }
                     )
 
                     CompactSettingsItem(

@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -13,6 +15,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.unit.dp
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -21,6 +25,11 @@ fun Toolbar(
     onOpenLauncherSettings: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val settingsRepository = koinInject<SettingsRepository>()
+
+    val toolbarItemsOrder by settingsRepository.toolbarItemsOrder.collectAsState()
+    val toolbarItemsEnabled by settingsRepository.toolbarItemsEnabled.collectAsState()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -33,12 +42,21 @@ fun Toolbar(
             modifier = Modifier
                 .focusRequester(focusRequester)
         )
+
         Spacer(modifier = Modifier.weight(1f))
-        ToolbarInputsButton()
-        ToolbarNotificationsButton()
-        ToolbarWifiButton()
-        ToolbarLauncherSettingsButton(onClick = onOpenLauncherSettings)
-        ToolbarSettingsButton()
-        ToolbarClock()
+
+        // Render all toolbar items (including clock) based on order and enabled state
+        toolbarItemsOrder.forEach { itemName ->
+            if (toolbarItemsEnabled.contains(itemName)) {
+                when (SettingsRepository.Companion.ToolbarItem.valueOf(itemName)) {
+                    SettingsRepository.Companion.ToolbarItem.CLOCK -> ToolbarClock()
+                    SettingsRepository.Companion.ToolbarItem.INPUTS -> ToolbarInputsButton()
+                    SettingsRepository.Companion.ToolbarItem.NOTIFICATIONS -> ToolbarNotificationsButton()
+                    SettingsRepository.Companion.ToolbarItem.WIFI -> ToolbarWifiButton()
+                    SettingsRepository.Companion.ToolbarItem.LAUNCHER_SETTINGS -> ToolbarLauncherSettingsButton(onClick = onOpenLauncherSettings)
+                    SettingsRepository.Companion.ToolbarItem.SETTINGS -> ToolbarSettingsButton()
+                }
+            }
+        }
     }
 }

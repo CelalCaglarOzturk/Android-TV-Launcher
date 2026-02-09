@@ -131,7 +131,9 @@ class BackupRepository(
             appCardSize = settingsRepository.appCardSize.value,
             channelCardSize = settingsRepository.channelCardSize.value,
             showMobileApps = settingsRepository.showMobileApps.value,
-            enableAnimations = settingsRepository.enableAnimations.value
+            enableAnimations = settingsRepository.enableAnimations.value,
+            toolbarItemsOrder = settingsRepository.toolbarItemsOrder.value,
+            toolbarItemsEnabled = settingsRepository.toolbarItemsEnabled.value.toList()
         )
 
         return BackupData(
@@ -149,6 +151,15 @@ class BackupRepository(
         settingsRepository.setChannelCardSize(data.settings.channelCardSize)
         settingsRepository.setShowMobileApps(data.settings.showMobileApps)
         settingsRepository.setEnableAnimations(data.settings.enableAnimations)
+
+        // Restore Toolbar Settings (unified list)
+        data.settings.toolbarItemsOrder?.let { settingsRepository.setToolbarItemsOrder(it) }
+        data.settings.toolbarItemsEnabled?.let { enabledList ->
+            val allItems = SettingsRepository.Companion.ToolbarItem.entries.map { it.name }
+            allItems.forEach { itemName ->
+                settingsRepository.setToolbarItemEnabled(itemName, enabledList.contains(itemName))
+            }
+        }
 
         // Restore Watch Next Blacklist
         val currentBlacklist = database.watchNextBlacklist.getAll().executeAsList()
@@ -244,7 +255,14 @@ data class SettingsBackup(
     val appCardSize: Int,
     val channelCardSize: Int = 90,
     val showMobileApps: Boolean = false,
-    val enableAnimations: Boolean = true
+    val enableAnimations: Boolean = true,
+    val toolbarItemsOrder: List<String>? = null,
+    val toolbarItemsEnabled: List<String>? = null,
+    // Legacy fields for backwards compatibility
+    val toolbarOrder: List<String>? = null,
+    val toolbarEnabled: List<String>? = null,
+    val toolbarClockEnabled: Boolean? = null,
+    val toolbarClockPosition: String? = null
 )
 
 @Serializable

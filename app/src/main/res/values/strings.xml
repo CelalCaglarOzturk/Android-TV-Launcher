@@ -84,4 +84,23 @@
 	<string
         name="settings_anim_transition_desc"
     >Screen and dialog transitions</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">Toolbar Placement</string>
+	<string name="settings_clock">Clock</string>
+	<string name="settings_clock_enabled">Show Clock</string>
+	<string name="settings_clock_position">Clock Position</string>
+	<string name="settings_clock_position_start">Start (left side)</string>
+	<string name="settings_clock_position_end">End (right side)</string>
+	<string name="settings_clock_position_hidden">Hidden</string>
+	<string name="settings_toolbar_buttons">Toolbar Buttons</string>
+	<string name="settings_toolbar_buttons_description">Enable/disable and reorder toolbar buttons</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">Clock</string>
+	<string name="toolbar_inputs">Inputs</string>
+	<string name="toolbar_notifications">Notifications</string>
+	<string name="toolbar_wifi">Wi-Fi</string>
+	<string name="toolbar_launcher_settings">Launcher Settings</string>
+	<string name="toolbar_settings">System Settings</string>
 </resources>

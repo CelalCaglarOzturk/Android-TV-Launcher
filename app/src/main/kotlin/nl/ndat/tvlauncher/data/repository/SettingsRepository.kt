@@ -23,9 +23,30 @@ class SettingsRepository(
         private const val KEY_ANIM_APP_MOVE = "anim_app_move"
         private const val KEY_ANIM_TRANSITION = "anim_transition"
 
+        // Toolbar Placement Keys - Single unified list for all items including clock
+        private const val KEY_TOOLBAR_ITEMS_ORDER = "toolbar_items_order"
+        private const val KEY_TOOLBAR_ITEMS_ENABLED = "toolbar_items_enabled"
+
         // Default height in dp
         const val DEFAULT_APP_CARD_SIZE = 90
         const val DEFAULT_CHANNEL_CARD_SIZE = 90
+
+        // Default toolbar items order (includes clock at the end/right side)
+        val DEFAULT_TOOLBAR_ITEMS_ORDER = listOf(
+            ToolbarItem.INPUTS.name,
+            ToolbarItem.NOTIFICATIONS.name,
+            ToolbarItem.WIFI.name,
+            ToolbarItem.LAUNCHER_SETTINGS.name,
+            ToolbarItem.SETTINGS.name,
+            ToolbarItem.CLOCK.name
+        )
+
+        // Default enabled state for all items (all enabled by default, including launcher settings)
+        val DEFAULT_TOOLBAR_ITEMS_ENABLED = ToolbarItem.entries.map { it.name }.toSet()
+
+        enum class ToolbarItem {
+            CLOCK, INPUTS, NOTIFICATIONS, WIFI, LAUNCHER_SETTINGS, SETTINGS
+        }
     }
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -60,6 +81,17 @@ class SettingsRepository(
 
     private val _animTransition = MutableStateFlow(prefs.getBoolean(KEY_ANIM_TRANSITION, true))
     val animTransition = _animTransition.asStateFlow()
+
+    // Toolbar Placement States - Single unified list
+    private val _toolbarItemsOrder = MutableStateFlow(
+        prefs.getStringSet(KEY_TOOLBAR_ITEMS_ORDER, null)?.toList() ?: DEFAULT_TOOLBAR_ITEMS_ORDER
+    )
+    val toolbarItemsOrder = _toolbarItemsOrder.asStateFlow()
+
+    private val _toolbarItemsEnabled = MutableStateFlow(
+        prefs.getStringSet(KEY_TOOLBAR_ITEMS_ENABLED, null)?.toSet() ?: DEFAULT_TOOLBAR_ITEMS_ENABLED
+    )
+    val toolbarItemsEnabled = _toolbarItemsEnabled.asStateFlow()
 
     fun setAppCardSize(size: Int) {
         prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
@@ -126,6 +158,42 @@ class SettingsRepository(
         _animTransition.value = enable
     }
 
+    // Toolbar Placement Setters - Single unified list
+    fun setToolbarItemsOrder(order: List<String>) {
+        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ORDER, order.toSet()) }
+        _toolbarItemsOrder.value = order
+    }
+
+    fun toggleToolbarItem(itemName: String) {
+        // Don't allow disabling launcher settings
+        if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name) {
+            return
+        }
+        val current = _toolbarItemsEnabled.value.toMutableSet()
+        if (current.contains(itemName)) {
+            current.remove(itemName)
+        } else {
+            current.add(itemName)
+        }
+        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
+        _toolbarItemsEnabled.value = current
+    }
+
+    fun setToolbarItemEnabled(itemName: String, enabled: Boolean) {
+        // Don't allow disabling launcher settings
+        if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name && !enabled) {
+            return
+        }
+        val current = _toolbarItemsEnabled.value.toMutableSet()
+        if (enabled) {
+            current.add(itemName)
+        } else {
+            current.remove(itemName)
+        }
+        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
+        _toolbarItemsEnabled.value = current
+    }
+
     fun resetSettings() {
         prefs.edit { clear() }
         _appCardSize.value = DEFAULT_APP_CARD_SIZE
@@ -140,5 +208,9 @@ class SettingsRepository(
         _animChannelMove.value = true
         _animAppMove.value = true
         _animTransition.value = true
+
+        // Reset toolbar placement to unified list
+        _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
+        _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
     }
 }
