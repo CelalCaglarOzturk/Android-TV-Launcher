@@ -56,7 +56,6 @@ fun LauncherSettingsDialog(
     val backupRepository = koinInject<BackupRepository>()
     val channelRepository = koinInject<ChannelRepository>()
     val appCardSize by settingsRepository.appCardSize.collectAsState()
-    val channelCardSize by settingsRepository.channelCardSize.collectAsState()
     val showMobileApps by settingsRepository.showMobileApps.collectAsState()
     val enableAnimations by settingsRepository.enableAnimations.collectAsState()
     val scope = rememberCoroutineScope()
@@ -65,6 +64,7 @@ fun LauncherSettingsDialog(
     var showInputsSettings by remember { mutableStateOf(false) }
     var showAnimationsSettings by remember { mutableStateOf(false) }
     var showToolbarPlacementSettings by remember { mutableStateOf(false) }
+    var showChannelSettings by remember { mutableStateOf(false) }
     var showPermissionDialog by remember { mutableStateOf(false) }
 
     if (showPermissionDialog) {
@@ -87,6 +87,8 @@ fun LauncherSettingsDialog(
         AnimationsSettingsDialog(onDismissRequest = { showAnimationsSettings = false })
     } else if (showToolbarPlacementSettings) {
         ToolbarPlacementSettingsDialog(onDismissRequest = { showToolbarPlacementSettings = false })
+    } else if (showChannelSettings) {
+        ChannelSettingsDialog(onDismissRequest = { showChannelSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             // Use Surface for the dialog background (non-clickable)
@@ -141,37 +143,6 @@ fun LauncherSettingsDialog(
                         }
                     }
 
-                    // Channel Card Size
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp, horizontal = 4.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.settings_channel_card_size, channelCardSize),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Row {
-                            SmallButton(onClick = {
-                                settingsRepository.setChannelCardSize(
-                                    (channelCardSize - 10).coerceAtLeast(50)
-                                )
-                            }) {
-                                Text("-")
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            SmallButton(onClick = {
-                                settingsRepository.setChannelCardSize(
-                                    (channelCardSize + 10).coerceAtMost(200)
-                                )
-                            }) {
-                                Text("+")
-                            }
-                        }
-                    }
-
                     // Show Mobile Apps Toggle
                     CompactSettingsItem(
                         title = stringResource(R.string.apps_show_mobile),
@@ -196,6 +167,11 @@ fun LauncherSettingsDialog(
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_toolbar_placement),
                         onClick = { showToolbarPlacementSettings = true }
+                    )
+
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_channel),
+                        onClick = { showChannelSettings = true }
                     )
 
                     CompactSettingsItem(

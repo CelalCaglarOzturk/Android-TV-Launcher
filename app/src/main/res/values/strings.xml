@@ -103,4 +103,9 @@
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">Launcher Settings</string>
 	<string name="toolbar_settings">System Settings</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">Channel Settings</string>
+	<string name="settings_channel_cards_per_row">Cards per Row: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">Limit cards displayed per channel to improve performance (3-20)</string>
 </resources>

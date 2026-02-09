@@ -27,9 +27,13 @@ class SettingsRepository(
         private const val KEY_TOOLBAR_ITEMS_ORDER = "toolbar_items_order"
         private const val KEY_TOOLBAR_ITEMS_ENABLED = "toolbar_items_enabled"
 
+        // Channel Settings Keys
+        private const val KEY_CHANNEL_CARDS_PER_ROW = "channel_cards_per_row"
+
         // Default height in dp
         const val DEFAULT_APP_CARD_SIZE = 90
         const val DEFAULT_CHANNEL_CARD_SIZE = 90
+        const val DEFAULT_CHANNEL_CARDS_PER_ROW = 7
 
         // Default toolbar items order (includes clock at the end/right side)
         val DEFAULT_TOOLBAR_ITEMS_ORDER = listOf(
@@ -93,6 +97,12 @@ class SettingsRepository(
     )
     val toolbarItemsEnabled = _toolbarItemsEnabled.asStateFlow()
 
+    // Channel Settings States
+    private val _channelCardsPerRow = MutableStateFlow(
+        prefs.getInt(KEY_CHANNEL_CARDS_PER_ROW, DEFAULT_CHANNEL_CARDS_PER_ROW)
+    )
+    val channelCardsPerRow = _channelCardsPerRow.asStateFlow()
+
     fun setAppCardSize(size: Int) {
         prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
         _appCardSize.value = size
@@ -101,6 +111,11 @@ class SettingsRepository(
     fun setChannelCardSize(size: Int) {
         prefs.edit { putInt(KEY_CHANNEL_CARD_SIZE, size) }
         _channelCardSize.value = size
+    }
+
+    fun setChannelCardsPerRow(count: Int) {
+        prefs.edit { putInt(KEY_CHANNEL_CARDS_PER_ROW, count.coerceIn(3, 20)) }
+        _channelCardsPerRow.value = count.coerceIn(3, 20)
     }
 
     fun toggleInputHidden(inputId: String) {
@@ -198,6 +213,7 @@ class SettingsRepository(
         prefs.edit { clear() }
         _appCardSize.value = DEFAULT_APP_CARD_SIZE
         _channelCardSize.value = DEFAULT_CHANNEL_CARD_SIZE
+        _channelCardsPerRow.value = DEFAULT_CHANNEL_CARDS_PER_ROW
         _hiddenInputs.value = emptySet()
         _showMobileApps.value = false
 

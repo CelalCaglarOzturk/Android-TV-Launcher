@@ -77,7 +77,13 @@ fun ChannelProgramCardRow(
     val settingsRepository = koinInject<SettingsRepository>()
     val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
     val animChannelRow by settingsRepository.animChannelRow.collectAsState(initial = true)
+    val channelCardsPerRow by settingsRepository.channelCardsPerRow.collectAsState()
     val areRowAnimationsEnabled = enableAnimations && animChannelRow
+
+    // Limit programs to configured number for performance
+    val limitedPrograms = remember(programs, channelCardsPerRow) {
+        programs.take(channelCardsPerRow)
+    }
 
     var popupVisible by remember { mutableStateOf(false) }
     var isInMoveMode by remember { mutableStateOf(false) }
@@ -210,7 +216,7 @@ fun ChannelProgramCardRow(
                                 .focusRestorer(childFocusRequester),
                         ) {
                             itemsIndexed(
-                                items = programs,
+                                items = limitedPrograms,
                                 key = { _, program -> program.id },
                                 contentType = { _, _ -> "program_card" }
                             ) { index, program ->
