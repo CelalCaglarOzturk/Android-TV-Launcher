@@ -1,7 +1,6 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -32,11 +30,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -232,13 +227,6 @@ fun AppsTab(
                 }
             }
 
-            // Skeletons
-            if (!hasApps && !hasHiddenApps) {
-                items(15) {
-                    SkeletonAppCard(appCardSize.dp)
-                }
-            }
-
             // Hidden Apps Header
             if (hasHiddenApps) {
                 item(
@@ -305,15 +293,4 @@ fun AppsTab(
             }
         }
     }
-}
-
-@Composable
-fun SkeletonAppCard(baseHeight: Dp) {
-    Box(
-        modifier = Modifier
-            .height(baseHeight)
-            .width(baseHeight * (16f / 9f))
-            .graphicsLayer { alpha = 0.99f }
-            .background(Color.Gray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
-    )
 }

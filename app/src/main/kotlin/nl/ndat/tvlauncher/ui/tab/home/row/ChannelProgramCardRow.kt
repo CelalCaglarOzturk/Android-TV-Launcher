@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +44,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import kotlinx.coroutines.delay
@@ -75,9 +75,9 @@ fun ChannelProgramCardRow(
     onRemoveProgram: ((program: ChannelProgram) -> Unit)? = null,
 ) {
     val settingsRepository = koinInject<SettingsRepository>()
-    val enableAnimations by settingsRepository.enableAnimations.collectAsState(initial = true)
-    val animChannelRow by settingsRepository.animChannelRow.collectAsState(initial = true)
-    val channelCardsPerRow by settingsRepository.channelCardsPerRow.collectAsState()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle(initialValue = true)
+    val animChannelRow by settingsRepository.animChannelRow.collectAsStateWithLifecycle(initialValue = true)
+    val channelCardsPerRow by settingsRepository.channelCardsPerRow.collectAsStateWithLifecycle()
     val areRowAnimationsEnabled = enableAnimations && animChannelRow
 
     // Limit programs to configured number for performance

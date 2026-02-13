@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
@@ -31,8 +31,8 @@ fun ChannelSettingsDialog(
     onDismissRequest: () -> Unit
 ) {
     val settingsRepository = koinInject<SettingsRepository>()
-    val channelCardSize by settingsRepository.channelCardSize.collectAsState()
-    val channelCardsPerRow by settingsRepository.channelCardsPerRow.collectAsState()
+    val channelCardSize by settingsRepository.channelCardSize.collectAsStateWithLifecycle()
+    val channelCardsPerRow by settingsRepository.channelCardsPerRow.collectAsStateWithLifecycle()
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(

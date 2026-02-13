@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Checkbox
 import androidx.tv.material3.ListItem
 import androidx.tv.material3.MaterialTheme
@@ -28,8 +28,8 @@ fun InputsSettingsDialog(
     val inputRepository = koinInject<InputRepository>()
     val settingsRepository = koinInject<SettingsRepository>()
 
-    val inputs by inputRepository.getInputs().collectAsState(initial = emptyList())
-    val hiddenInputs by settingsRepository.hiddenInputs.collectAsState()
+    val inputs by inputRepository.getInputs().collectAsStateWithLifecycle(initialValue = emptyList())
+    val hiddenInputs by settingsRepository.hiddenInputs.collectAsStateWithLifecycle()
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -15,6 +14,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import org.koin.compose.koinInject
 
@@ -27,8 +27,8 @@ fun Toolbar(
     val focusRequester = remember { FocusRequester() }
     val settingsRepository = koinInject<SettingsRepository>()
 
-    val toolbarItemsOrder by settingsRepository.toolbarItemsOrder.collectAsState()
-    val toolbarItemsEnabled by settingsRepository.toolbarItemsEnabled.collectAsState()
+    val toolbarItemsOrder by settingsRepository.toolbarItemsOrder.collectAsStateWithLifecycle()
+    val toolbarItemsEnabled by settingsRepository.toolbarItemsEnabled.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier

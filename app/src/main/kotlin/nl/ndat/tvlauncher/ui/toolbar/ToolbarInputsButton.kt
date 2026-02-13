@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.ListItem
@@ -34,8 +34,8 @@ import org.koin.compose.koinInject
 fun ToolbarInputsButton() {
     val inputRepository = koinInject<InputRepository>()
     val settingsRepository = koinInject<SettingsRepository>()
-    val allInputs by inputRepository.getInputs().collectAsState(initial = emptyList())
-    val hiddenInputs by settingsRepository.hiddenInputs.collectAsState()
+    val allInputs by inputRepository.getInputs().collectAsStateWithLifecycle(initialValue = emptyList())
+    val hiddenInputs by settingsRepository.hiddenInputs.collectAsStateWithLifecycle()
 
     val inputs by remember(allInputs, hiddenInputs) {
         derivedStateOf {

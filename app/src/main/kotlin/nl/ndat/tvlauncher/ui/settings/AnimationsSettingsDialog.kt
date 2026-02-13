@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
@@ -33,12 +33,12 @@ fun AnimationsSettingsDialog(
     onDismissRequest: () -> Unit
 ) {
     val settingsRepository = koinInject<SettingsRepository>()
-    val enableAnimations by settingsRepository.enableAnimations.collectAsState()
-    val animAppIcon by settingsRepository.animAppIcon.collectAsState()
-    val animChannelRow by settingsRepository.animChannelRow.collectAsState()
-    val animChannelMove by settingsRepository.animChannelMove.collectAsState()
-    val animAppMove by settingsRepository.animAppMove.collectAsState()
-    val animTransition by settingsRepository.animTransition.collectAsState()
+    val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
+    val animAppIcon by settingsRepository.animAppIcon.collectAsStateWithLifecycle()
+    val animChannelRow by settingsRepository.animChannelRow.collectAsStateWithLifecycle()
+    val animChannelMove by settingsRepository.animChannelMove.collectAsStateWithLifecycle()
+    val animAppMove by settingsRepository.animAppMove.collectAsStateWithLifecycle()
+    val animTransition by settingsRepository.animTransition.collectAsStateWithLifecycle()
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(

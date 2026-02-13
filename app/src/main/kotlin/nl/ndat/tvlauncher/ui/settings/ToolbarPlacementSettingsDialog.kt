@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +28,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
@@ -44,8 +44,8 @@ fun ToolbarPlacementSettingsDialog(
     onDismissRequest: () -> Unit
 ) {
     val settingsRepository = koinInject<SettingsRepository>()
-    val toolbarItemsOrder by settingsRepository.toolbarItemsOrder.collectAsState()
-    val toolbarItemsEnabled by settingsRepository.toolbarItemsEnabled.collectAsState()
+    val toolbarItemsOrder by settingsRepository.toolbarItemsOrder.collectAsStateWithLifecycle()
+    val toolbarItemsEnabled by settingsRepository.toolbarItemsEnabled.collectAsStateWithLifecycle()
 
     // Track which item is currently being moved (by its index)
     var movingItemIndex by remember { mutableIntStateOf(-1) }

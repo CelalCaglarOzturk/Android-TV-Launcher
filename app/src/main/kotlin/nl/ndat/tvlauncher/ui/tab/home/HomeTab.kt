@@ -38,9 +38,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -171,13 +169,6 @@ fun HomeTab(
                 baseHeight = appCardSize.dp,
                 firstItemFocusRequester = firstItemFocusRequester
             )
-        }
-
-        // Skeleton loading state
-        if (allAppChannels.isEmpty() && enabledChannels.isEmpty()) {
-            items(3) {
-                SkeletonChannelRow(channelCardSize.dp)
-            }
         }
 
         itemsIndexed(
@@ -415,31 +406,4 @@ private fun DisabledChannelCard(
     )
 }
 
-@Composable
-fun SkeletonChannelRow(baseHeight: Dp) {
-    Column(modifier = Modifier.padding(bottom = 16.dp)) {
-        // Title Skeleton
-        Box(
-            modifier = Modifier
-                .padding(start = 48.dp, bottom = 8.dp)
-                .size(width = 150.dp, height = 20.dp)
-                .background(Color.Gray.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
-        )
 
-        // Cards Skeleton
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 48.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            items(5) {
-                Box(
-                    modifier = Modifier
-                        .height(baseHeight)
-                        .width(baseHeight * (16f / 9f))
-                        .graphicsLayer { alpha = 0.99f } // GPU optimization hint
-                        .background(Color.Gray.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
-                )
-            }
-        }
-    }
-}
