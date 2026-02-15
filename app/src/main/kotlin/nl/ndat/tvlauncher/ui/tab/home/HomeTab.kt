@@ -184,18 +184,17 @@ fun HomeTab(
                 viewModel.channelPrograms(channel.id)
             }.collectAsStateWithLifecycle()
             val isWatchNext = remember(channel.type) { channel.type == ChannelType.WATCH_NEXT }
-            val isLive = remember(channel.type) { channel.type == ChannelType.LIVE }
 
             // Early return if not displayable - memoize the condition check
-            val shouldDisplay = remember(isWatchNext, isLive, app) {
-                isWatchNext || isLive || app != null
+            val shouldDisplay = remember(isWatchNext, app) {
+                isWatchNext || app != null
             }
 
             if (shouldDisplay) {
                 // Memoize the title computation
-                val title = remember(isWatchNext, isLive, app?.displayName, channel.displayName) {
-                    if (isWatchNext || isLive) {
-                        null // Will use string resource or direct name
+                val title = remember(isWatchNext, app?.displayName, channel.displayName) {
+                    if (isWatchNext) {
+                        null // Will use string resource
                     } else {
                         app?.displayName to channel.displayName
                     }
@@ -203,8 +202,6 @@ fun HomeTab(
 
                 val displayTitle = if (isWatchNext) {
                     stringResource(R.string.channel_watch_next)
-                } else if (isLive) {
-                    channel.displayName
                 } else {
                     stringResource(R.string.channel_preview, title!!.first!!, title.second)
                 }

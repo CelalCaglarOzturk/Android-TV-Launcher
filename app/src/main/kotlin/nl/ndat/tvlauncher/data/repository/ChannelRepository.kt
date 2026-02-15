@@ -106,7 +106,6 @@ class ChannelRepository(
     suspend fun refreshAllChannels() {
         refreshWatchNextChannels()
         refreshPreviewChannels()
-        refreshLiveChannels()
     }
 
     suspend fun refreshPreviewChannels() {
@@ -114,20 +113,6 @@ class ChannelRepository(
         commitChannels(ChannelType.PREVIEW, channels)
 
         for (channel in channels) refreshChannelPrograms(channel)
-    }
-
-    suspend fun refreshLiveChannels() {
-        val channels = channelResolver.getLiveChannels(context)
-        commitChannels(ChannelType.LIVE, channels)
-
-        for (channel in channels) {
-            val prefix = "${ChannelResolver.CHANNEL_ID_PREFIX}live_input_"
-            if (channel.id.startsWith(prefix)) {
-                val inputId = channel.id.removePrefix(prefix)
-                val programs = channelResolver.getLiveChannelPrograms(context, inputId, channel.id)
-                commitChannelPrograms(channel.id, programs)
-            }
-        }
     }
 
     suspend fun refreshWatchNextChannels() {

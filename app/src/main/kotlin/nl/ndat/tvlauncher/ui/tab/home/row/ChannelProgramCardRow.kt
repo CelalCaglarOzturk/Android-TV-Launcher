@@ -1,14 +1,9 @@
 package nl.ndat.tvlauncher.ui.tab.home.row
 
 import android.view.KeyEvent
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +28,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -97,45 +90,12 @@ fun ChannelProgramCardRow(
     var focusedProgramId by remember { mutableStateOf<String?>(null) }
     val focusRequesters = remember { mutableMapOf<String, FocusRequester>() }
 
-    // Animation states
-    val targetState = when {
-        isInMoveMode -> RowState.Move
-        isFocused -> RowState.Focused
-        else -> RowState.Normal
-    }
-
-    val transition = updateTransition(targetState, label = "rowTransition")
-
-    val alpha by transition.animateFloat(
-        transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
-        },
-        label = "rowAlpha"
-    ) { state ->
-        if (state == RowState.Focused || state == RowState.Move) 1f else 0.5f
-    }
-
-    val scale by transition.animateFloat(
-        transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
-        },
+    // Simple scale animation when focused
+    val scale by animateFloatAsState(
+        targetValue = if (isFocused) 1.05f else 1.0f,
+        animationSpec = if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap(),
         label = "rowScale"
-    ) { state ->
-        when (state) {
-            RowState.Move -> 1.02f
-            RowState.Focused -> 1f
-            RowState.Normal -> 0.95f
-        }
-    }
-
-    val borderColor by transition.animateColor(
-        transitionSpec = {
-            if (areRowAnimationsEnabled) spring(stiffness = 10_000f) else snap()
-        },
-        label = "rowBorderColor"
-    ) { state ->
-        if (state == RowState.Move) MaterialTheme.colorScheme.primary else Color.Transparent
-    }
+    )
 
     // Restore focus to the program that was being removed/moved after list recomposes
     LaunchedEffect(focusedProgramId, programs) {
@@ -175,15 +135,9 @@ fun ChannelProgramCardRow(
                         modifier = modifier
                             .onFocusChanged { isFocused = it.hasFocus }
                             .graphicsLayer {
-                                this.alpha = alpha
                                 scaleX = scale
                                 scaleY = scale
                             }
-                            .border(
-                                width = 4.dp,
-                                color = borderColor,
-                                shape = RoundedCornerShape(12.dp)
-                            )
                     ) {
                         // Row title (non-focusable, just a label)
                         Row(
@@ -378,6 +332,4 @@ fun ChannelProgramCardRow(
     )
 }
 
-private enum class RowState {
-    Normal, Focused, Move
-}
+
