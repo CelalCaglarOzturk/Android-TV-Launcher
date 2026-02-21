@@ -66,8 +66,25 @@ fun LauncherSettingsDialog(
     var showToolbarPlacementSettings by remember { mutableStateOf(false) }
     var showChannelSettings by remember { mutableStateOf(false) }
     var showPermissionDialog by remember { mutableStateOf(false) }
+    var showResetConfirmDialog by remember { mutableStateOf(false) }
 
-    if (showPermissionDialog) {
+    if (showResetConfirmDialog) {
+        ResetConfirmDialog(
+            onDismissRequest = { showResetConfirmDialog = false },
+            onConfirm = {
+                showResetConfirmDialog = false
+                scope.launch {
+                    settingsRepository.resetSettings()
+                    channelRepository.clearWatchNextBlacklist()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.settings_reset_success),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        )
+    } else if (showPermissionDialog) {
         PermissionRequiredDialog(
             onDismissRequest = { showPermissionDialog = false },
             onOpenSettings = {
@@ -250,15 +267,7 @@ fun LauncherSettingsDialog(
                         title = stringResource(R.string.settings_reset),
                         description = stringResource(R.string.settings_reset_description),
                         onClick = {
-                            scope.launch {
-                                settingsRepository.resetSettings()
-                                channelRepository.clearWatchNextBlacklist()
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.settings_reset_success),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            showResetConfirmDialog = true
                         }
                     )
                 }
@@ -368,6 +377,56 @@ private fun PermissionRequiredDialog(
                     }
                     Button(onClick = onOpenSettings) {
                         Text(stringResource(R.string.backup_permission_open_settings))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ResetConfirmDialog(
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.width(400.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_reset_confirm_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(R.string.settings_reset_confirm_message),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.colors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    Button(
+                        onClick = onConfirm,
+                        colors = ButtonDefaults.colors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                        )
+                    ) {
+                        Text(stringResource(R.string.settings_reset_confirm_button))
                     }
                 }
             }

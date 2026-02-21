@@ -10,10 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import androidx.core.os.ConfigurationCompat
+import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.util.composable.SystemBroadcastReceiver
 import java.util.Calendar
@@ -47,7 +47,7 @@ fun ToolbarClock() {
 
 	Text(
 		fontSize = 20.sp,
-		color = Color.Gray,
+		color = MaterialTheme.colorScheme.onSurfaceVariant,
 		text = time,
 	)
 }

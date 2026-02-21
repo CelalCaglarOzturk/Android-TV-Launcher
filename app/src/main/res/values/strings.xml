@@ -38,6 +38,10 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
+	<string name="app_hint_options">Hold OK for options</string>
+	<string name="app_moving_instructions">Use arrows to move • OK to confirm</string>
+	<string name="channel_hint_options">Hold OK for options</string>
+	<string name="channel_moving_instructions">Use ↑↓ to move • OK to confirm</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Show mobile apps</string>
@@ -61,6 +65,10 @@
         name="settings_reset_description"
     >Clear all preferences and restore defaults</string>
 	<string name="settings_reset_success">Settings reset to default</string>
+	<string name="settings_reset_confirm_title">Reset Settings?</string>
+	<string name="settings_reset_confirm_message">This will clear all your preferences and restore defaults. This action cannot be undone.</string>
+	<string name="settings_reset_confirm_button">Reset</string>
+	<string name="cancel">Cancel</string>
 
 	<!-- Animations -->
 	<string name="settings_animations">Animations</string>
@@ -108,4 +116,10 @@
 	<string name="settings_channel">Channel Settings</string>
 	<string name="settings_channel_cards_per_row">Cards per Row: %1$d</string>
 	<string name="settings_channel_cards_per_row_description">Limit cards displayed per channel to improve performance (3-20)</string>
+	
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">No Apps</string>
+	<string name="empty_no_apps_message">No apps found. Install some apps to get started.</string>
+	<string name="empty_no_channels_title">No Channels</string>
+	<string name="empty_no_channels_message">Channels from your apps will appear here.</string>
 </resources>

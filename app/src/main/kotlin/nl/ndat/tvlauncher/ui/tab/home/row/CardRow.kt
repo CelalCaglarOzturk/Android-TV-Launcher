@@ -6,10 +6,13 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -17,16 +20,21 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Text
@@ -39,6 +47,7 @@ fun CardRow(
     modifier: Modifier = Modifier,
     title: String? = null,
     state: LazyListState = rememberLazyListState(),
+    baseHeight: Dp = 90.dp,
     content: LazyListScope.(childFocusRequester: FocusRequester) -> Unit,
 ) {
     val settingsRepository = koinInject<SettingsRepository>()
@@ -94,18 +103,59 @@ fun CardRow(
 
         val childFocusRequester = remember { FocusRequester() }
 
-        LazyRow(
-            state = state,
-            contentPadding = PaddingValues(
-                vertical = 4.dp,
-                horizontal = 48.dp,
-            ),
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRestorer(childFocusRequester),
+        val canScrollBack by remember { derivedStateOf { state.canScrollBackward } }
+        val canScrollForward by remember { derivedStateOf { state.canScrollForward } }
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            content(childFocusRequester)
+            LazyRow(
+                state = state,
+                contentPadding = PaddingValues(
+                    vertical = 4.dp,
+                    horizontal = 48.dp,
+                ),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRestorer(childFocusRequester),
+            ) {
+                content(childFocusRequester)
+            }
+
+            if (canScrollBack && isFocused) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .height(height = baseHeight.coerceAtLeast(90.dp))
+                        .fillMaxWidth(0.08f)
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Black.copy(alpha = 0.6f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+            }
+
+            if (canScrollForward && isFocused) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .height(height = baseHeight.coerceAtLeast(90.dp))
+                        .fillMaxWidth(0.08f)
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = 0.6f)
+                                )
+                            )
+                        )
+                )
+            }
         }
     }
 }

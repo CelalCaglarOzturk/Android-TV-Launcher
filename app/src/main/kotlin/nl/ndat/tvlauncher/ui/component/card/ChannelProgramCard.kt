@@ -1,13 +1,14 @@
 package nl.ndat.tvlauncher.ui.component.card
 
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,11 +21,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -37,6 +43,7 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
 
@@ -49,6 +56,7 @@ fun ChannelProgramCard(
     baseHeight: Dp = 100.dp,
     overrideAspectRatio: Float? = null,
     isMoving: Boolean = false,
+    showHint: Boolean = false,
 ) {
     val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
@@ -80,7 +88,6 @@ fun ChannelProgramCard(
             .memoryCachePolicy(CachePolicy.ENABLED)
             .diskCachePolicy(CachePolicy.ENABLED)
             .allowHardware(true)
-            .bitmapConfig(Bitmap.Config.RGB_565)
             .crossfade(enableAnimations)
             .size(requestWidth, requestHeight)
             .build()
@@ -116,16 +123,19 @@ fun ChannelProgramCard(
         interactionSource = interactionSource,
         title = {
             if (hasTitle) {
-                Text(
-                    text = program.title!!,
-                    maxLines = 1,
-                    overflow = TextOverflow.Clip,
-                    softWrap = false,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    modifier = Modifier
-                        .let {
+                Column(
+                    modifier = Modifier.padding(top = 6.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = program.title!!,
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        softWrap = false,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.let {
                             if (isFocused && enableAnimations && !isMoving) it.then(
                                 Modifier.basicMarquee(
                                     iterations = Int.MAX_VALUE,
@@ -133,22 +143,46 @@ fun ChannelProgramCard(
                                 )
                             ) else it
                         }
-                        .padding(top = 6.dp),
-                )
+                    )
+                    
+                    if (showHint && isFocused && !isMoving) {
+                        Text(
+                            text = stringResource(R.string.channel_hint_options),
+                            maxLines = 1,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         },
         imageCard = { _ ->
             Card(
                 modifier = Modifier
                     .height(baseHeight)
-                    .aspectRatio(aspectRatio),
+                    .aspectRatio(aspectRatio)
+                    .then(
+                        if (isFocused) {
+                            Modifier.drawBehind {
+                                drawRect(
+                                    brush = Brush.radialGradient(
+                                        colors = listOf(
+                                            Color.White.copy(alpha = 0.3f),
+                                            Color.White.copy(alpha = 0.0f)
+                                        ),
+                                        radius = size.maxDimension * 0.8f
+                                    )
+                                )
+                            }
+                        } else Modifier
+                    ),
                 interactionSource = interactionSource,
                 colors = CardDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 ),
                 border = CardDefaults.border(
                     focusedBorder = Border(
-                        border = BorderStroke(2.dp, MaterialTheme.colorScheme.border),
+                        border = BorderStroke(3.dp, Color.White),
                     )
                 ),
                 onClick = {
@@ -166,7 +200,6 @@ fun ChannelProgramCard(
                     )
 
                     if (progress != null) {
-                        // Background bar (semi-transparent black)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -174,7 +207,6 @@ fun ChannelProgramCard(
                                 .align(Alignment.BottomStart)
                                 .background(Color.Black.copy(alpha = 0.5f))
                         )
-                        // Progress bar (red)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(progress)
@@ -182,6 +214,28 @@ fun ChannelProgramCard(
                                 .align(Alignment.BottomStart)
                                 .background(Color.Red)
                         )
+                    }
+                    
+                    if (isMoving) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .drawBehind {
+                                    drawRoundRect(
+                                        color = Color.Black.copy(alpha = 0.7f),
+                                        cornerRadius = CornerRadius(0.dp.toPx())
+                                    )
+                                }
+                        ) {
+                            Text(
+                                text = stringResource(R.string.channel_moving_instructions),
+                                color = Color.White,
+                                fontSize = with(LocalDensity.current) { (baseHeight.value / 10).toInt().dp.toSp() },
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
                     }
                 }
             }

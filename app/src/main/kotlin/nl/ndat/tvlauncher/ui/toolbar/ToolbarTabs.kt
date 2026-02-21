@@ -35,8 +35,6 @@ fun ToolbarTabs(
                     onFocus = {
                         if (destination == currentDestination) return@Tab
 
-                        // Clear the backstack and set only the new destination
-                        // This avoids duplicate entries and ensures clean state
                         backStack.clear()
                         backStack.add(destination)
                     },

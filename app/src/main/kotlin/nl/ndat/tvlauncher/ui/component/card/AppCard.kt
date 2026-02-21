@@ -6,6 +6,7 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -18,7 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -99,8 +104,9 @@ fun AppCard(
             .build()
     }
 
-    // Check if popup is available once
     val hasPopupContent = remember(popupContent) { popupContent != null }
+    
+    val isFocused by interactionSource.collectIsFocusedAsState()
 
     PopupContainer(
         visible = menuVisible && hasPopupContent,
@@ -120,13 +126,28 @@ fun AppCard(
                     Card(
                         modifier = Modifier
                             .height(baseHeight)
-                            .aspectRatio(16f / 9f),
+                            .aspectRatio(16f / 9f)
+                            .then(
+                                if (isFocused) {
+                                    Modifier.drawBehind {
+                                        drawRect(
+                                            brush = Brush.radialGradient(
+                                                colors = listOf(
+                                                    Color.White.copy(alpha = 0.3f),
+                                                    Color.White.copy(alpha = 0.0f)
+                                                ),
+                                                radius = size.maxDimension * 0.8f
+                                            )
+                                        )
+                                    }
+                                } else Modifier
+                            ),
                         interactionSource = interactionSource,
                         border = CardDefaults.border(
                             focusedBorder = Border(
                                 border = BorderStroke(
-                                    2.dp,
-                                    MaterialTheme.colorScheme.border
+                                    3.dp,
+                                    Color.White
                                 ),
                             )
                         ),

@@ -50,7 +50,6 @@ import nl.ndat.tvlauncher.ui.tab.home.ChannelPopup
 import nl.ndat.tvlauncher.ui.tab.home.WatchNextProgramPopup
 import org.koin.compose.koinInject
 
-// Long press delay in milliseconds - reduced for faster response
 private const val LONG_PRESS_DELAY_MS = 300L
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -180,17 +179,14 @@ fun ChannelProgramCardRow(
                                 }
 
                                 Box {
-                                    // Time-based long press detection
                                     var isKeyHeld by remember { mutableStateOf(false) }
                                     var isLongPressTriggered by remember { mutableStateOf(false) }
 
-                                    // Launch effect to detect long press after delay
                                     LaunchedEffect(isKeyHeld) {
                                         if (isKeyHeld) {
                                             delay(LONG_PRESS_DELAY_MS)
                                             if (isKeyHeld) {
                                                 isLongPressTriggered = true
-                                                // Trigger long press action immediately
                                                 if (onRemoveProgram != null) {
                                                     watchNextPopupProgram = program
                                                 } else if (channel != null && onToggleEnabled != null) {
@@ -205,6 +201,7 @@ fun ChannelProgramCardRow(
                                         baseHeight = baseHeight,
                                         overrideAspectRatio = overrideAspectRatio,
                                         isMoving = isInMoveMode,
+                                        showHint = true,
                                         modifier = Modifier
                                             .focusRequester(programFocusRequester)
                                             .then(
