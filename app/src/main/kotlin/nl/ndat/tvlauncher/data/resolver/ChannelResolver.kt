@@ -117,31 +117,46 @@ class ChannelResolver {
             return@withContext channels
         }
         
-        channels.addAll(cursor.processRows { cursor ->
-            val appLinkIntentUri = cursor.getString(PreviewChannel.Columns.COL_APP_LINK_INTENT_URI)
-            val displayName = cursor.getString(PreviewChannel.Columns.COL_DISPLAY_NAME)
-            val packageName = cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)
+        val cursorResult = cursor.use {
+            if (it.count == 0) {
+                Timber.d("Channel cursor is empty")
+                emptyList()
+            } else {
+                it.processRows { cursor ->
+                    val appLinkIntentUri = cursor.getString(PreviewChannel.Columns.COL_APP_LINK_INTENT_URI)
+                    val displayName = cursor.getString(PreviewChannel.Columns.COL_DISPLAY_NAME)
+                    val packageName = cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)
 
-            when {
-                appLinkIntentUri.isNullOrEmpty() -> {
-                    Timber.d("Ignoring channel $packageName due to missing intent uri")
-                    null
-                }
+                    when {
+                        appLinkIntentUri.isNullOrEmpty() -> {
+                            Timber.d("Ignoring channel $packageName due to missing intent uri")
+                            null
+                        }
 
-                displayName.isNullOrEmpty() -> {
-                    Timber.d("Ignoring channel $packageName due to missing display name")
-                    null
-                }
+                        displayName.isNullOrEmpty() -> {
+                            Timber.d("Ignoring channel $packageName due to missing display name")
+                            null
+                        }
 
-                else -> {
-                    val channel = PreviewChannel.fromCursor(cursor)?.toChannel()
-                    if (channel == null) {
-                        Timber.d("Ignoring channel $packageName due to failing to parse")
+                        else -> {
+                            val channel = PreviewChannel.fromCursor(cursor)?.toChannel()
+                            if (channel == null) {
+                                Timber.d("Ignoring channel $packageName due to failing to parse")
+                            }
+                            channel
+                        }
                     }
-                    channel
                 }
             }
-        })
+        }
+        
+        channels.addAll(cursorResult)
+        
+        // If no channels found and on Android 16+, try alternative query
+        if (channels.isEmpty() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            Timber.d("Android 16+ detected with no channels - attempting alternative channel query")
+            channels.addAll(queryAndroid16Channels(context))
+        }
         
         Timber.d("Found ${channels.size} preview channels")
         channels

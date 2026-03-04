@@ -11,7 +11,6 @@ import android.os.Environment
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.KeyEvent
-import android.view.MotionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -181,12 +180,5 @@ class LauncherActivity : ComponentActivity() {
         }
 
         return super.onKeyDown(keyCode, event)
-    }
-
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            Timber.d("Touch event detected: x=${event.x}, y=${event.y}")
-        }
-        return super.dispatchTouchEvent(event)
     }
 }
