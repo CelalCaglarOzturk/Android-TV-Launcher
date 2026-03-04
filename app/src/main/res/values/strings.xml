@@ -28,6 +28,7 @@
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remove from Watch Next</string>
+	<string name="watch_next_no_apps">No apps support this feature on this TV</string>
 
 	<!-- App options -->
 	<string name="app_options">App Options</string>

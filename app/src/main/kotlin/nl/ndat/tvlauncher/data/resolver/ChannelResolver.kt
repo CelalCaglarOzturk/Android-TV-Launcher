@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.CursorIndexOutOfBoundsException
 import android.net.Uri
+import android.os.Build
 import android.os.CancellationSignal
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.getSystemService
@@ -97,10 +98,26 @@ class ChannelResolver {
     }
 
     suspend fun getPreviewChannels(context: Context): List<Channel> = withContext(Dispatchers.IO) {
-        context.contentResolver.tryQuery(
-            TvContractCompat.Channels.CONTENT_URI,
-            PreviewChannel.Columns.PROJECTION,
-        ).processRows { cursor ->
+        val channels = mutableListOf<Channel>()
+        
+        val uri = TvContractCompat.Channels.CONTENT_URI
+        val projection = PreviewChannel.Columns.PROJECTION
+        
+        val cursor = context.contentResolver.tryQuery(
+            uri,
+            projection,
+        )
+        
+        if (cursor == null) {
+            Timber.w("Channel query returned null cursor - may indicate permission issue or Android 16 compatibility")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                Timber.d("Android 16+ detected - attempting alternative channel query")
+                channels.addAll(queryAndroid16Channels(context))
+            }
+            return@withContext channels
+        }
+        
+        channels.addAll(cursor.processRows { cursor ->
             val appLinkIntentUri = cursor.getString(PreviewChannel.Columns.COL_APP_LINK_INTENT_URI)
             val displayName = cursor.getString(PreviewChannel.Columns.COL_DISPLAY_NAME)
             val packageName = cursor.getString(PreviewChannel.Columns.COL_PACKAGE_NAME)
@@ -124,7 +141,76 @@ class ChannelResolver {
                     channel
                 }
             }
+        })
+        
+        Timber.d("Found ${channels.size} preview channels")
+        channels
+    }
+
+    private suspend fun queryAndroid16Channels(context: Context): List<Channel> = withContext(Dispatchers.IO) {
+        Timber.d("Attempting Android 16+ channel query method")
+        val channels = mutableListOf<Channel>()
+        
+        try {
+            val uri = Uri.parse("content://android.media.tv.channel")
+            val projection = arrayOf(
+                "_id",
+                "display_name",
+                "package_name",
+                "app_link_intent_uri",
+                "description"
+            )
+            
+            val android16Channels = context.contentResolver.tryQuery(uri, projection)?.processRows { cursor ->
+                val idIndex = cursor.getColumnIndex("_id")
+                val displayNameIndex = cursor.getColumnIndex("display_name")
+                val packageNameIndex = cursor.getColumnIndex("package_name")
+                val appLinkIntentUriIndex = cursor.getColumnIndex("app_link_intent_uri")
+                
+                if (idIndex < 0 || displayNameIndex < 0 || packageNameIndex < 0) {
+                    return@processRows null
+                }
+                
+                val channelId = cursor.getLong(idIndex)
+                val displayName = cursor.getString(displayNameIndex)
+                val packageName = cursor.getString(packageNameIndex)
+                val appLinkIntentUri = cursor.getString(appLinkIntentUriIndex)
+                
+                when {
+                    appLinkIntentUri.isNullOrEmpty() -> {
+                        Timber.d("Ignoring channel $packageName due to missing intent uri")
+                        null
+                    }
+                    displayName.isNullOrEmpty() -> {
+                        Timber.d("Ignoring channel $packageName due to missing display name")
+                        null
+                    }
+                    else -> {
+                        Channel(
+                            id = "$CHANNEL_ID_PREFIX$channelId",
+                            type = ChannelType.PREVIEW,
+                            channelId = channelId,
+                            displayName = displayName,
+                            description = null,
+                            packageName = packageName,
+                            appLinkIntentUri = appLinkIntentUri,
+                            enabled = true,
+                            displayOrder = null,
+                        )
+                    }
+                }
+            }
+            
+            if (android16Channels != null) {
+                channels.addAll(android16Channels)
+            }
+            
+            Timber.d("Android 16+ alternative query found ${channels.size} channels")
+        } catch (e: Exception) {
+            Timber.e(e, "Android 16+ alternative channel query failed")
         }
+        
+        channels
     }
 
     suspend fun getChannelPrograms(context: Context, channelId: Long): List<ChannelProgram> =
