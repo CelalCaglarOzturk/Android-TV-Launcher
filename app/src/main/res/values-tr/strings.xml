@@ -2,6 +2,7 @@
 	<string name="app_name">TV Launcher</string>
 	<string name="settings">Ayarlar</string>
     <string name="channel_watch_next">Sıradakini Oynat</string>
+	<string name="channel_no_channels">Uygulamalarınızdan kanallar burada görünecek</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Başlatıcı ayarları</string>
 	<string name="input_switch">Girişi değiştir</string>

@@ -39,6 +39,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -96,6 +97,12 @@ fun HomeTab(
 
     val hasDisabledChannels by remember {
         derivedStateOf { disabledChannels.isNotEmpty() }
+    }
+
+    val hasAppChannels by remember {
+        derivedStateOf {
+            enabledChannels.any { it.type != ChannelType.WATCH_NEXT }
+        }
     }
 
     // Use rememberSaveable to preserve scroll position across tab switches
@@ -186,8 +193,12 @@ fun HomeTab(
             val isWatchNext = remember(channel.type) { channel.type == ChannelType.WATCH_NEXT }
 
             // Early return if not displayable - memoize the condition check
-            val shouldDisplay = remember(isWatchNext, app) {
-                isWatchNext || app != null
+            val shouldDisplay = remember(isWatchNext, app, hasAppChannels) {
+                if (isWatchNext && !hasAppChannels) {
+                    false
+                } else {
+                    isWatchNext || app != null
+                }
             }
 
             if (shouldDisplay) {
@@ -276,6 +287,24 @@ fun HomeTab(
                         onRemoveProgram = onRemoveProgram
                     )
                 }
+            }
+        }
+
+        // Show placeholder when there are no app channels (Watch Next won't exist either)
+        if (!hasAppChannels) {
+            item(
+                key = "no_channels_placeholder",
+                contentType = "no_channels_placeholder"
+            ) {
+                Text(
+                    text = stringResource(R.string.channel_no_channels),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp, horizontal = 48.dp)
+                )
             }
         }
 

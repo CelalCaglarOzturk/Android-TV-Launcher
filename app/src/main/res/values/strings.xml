@@ -4,6 +4,7 @@
 	<string name="notifications">Notifications</string>
 	<string name="wifi">Network &amp; Internet</string>
     <string name="channel_watch_next">Watch Next</string>
+	<string name="channel_no_channels">Channels from your apps will appear here</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Launcher settings</string>
 	<string name="input_switch">Switch input</string>
