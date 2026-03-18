@@ -62,4 +62,68 @@
 	<string
         name="settings_enable_animations_description"
     >Kayan yazı ve diğer görsel efektleri göster</string>
+	<string name="settings_animations">Animasyonlar</string>
+	<string name="settings_anim_app_icon">Uygulama İkonu Animasyonları</string>
+	<string name="settings_anim_app_icon_desc">Odaklanınca kayan metin</string>
+	<string name="settings_anim_channel_row">Kanal Satırı Animasyonları</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Odaklanınca ölçek ve solma efektleri</string>
+	<string name="settings_anim_channel_move">Kanal Taşıma</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Kanalların düzgün yeniden sıralanması</string>
+	<string name="settings_anim_app_move">Uygulama Taşıma</string>
+	<string name="settings_anim_app_move_desc">Uygulamaların düzgün yeniden sıralanması</string>
+	<string name="settings_anim_transition">Genel Geçişler</string>
+	<string
+        name="settings_anim_transition_desc"
+    >Ekran ve diyalog geçişleri</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">Araç Çubuğu Konumu</string>
+	<string name="settings_clock">Saat</string>
+	<string name="settings_clock_enabled">Saati Göster</string>
+	<string name="settings_clock_position">Saat Konumu</string>
+	<string name="settings_clock_position_start">Başlangıç (sol taraf)</string>
+	<string name="settings_clock_position_end">Bitiş (sağ taraf)</string>
+	<string name="settings_clock_position_hidden">Gizli</string>
+	<string name="settings_toolbar_buttons">Araç Çubuğu Düğmeleri</string>
+	<string name="settings_toolbar_buttons_description">Araç çubuğu düğmelerini etkinleştir/devre dışı bırak ve sırala</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">Saat</string>
+	<string name="toolbar_inputs">Girişler</string>
+	<string name="toolbar_notifications">Bildirimler</string>
+	<string name="toolbar_wifi">Wi-Fi</string>
+	<string name="toolbar_launcher_settings">Başlatıcı Ayarları</string>
+	<string name="toolbar_settings">Sistem Ayarları</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">Kanal Ayarları</string>
+	<string name="settings_channel_cards_per_row">Satır Başına Kart: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">Performansı artırmak için kanal başına görüntülenen kart sayısını sınırla (3–20)</string>
+
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">Uygulama Yok</string>
+	<string name="empty_no_apps_message">Uygulama bulunamadı. Başlamak için uygulama yükleyin.</string>
+	<string name="empty_no_channels_title">Kanal Yok</string>
+	<string name="empty_no_channels_message">Uygulamalarınızdan kanallar burada görünecek.</string>
+
+	<!-- Additional -->
+	<string name="notifications">Bildirimler</string>
+	<string name="wifi">Ağ ve İnternet</string>
+	<string name="settings_no_inputs">Giriş bulunamadı</string>
+	<string name="watch_next_no_apps">Bu TV\'de bu özelliği destekleyen uygulama yok</string>
+	<string name="app_hint_options">Seçenekler için OK\'yi basılı tutun</string>
+	<string name="app_moving_instructions">Taşımak için oklar • Onaylamak için OK</string>
+	<string name="channel_hint_options">Seçenekler için OK\'yi basılı tutun</string>
+	<string name="channel_moving_instructions">Taşımak için ↑↓ • Onaylamak için OK</string>
+	<string name="backup_permission_title">Depolama İzni Gerekli</string>
+	<string name="backup_permission_message">TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama izinlerini etkinleştirin. Ayarlar > İzinler\'i açın ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
+	<string name="backup_permission_open_settings">Ayarları Aç</string>
+	<string name="settings_reset_confirm_title">Ayarları Sıfırla?</string>
+	<string name="settings_reset_confirm_message">Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
+	<string name="settings_reset_confirm_button">Sıfırla</string>
+	<string name="cancel">İptal</string>
 </resources>
