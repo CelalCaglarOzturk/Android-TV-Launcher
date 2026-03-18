@@ -21,7 +21,6 @@ class SettingsRepository(
         private const val KEY_ANIM_CHANNEL_ROW = "anim_channel_row"
         private const val KEY_ANIM_CHANNEL_MOVE = "anim_channel_move"
         private const val KEY_ANIM_APP_MOVE = "anim_app_move"
-        private const val KEY_ANIM_TRANSITION = "anim_transition"
 
         // Toolbar Placement Keys - Single unified list for all items including clock
         private const val KEY_TOOLBAR_ITEMS_ORDER = "toolbar_items_order"
@@ -82,9 +81,6 @@ class SettingsRepository(
 
     private val _animAppMove = MutableStateFlow(prefs.getBoolean(KEY_ANIM_APP_MOVE, true))
     val animAppMove = _animAppMove.asStateFlow()
-
-    private val _animTransition = MutableStateFlow(prefs.getBoolean(KEY_ANIM_TRANSITION, true))
-    val animTransition = _animTransition.asStateFlow()
 
     // Toolbar Placement States - Single unified list
     private val _toolbarItemsOrder = MutableStateFlow(
@@ -168,11 +164,6 @@ class SettingsRepository(
         _animAppMove.value = enable
     }
 
-    fun setAnimTransition(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ANIM_TRANSITION, enable) }
-        _animTransition.value = enable
-    }
-
     // Toolbar Placement Setters - Single unified list
     fun setToolbarItemsOrder(order: List<String>) {
         prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ORDER, order.toSet()) }
@@ -223,7 +214,6 @@ class SettingsRepository(
         _animChannelRow.value = true
         _animChannelMove.value = true
         _animAppMove.value = true
-        _animTransition.value = true
 
         // Reset toolbar placement to unified list
         _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER

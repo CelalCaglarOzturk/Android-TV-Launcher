@@ -38,7 +38,6 @@ fun AnimationsSettingsDialog(
     val animChannelRow by settingsRepository.animChannelRow.collectAsStateWithLifecycle()
     val animChannelMove by settingsRepository.animChannelMove.collectAsStateWithLifecycle()
     val animAppMove by settingsRepository.animAppMove.collectAsStateWithLifecycle()
-    val animTransition by settingsRepository.animTransition.collectAsStateWithLifecycle()
 
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
@@ -119,19 +118,6 @@ fun AnimationsSettingsDialog(
                         trailingContent = {
                             Switch(
                                 checked = animAppMove,
-                                onCheckedChange = null,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
-                    )
-
-                    CompactSettingsItem(
-                        title = stringResource(R.string.settings_anim_transition),
-                        description = stringResource(R.string.settings_anim_transition_desc),
-                        onClick = { settingsRepository.setAnimTransition(!animTransition) },
-                        trailingContent = {
-                            Switch(
-                                checked = animTransition,
                                 onCheckedChange = null,
                                 modifier = Modifier.padding(start = 8.dp)
                             )

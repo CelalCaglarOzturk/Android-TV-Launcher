@@ -75,10 +75,6 @@
     >Kanalların düzgün yeniden sıralanması</string>
 	<string name="settings_anim_app_move">Uygulama Taşıma</string>
 	<string name="settings_anim_app_move_desc">Uygulamaların düzgün yeniden sıralanması</string>
-	<string name="settings_anim_transition">Genel Geçişler</string>
-	<string
-        name="settings_anim_transition_desc"
-    >Ekran ve diyalog geçişleri</string>
 
 	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">Araç Çubuğu Konumu</string>
