@@ -110,4 +110,12 @@
 	<string name="settings_channel">Channel Settings</string>
 	<string name="settings_channel_cards_per_row">Cards per Row: %1$d</string>
 	<string name="settings_channel_cards_per_row_description">Limit cards displayed per channel to improve performance (3–20)</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">TV Launcher Recovery</string>
+	<string name="crash_recovery_message">The launcher has crashed multiple times. This may be caused by corrupted data or incompatible settings after an update. Choose a recovery option below:</string>
+	<string name="crash_recovery_reset_settings">Reset Settings</string>
+	<string name="crash_recovery_open_app_settings">Open System Settings</string>
+	<string name="crash_recovery_clear_data">Clear All Data &amp; Restart</string>
+	<string name="crash_recovery_try_again_hint">After clearing data in Settings, the app will restart automatically.</string>
 </resources>

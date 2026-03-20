@@ -122,4 +122,12 @@
 	<string name="settings_reset_confirm_message">Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
 	<string name="settings_reset_confirm_button">Sıfırla</string>
 	<string name="cancel">İptal</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">TV Launcher Kurtarma</string>
+	<string name="crash_recovery_message">Başlatıcı birden çok kez çöktü. Bu, güncellemeden sonra bozuk veriler veya uyumsuz ayarlardan kaynaklanıyor olabilir. Aşağıdan bir kurtarma seçeneği seçin:</string>
+	<string name="crash_recovery_reset_settings">Ayarları Sıfırla</string>
+	<string name="crash_recovery_open_app_settings">Sistem Ayarlarını Aç</string>
+	<string name="crash_recovery_clear_data">Tüm Verileri Temizle ve Yeniden Başlat</string>
+	<string name="crash_recovery_try_again_hint">Ayarlardan verileri temizledikten sonra uygulama otomatik olarak yeniden başlayacaktır.</string>
 </resources>

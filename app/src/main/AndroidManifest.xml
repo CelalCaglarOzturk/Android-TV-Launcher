@@ -68,6 +68,15 @@
 			</intent-filter>
 		</activity>
 
+		<activity
+            android:name=".crash.CrashRecoveryActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:theme="@style/Theme.TVLauncher"
+        />
+
 		<receiver
             android:name=".data.receiver.PackageChangeReceiver"
             android:exported="true"

@@ -4,6 +4,7 @@ import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.util.DebugLogger
+import nl.ndat.tvlauncher.crash.CrashHandler
 import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.BackupRepository
@@ -54,6 +55,8 @@ private val databaseModule = module {
 class LauncherApplication : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
+
+        CrashHandler.init(this)
 
         Timber.plant(Timber.DebugTree())
 

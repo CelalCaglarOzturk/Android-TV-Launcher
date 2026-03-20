@@ -19,13 +19,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.tvprovider.media.tv.TvContractCompat
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import nl.ndat.tvlauncher.crash.CrashHandler
 import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.ui.AppBase
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
 import nl.ndat.tvlauncher.util.FocusController
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
@@ -50,6 +51,8 @@ class LauncherActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        CrashHandler.clearCrashHistory(this)
 
         setContent {
             AppBase()
