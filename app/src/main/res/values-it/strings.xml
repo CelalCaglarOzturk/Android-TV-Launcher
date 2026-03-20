@@ -109,7 +109,7 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Impostazioni canali</string>
 	<string name="settings_channel_cards_per_row">Schede per riga: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Limita le schede visualizzate per canale per migliorare le prestazioni (3-20)</string>
+	<string name="settings_channel_cards_per_row_description">Limita le schede visualizzate per canale per migliorare le prestazioni (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher necessita di ripristino</string>

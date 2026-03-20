@@ -109,7 +109,7 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Configurações de Canal</string>
 	<string name="settings_channel_cards_per_row">Cards por Linha: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Limitar cards exibidos por canal para melhorar desempenho (3-20)</string>
+	<string name="settings_channel_cards_per_row_description">Limitar cards exibidos por canal para melhorar desempenho (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher Precisa de Recuperação</string>

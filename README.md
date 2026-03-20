@@ -10,7 +10,7 @@ The app is currently in an early development stage.
 
 ## Features
 
-- App  has all of the features of Android Home
+- App  has all the features of Android Home
 - High performance
 
 

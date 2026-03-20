@@ -31,6 +31,7 @@ import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
 val PERMISSION_READ_CHANNELS = TvContractCompat.PERMISSION_READ_TV_LISTINGS
+@Suppress("MayBeConstant")
 val PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
 val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS, PERMISSION_WRITE_STORAGE)
 

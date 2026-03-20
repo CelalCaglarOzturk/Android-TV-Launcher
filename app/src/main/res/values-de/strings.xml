@@ -109,7 +109,7 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Kanaleinstellungen</string>
 	<string name="settings_channel_cards_per_row">Karten pro Reihe: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Angezeigte Karten pro Kanal begrenzen zur Leistungsverbesserung (3-20)</string>
+	<string name="settings_channel_cards_per_row_description">Angezeigte Karten pro Kanal begrenzen zur Leistungsverbesserung (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher benötigt Wiederherstellung</string>

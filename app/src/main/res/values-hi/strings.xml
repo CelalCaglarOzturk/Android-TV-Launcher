@@ -109,7 +109,7 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">चैनल सेटिंग्स</string>
 	<string name="settings_channel_cards_per_row">प्रति पंक्ति कार्ड: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">प्रदर्शन बेहतर करने के लिए प्रति चैनल दिखाए गए कार्ड सीमित करें (3-20)</string>
+	<string name="settings_channel_cards_per_row_description">प्रदर्शन बेहतर करने के लिए प्रति चैनल दिखाए गए कार्ड सीमित करें (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher को रिकवरी की जरूरत है</string>

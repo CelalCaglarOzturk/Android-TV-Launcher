@@ -1,5 +1,6 @@
 package nl.ndat.tvlauncher.crash
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -34,12 +35,12 @@ class CrashRecoveryActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setContent {
             CrashRecoveryScreen()
         }
     }
-    
+
     @Composable
     private fun CrashRecoveryScreen() {
         MaterialTheme {
@@ -59,16 +60,16 @@ class CrashRecoveryActivity : ComponentActivity() {
                         style = MaterialTheme.typography.headlineMedium,
                         textAlign = TextAlign.Center
                     )
-                    
+
                     Text(
                         text = stringResource(R.string.crash_recovery_message),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(top = 16.dp)
                     )
-                    
+
                     Spacer(modifier = Modifier.height(32.dp))
-                    
+
                     Column(
                         modifier = Modifier.fillMaxWidth(0.8f),
                         verticalArrangement = Arrangement.spacedBy(24.dp),
@@ -130,27 +131,28 @@ class CrashRecoveryActivity : ComponentActivity() {
             }
         }
     }
-    
-    private fun resetSettingsAndRestart() {
+
+    @SuppressLint("ApplySharedPref")
+	private fun resetSettingsAndRestart() {
         try {
             // Clear settings preferences
             getSharedPreferences("launcher_settings", MODE_PRIVATE)
                 .edit()
                 .clear()
                 .commit()
-            
+
             // Clear crash recovery preferences
             getSharedPreferences("crash_recovery", MODE_PRIVATE)
                 .edit()
                 .clear()
                 .commit()
-            
+
             // Delete database (this resets apps, channels, blacklist, etc.)
             DatabaseContainer.deleteDatabase(this)
-            
+
             // Clear crash history
             CrashHandler.clearCrashHistory(this)
-            
+
             // Restart the app - it will refresh apps/channels on startup
             restartApp()
         } catch (e: Exception) {
@@ -158,7 +160,7 @@ class CrashRecoveryActivity : ComponentActivity() {
             openAppSettings()
         }
     }
-    
+
     private fun openAppSettings() {
         CrashHandler.clearCrashHistory(this)
         try {
@@ -171,7 +173,7 @@ class CrashRecoveryActivity : ComponentActivity() {
             startActivity(intent)
         }
     }
-    
+
     private fun restartApp() {
         val intent = packageManager.getLaunchIntentForPackage(packageName)
         if (intent != null) {
