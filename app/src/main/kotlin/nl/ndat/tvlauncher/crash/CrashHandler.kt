@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Process
-import nl.ndat.tvlauncher.LauncherActivity
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -27,9 +26,14 @@ class CrashHandler(
         
         fun init(context: Context): CrashHandler {
             return instance ?: synchronized(this) {
-                instance ?: CrashHandler(context.applicationContext).also {
-                    instance = it
-                    Thread.setDefaultUncaughtExceptionHandler(it)
+                instance ?: run {
+                    val handler = CrashHandler(context.applicationContext)
+                    val previousHandler = Thread.getDefaultUncaughtExceptionHandler()
+                    handler.defaultHandler = previousHandler
+                    Thread.setDefaultUncaughtExceptionHandler(handler)
+                    Timber.d("CrashHandler: Initialized, previous handler = $previousHandler")
+                    instance = handler
+                    handler
                 }
             }
         }
@@ -40,7 +44,8 @@ class CrashHandler(
             context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .clear()
-                .apply()
+                .commit()
+            Timber.d("CrashHandler: Crash history cleared")
         }
         
         fun getCrashCount(context: Context): Int {
@@ -61,35 +66,48 @@ class CrashHandler(
     }
     
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    private val defaultHandler: Thread.UncaughtExceptionHandler? = Thread.getDefaultUncaughtExceptionHandler()
+    var defaultHandler: Thread.UncaughtExceptionHandler? = null
+        internal set
     
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.e(throwable, "CrashHandler: Uncaught exception")
         
-        val currentTime = System.currentTimeMillis()
-        val crashTimestamps = getCrashTimestamps()
-        
-        crashTimestamps.add(0, currentTime)
-        
-        while (crashTimestamps.size > MAX_CRASH_COUNT) {
-            crashTimestamps.removeAt(crashTimestamps.size - 1)
-        }
-        
-        val recentCrashes = crashTimestamps.filter { currentTime - it < CRASH_WINDOW_MS }
-        
-        prefs.edit()
-            .putString(KEY_CRASH_TIMESTAMPS, recentCrashes.joinToString(","))
-            .putInt(KEY_CRASH_COUNT, recentCrashes.size)
-            .putString(KEY_LAST_CRASH_MESSAGE, throwable.message ?: throwable.javaClass.simpleName)
-            .putString(KEY_LAST_CRASH_STACK, getStackTraceString(throwable))
-            .apply()
-        
-        val isCrashLoop = recentCrashes.size >= MAX_CRASH_COUNT
-        
-        if (isCrashLoop) {
-            Timber.e("CrashHandler: Crash loop detected (${recentCrashes.size} crashes in ${CRASH_WINDOW_MS}ms)")
-            launchRecoveryActivity()
-        } else {
+        try {
+            val currentTime = System.currentTimeMillis()
+            val crashTimestamps = getCrashTimestamps()
+            
+            crashTimestamps.add(0, currentTime)
+            
+            while (crashTimestamps.size > MAX_CRASH_COUNT + 1) {
+                crashTimestamps.removeAt(crashTimestamps.size - 1)
+            }
+            
+            val recentCrashes = crashTimestamps.filter { currentTime - it < CRASH_WINDOW_MS }
+            
+            val crashCount = recentCrashes.size
+            
+            Timber.d("CrashHandler: Crash count = $crashCount, timestamps = ${recentCrashes.joinToString()}")
+            
+            prefs.edit()
+                .putString(KEY_CRASH_TIMESTAMPS, recentCrashes.joinToString(","))
+                .putInt(KEY_CRASH_COUNT, crashCount)
+                .putString(KEY_LAST_CRASH_MESSAGE, throwable.message ?: throwable.javaClass.simpleName)
+                .putString(KEY_LAST_CRASH_STACK, getStackTraceString(throwable))
+                .commit()
+            
+            val isCrashLoop = crashCount >= MAX_CRASH_COUNT
+            
+            Timber.d("CrashHandler: isCrashLoop = $isCrashLoop (count=$crashCount, threshold=$MAX_CRASH_COUNT)")
+            
+            if (isCrashLoop) {
+                Timber.e("CrashHandler: Crash loop detected ($crashCount crashes in ${CRASH_WINDOW_MS}ms)")
+                launchRecoveryActivity()
+            } else {
+                Timber.d("CrashHandler: Not a crash loop yet, delegating to default handler")
+                defaultHandler?.uncaughtException(thread, throwable)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "CrashHandler: Error handling crash")
             defaultHandler?.uncaughtException(thread, throwable)
         }
     }
@@ -100,8 +118,9 @@ class CrashHandler(
             mutableListOf()
         } else {
             try {
-                timestampsStr.split(",").map { it.toLong() }.toMutableList()
+                timestampsStr.split(",").filter { it.isNotEmpty() }.map { it.toLong() }.toMutableList()
             } catch (e: Exception) {
+                Timber.e(e, "CrashHandler: Error parsing timestamps")
                 mutableListOf()
             }
         }
@@ -116,12 +135,14 @@ class CrashHandler(
     
     private fun launchRecoveryActivity() {
         try {
+            Timber.d("CrashHandler: Launching CrashRecoveryActivity")
             val intent = Intent(context, CrashRecoveryActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK or
                         Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             }
             context.startActivity(intent)
+            Timber.d("CrashHandler: CrashRecoveryActivity started, finishing process")
             Process.killProcess(Process.myPid())
         } catch (e: Exception) {
             Timber.e(e, "CrashHandler: Failed to launch recovery activity")
