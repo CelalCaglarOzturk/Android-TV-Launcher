@@ -1,0 +1,121 @@
+<resources>
+	<string name="app_name">TV लॉन्चर</string>
+	<string name="settings">सेटिंग्स</string>
+	<string name="notifications">सूचनाएं</string>
+	<string name="wifi">नेटवर्क और इंटरनेट</string>
+	<string name="channel_watch_next">वॉच नेक्स्ट</string>
+	<string name="channel_no_channels">आपके ऐप्स से चैनल यहां दिखाई देंगे</string>
+	<string name="channel_preview">%1$s: %2$s</string>
+	<string name="settings_launcher">लॉन्चर सेटिंग्स</string>
+	<string name="input_switch">इनपुट स्विच करें</string>
+	<string name="tab_home">होम</string>
+	<string name="tab_apps">सभी ऐप्स</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">चैनल सक्षम करें</string>
+	<string name="channel_disable">चैनल अक्षम करें</string>
+	<string name="channel_move">चैनल हिलाएं</string>
+	<string name="close">बंद करें</string>
+	<string name="disabled_channels">अक्षम चैनल</string>
+
+	<!-- Settings -->
+	<string name="settings_app_card_size">ऐप कार्ड साइज़: %1$d dp</string>
+	<string name="settings_channel_card_size">चैनल कार्ड साइज़: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">TV इंटरफ़ेस के बिना ऐप्स दिखाएं</string>
+	<string name="settings_inputs">इनपुट</string>
+	<string name="settings_no_inputs">कोई इनपुट नहीं मिला</string>
+
+	<!-- Watch Next -->
+	<string name="watch_next_remove">वॉच नेक्स्ट से हटाएं</string>
+	<string name="watch_next_no_apps">इस TV पर कोई ऐप इस फ़ीचर का समर्थन नहीं करता</string>
+
+	<!-- App options -->
+	<string name="app_options">ऐप विकल्प</string>
+	<string name="app_open">खोलें</string>
+	<string name="app_move">हिलाएं</string>
+	<string name="app_info">जानकारी</string>
+	<string name="app_add_to_home">होम में जोड़ें</string>
+	<string name="app_remove_from_home">होम से हटाएं</string>
+	<string name="app_hide">ऐप छुपाएं</string>
+	<string name="app_unhide">ऐप दिखाएं</string>
+	<string name="app_hint_options">विकल्पों के लिए OK दबाकर रखें</string>
+	<string name="app_moving_instructions">हिलाने के लिए तीर • पुष्टि के लिए OK</string>
+	<string name="channel_hint_options">विकल्पों के लिए OK दबाकर रखें</string>
+	<string name="channel_moving_instructions">हिलाने के लिए ↑↓ • पुष्टि के लिए OK</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">मोबाइल ऐप्स दिखाएं</string>
+	<string name="apps_hidden_title">छुपे ऐप्स</string>
+
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">कोई ऐप नहीं</string>
+	<string name="empty_no_apps_message">कोई ऐप नहीं मिला। शुरू करने के लिए कुछ ऐप्स इंस्टॉल करें।</string>
+	<string name="empty_no_channels_title">कोई चैनल नहीं</string>
+	<string name="empty_no_channels_message">आपके ऐप्स से चैनल यहां दिखाई देंगे।</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">बैकअप</string>
+	<string name="restore">पुनर्स्थापित करें</string>
+	<string name="backup_success">बैकअप सफलतापूर्वक पूर्ण</string>
+	<string name="backup_failed">बैकअप विफल</string>
+	<string name="restore_success">पुनर्स्थापना सफलतापूर्वक पूर्ण</string>
+	<string name="restore_failed">पुनर्स्थापना विफल</string>
+	<string name="restore_not_found">बैकअप फ़ाइल नहीं मिली</string>
+	<string name="backup_permission_title">स्टोरेज अनुमति आवश्यक</string>
+	<string name="backup_permission_message">कृपया TV Launcher को आपकी सेटिंग्स बैकअप और पुनर्स्थापित करने के लिए स्टोरेज अनुमतियां सक्षम करें। सेटिंग्स > अनुमतियां खोलें, फिर "फ़ाइलें और मीडिया" या "सभी फ़ाइलों तक पहुंच" अनुमति सक्षम करें।</string>
+	<string name="backup_permission_open_settings">सेटिंग्स खोलें</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">सेटिंग्स रीसेट करें</string>
+	<string name="settings_reset_description">सभी प्राथमिकताएं साफ करें और डिफ़ॉल्ट रीस्टोर करें</string>
+	<string name="settings_reset_success">सेटिंग्स डिफ़ॉल्ट पर रीसेट की गईं</string>
+	<string name="settings_reset_confirm_title">सेटिंग्स रीसेट करें?</string>
+	<string name="settings_reset_confirm_message">यह आपकी सभी प्राथमिकताएं साफ करेगा और डिफ़ॉल्ट रीस्टोर करेगा। यह क्रिया पूर्ववत नहीं की जा सकती।</string>
+	<string name="settings_reset_confirm_button">रीसेट</string>
+	<string name="cancel">रद्द करें</string>
+
+	<!-- Animations -->
+	<string name="settings_animations">एनिमेशन</string>
+	<string name="settings_enable_animations">सभी एनिमेशन सक्षम करें</string>
+	<string name="settings_enable_animations_description">सभी विज़ुअल इफ़ेक्ट टॉगल करें</string>
+	<string name="settings_anim_app_icon">ऐप आइकन एनिमेशन</string>
+	<string name="settings_anim_app_icon_desc">फोकस पर मार्की टेक्स्ट</string>
+	<string name="settings_anim_channel_row">चैनल पंक्ति एनिमेशन</string>
+	<string name="settings_anim_channel_row_desc">फोकस पर स्केल और फेड इफ़ेक्ट</string>
+	<string name="settings_anim_channel_move">चैनल मूवमेंट</string>
+	<string name="settings_anim_channel_move_desc">चैनलों का सुचारू पुनःक्रम</string>
+	<string name="settings_anim_app_move">ऐप मूवमेंट</string>
+	<string name="settings_anim_app_move_desc">ऐप्स का सुचारू पुनःक्रम</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">टूलबार प्लेसमेंट</string>
+	<string name="settings_clock">घड़ी</string>
+	<string name="settings_clock_enabled">घड़ी दिखाएं</string>
+	<string name="settings_clock_position">घड़ी की स्थिति</string>
+	<string name="settings_clock_position_start">शुरुआत (बाईं ओर)</string>
+	<string name="settings_clock_position_end">अंत (दाईं ओर)</string>
+	<string name="settings_clock_position_hidden">छुपाएं</string>
+	<string name="settings_toolbar_buttons">टूलबार बटन</string>
+	<string name="settings_toolbar_buttons_description">टूलबार बटन सक्षम/अक्षम और पुनःक्रम करें</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">घड़ी</string>
+	<string name="toolbar_inputs">इनपुट</string>
+	<string name="toolbar_notifications">सूचनाएं</string>
+	<string name="toolbar_wifi">वाई-फाई</string>
+	<string name="toolbar_launcher_settings">लॉन्चर सेटिंग्स</string>
+	<string name="toolbar_settings">सिस्टम सेटिंग्स</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">चैनल सेटिंग्स</string>
+	<string name="settings_channel_cards_per_row">प्रति पंक्ति कार्ड: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">प्रदर्शन बेहतर करने के लिए प्रति चैनल दिखाए गए कार्ड सीमित करें (3-20)</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">TV Launcher को रिकवरी की जरूरत है</string>
+	<string name="crash_recovery_message">लॉन्चर कई बार क्रैश हुआ और सामान्य रूप से शुरू नहीं हो सकता।\n\nसमस्या ठीक करने के लिए नीचे एक विकल्प चुनें:</string>
+	<string name="crash_recovery_reset_settings">सेटिंग्स रीसेट करें</string>
+	<string name="crash_recovery_reset_settings_desc">सभी प्राथमिकताओं को डिफ़ॉल्ट पर रीसेट करता है। ऐप्स और चैनल कुछ सेकंड में दिखाई देंगे।</string>
+	<string name="crash_recovery_open_app_settings">ऐप सेटिंग्स खोलें</string>
+	<string name="crash_recovery_open_app_settings_desc">सिस्टम सेटिंग्स खोलता है। पूर्ण रीसेट के लिए "स्टोरेज" → "डेटा साफ करें" चुनें। यह सभी ऐप डेटा और अनुमतियां हटा देगा</string>
+</resources>

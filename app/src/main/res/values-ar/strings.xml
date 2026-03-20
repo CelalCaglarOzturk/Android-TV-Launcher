@@ -1,0 +1,121 @@
+<resources>
+	<string name="app_name">مُطلق التلفزيون</string>
+	<string name="settings">الإعدادات</string>
+	<string name="notifications">الإشعارات</string>
+	<string name="wifi">الشبكة والإنترنت</string>
+	<string name="channel_watch_next">المشاهدة لاحقاً</string>
+	<string name="channel_no_channels">ستظهر قنوات من تطبيقاتك هنا</string>
+	<string name="channel_preview">%1$s: %2$s</string>
+	<string name="settings_launcher">إعدادات المُطلق</string>
+	<string name="input_switch">تبديل الإدخال</string>
+	<string name="tab_home">الرئيسية</string>
+	<string name="tab_apps">جميع التطبيقات</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">تفعيل القناة</string>
+	<string name="channel_disable">تعطيل القناة</string>
+	<string name="channel_move">نقل القناة</string>
+	<string name="close">إغلاق</string>
+	<string name="disabled_channels">القنوات المعطلة</string>
+
+	<!-- Settings -->
+	<string name="settings_app_card_size">حجم بطاقة التطبيق: %1$d نقطة</string>
+	<string name="settings_channel_card_size">حجم بطاقة القناة: %1$d نقطة</string>
+	<string name="settings_show_mobile_apps_description">إظهار التطبيقات بدون واجهة التلفزيون</string>
+	<string name="settings_inputs">المدخلات</string>
+	<string name="settings_no_inputs">لم يتم العثور على مدخلات</string>
+
+	<!-- Watch Next -->
+	<string name="watch_next_remove">إزالة من المشاهدة لاحقاً</string>
+	<string name="watch_next_no_apps">لا تدعم أي تطبيق هذه الميزة على هذا التلفزيون</string>
+
+	<!-- App options -->
+	<string name="app_options">خيارات التطبيق</string>
+	<string name="app_open">فتح</string>
+	<string name="app_move">نقل</string>
+	<string name="app_info">معلومات</string>
+	<string name="app_add_to_home">إضافة إلى الرئيسية</string>
+	<string name="app_remove_from_home">إزالة من الرئيسية</string>
+	<string name="app_hide">إخفاء التطبيق</string>
+	<string name="app_unhide">إظهار التطبيق</string>
+	<string name="app_hint_options">اضغط مع الاستمرار على OK للخيارات</string>
+	<string name="app_moving_instructions">استخدم الأسهم للنقل • OK للتأكيد</string>
+	<string name="channel_hint_options">اضغط مع الاستمرار على OK للخيارات</string>
+	<string name="channel_moving_instructions">استخدم ↑↓ للنقل • OK للتأكيد</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">إظهار تطبيقات الهاتف</string>
+	<string name="apps_hidden_title">التطبيقات المخفية</string>
+
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">لا توجد تطبيقات</string>
+	<string name="empty_no_apps_message">لم يتم العثور على تطبيقات. ثبّت بعض التطبيقات للبدء.</string>
+	<string name="empty_no_channels_title">لا توجد قنوات</string>
+	<string name="empty_no_channels_message">ستظهر قنوات من تطبيقاتك هنا.</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">نسخ احتياطي</string>
+	<string name="restore">استعادة</string>
+	<string name="backup_success">تمت عملية النسخ الاحتياطي بنجاح</string>
+	<string name="backup_failed">فشلت عملية النسخ الاحتياطي</string>
+	<string name="restore_success">تمت عملية الاستعادة بنجاح</string>
+	<string name="restore_failed">فشلت عملية الاستعادة</string>
+	<string name="restore_not_found">لم يتم العثور على ملف النسخ الاحتياطي</string>
+	<string name="backup_permission_title">مطلوب إذن التخزين</string>
+	<string name="backup_permission_message">يرجى تفعيل أذونات التخزين لـ مُطلق التلفزيون للنسخ الاحتياطي واستعادة إعداداتك. افتح الإعدادات > الأذونات، ثم فعّل "الملفات والوسائط" أو "الوصول إلى جميع الملفات".</string>
+	<string name="backup_permission_open_settings">فتح الإعدادات</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">إعادة تعيين الإعدادات</string>
+	<string name="settings_reset_description">مسح جميع التفضيلات واستعادة الإعدادات الافتراضية</string>
+	<string name="settings_reset_success">تمت إعادة تعيين الإعدادات إلى الإعدادات الافتراضية</string>
+	<string name="settings_reset_confirm_title">إعادة تعيين الإعدادات؟</string>
+	<string name="settings_reset_confirm_message">سيؤدي هذا إلى مسح جميع تفضيلاتك واستعادة الإعدادات الافتراضية. لا يمكن التراجع عن هذا الإجراء.</string>
+	<string name="settings_reset_confirm_button">إعادة تعيين</string>
+	<string name="cancel">إلغاء</string>
+
+	<!-- Animations -->
+	<string name="settings_animations">الرسوم المتحركة</string>
+	<string name="settings_enable_animations">تفعيل جميع الرسوم المتحركة</string>
+	<string name="settings_enable_animations_description">تبديل جميع التأثيرات المرئية</string>
+	<string name="settings_anim_app_icon">رسوم متحركة لأيقونة التطبيق</string>
+	<string name="settings_anim_app_icon_desc">نص متحرك عند التركيز</string>
+	<string name="settings_anim_channel_row">رسوم متحركة لصف القناة</string>
+	<string name="settings_anim_channel_row_desc">تأثيرات التكبير والتلاشي عند التركيز</string>
+	<string name="settings_anim_channel_move">تحريك القنوات</string>
+	<string name="settings_anim_channel_move_desc">إعادة ترتيب سلس للقنوات</string>
+	<string name="settings_anim_app_move">تحريك التطبيقات</string>
+	<string name="settings_anim_app_move_desc">إعادة ترتيب سلس للتطبيقات</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">موضع شريط الأدوات</string>
+	<string name="settings_clock">الساعة</string>
+	<string name="settings_clock_enabled">إظهار الساعة</string>
+	<string name="settings_clock_position">موضع الساعة</string>
+	<string name="settings_clock_position_start">البداية (الجانب الأيسر)</string>
+	<string name="settings_clock_position_end">النهاية (الجانب الأيمن)</string>
+	<string name="settings_clock_position_hidden">مخفية</string>
+	<string name="settings_toolbar_buttons">أزرار شريط الأدوات</string>
+	<string name="settings_toolbar_buttons_description">تفعيل/تعطيل وإعادة ترتيب أزرار شريط الأدوات</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">الساعة</string>
+	<string name="toolbar_inputs">المدخلات</string>
+	<string name="toolbar_notifications">الإشعارات</string>
+	<string name="toolbar_wifi">واي فاي</string>
+	<string name="toolbar_launcher_settings">إعدادات المُطلق</string>
+	<string name="toolbar_settings">إعدادات النظام</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">إعدادات القنوات</string>
+	<string name="settings_channel_cards_per_row">البطاقات في الصف: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">تقييد البطاقات المعروضة لكل قناة لتحسين الأداء (3-20)</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">يحتاج مُطلق التلفزيون للاسترداد</string>
+	<string name="crash_recovery_message">تعطّل المُطلق عدة مرات ولا يمكنه البدء بشكل طبيعي.\n\nاختر خياراً أدناه لإصلاح المشكلة:</string>
+	<string name="crash_recovery_reset_settings">إعادة تعيين الإعدادات</string>
+	<string name="crash_recovery_reset_settings_desc">إعادة تعيين جميع التفضيلات إلى الإعدادات الافتراضية. ستظهر التطبيقات والقنوات بعد بضع ثوانٍ.</string>
+	<string name="crash_recovery_open_app_settings">فتح إعدادات التطبيق</string>
+	<string name="crash_recovery_open_app_settings_desc">يفتح إعدادات النظام. حدد "التخزين" → "مسح البيانات" لإعادة التعيين بالكامل. سيؤدي هذا إلى إزالة جميع بيانات وأذونات التطبيق</string>
+</resources>

@@ -1,0 +1,121 @@
+<resources>
+	<string name="app_name">TV 런처</string>
+	<string name="settings">설정</string>
+	<string name="notifications">알림</string>
+	<string name="wifi">네트워크 및 인터넷</string>
+	<string name="channel_watch_next">이어서 시청</string>
+	<string name="channel_no_channels">앱의 채널이 여기에 표시됩니다</string>
+	<string name="channel_preview">%1$s: %2$s</string>
+	<string name="settings_launcher">런처 설정</string>
+	<string name="input_switch">입력 전환</string>
+	<string name="tab_home">홈</string>
+	<string name="tab_apps">모든 앱</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">채널 활성화</string>
+	<string name="channel_disable">채널 비활성화</string>
+	<string name="channel_move">채널 이동</string>
+	<string name="close">닫기</string>
+	<string name="disabled_channels">비활성화된 채널</string>
+
+	<!-- Settings -->
+	<string name="settings_app_card_size">앱 카드 크기: %1$d dp</string>
+	<string name="settings_channel_card_size">채널 카드 크기: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">TV 인터페이스 없는 앱 표시</string>
+	<string name="settings_inputs">입력</string>
+	<string name="settings_no_inputs">입력을 찾을 수 없습니다</string>
+
+	<!-- Watch Next -->
+	<string name="watch_next_remove">이어서 시청에서 제거</string>
+	<string name="watch_next_no_apps">이 TV에서 이 기능을 지원하는 앱이 없습니다</string>
+
+	<!-- App options -->
+	<string name="app_options">앱 옵션</string>
+	<string name="app_open">열기</string>
+	<string name="app_move">이동</string>
+	<string name="app_info">정보</string>
+	<string name="app_add_to_home">홈에 추가</string>
+	<string name="app_remove_from_home">홈에서 제거</string>
+	<string name="app_hide">앱 숨기기</string>
+	<string name="app_unhide">앱 표시</string>
+	<string name="app_hint_options">옵션을 보려면 OK를 길게 누르세요</string>
+	<string name="app_moving_instructions">화살표로 이동 • OK로 확인</string>
+	<string name="channel_hint_options">옵션을 보려면 OK를 길게 누르세요</string>
+	<string name="channel_moving_instructions">↑↓로 이동 • OK로 확인</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">모바일 앱 표시</string>
+	<string name="apps_hidden_title">숨겨진 앱</string>
+
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">앱 없음</string>
+	<string name="empty_no_apps_message">앱을 찾을 수 없습니다. 시작하려면 앱을 설치하세요.</string>
+	<string name="empty_no_channels_title">채널 없음</string>
+	<string name="empty_no_channels_message">앱의 채널이 여기에 표시됩니다.</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">백업</string>
+	<string name="restore">복원</string>
+	<string name="backup_success">백업이 완료되었습니다</string>
+	<string name="backup_failed">백업 실패</string>
+	<string name="restore_success">복원이 완료되었습니다</string>
+	<string name="restore_failed">복원 실패</string>
+	<string name="restore_not_found">백업 파일을 찾을 수 없습니다</string>
+	<string name="backup_permission_title">저장소 권한 필요</string>
+	<string name="backup_permission_message">TV 런처가 설정을 백업 및 복원할 수 있도록 저장소 권한을 활성화하세요. 설정 > 권한을 열고 "파일 및 미디어" 또는 "모든 파일에 대한 액세스" 권한을 활성화하세요.</string>
+	<string name="backup_permission_open_settings">설정 열기</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">설정 초기화</string>
+	<string name="settings_reset_description">모든 기본 설정을 지우고 기본값으로 복원</string>
+	<string name="settings_reset_success">설정이 기본값으로 초기화되었습니다</string>
+	<string name="settings_reset_confirm_title">설정을 초기화하시겠습니까?</string>
+	<string name="settings_reset_confirm_message">모든 기본 설정이 지워지고 기본값으로 복원됩니다. 이 작업은 취소할 수 없습니다.</string>
+	<string name="settings_reset_confirm_button">초기화</string>
+	<string name="cancel">취소</string>
+
+	<!-- Animations -->
+	<string name="settings_animations">애니메이션</string>
+	<string name="settings_enable_animations">모든 애니메이션 활성화</string>
+	<string name="settings_enable_animations_description">모든 시각 효과 전환</string>
+	<string name="settings_anim_app_icon">앱 아이콘 애니메이션</string>
+	<string name="settings_anim_app_icon_desc">포커스 시 마퀴 텍스트</string>
+	<string name="settings_anim_channel_row">채널 행 애니메이션</string>
+	<string name="settings_anim_channel_row_desc">포커스 시 크기 조정 및 페이드 효과</string>
+	<string name="settings_anim_channel_move">채널 이동</string>
+	<string name="settings_anim_channel_move_desc">채널의 부드러운 재정렬</string>
+	<string name="settings_anim_app_move">앱 이동</string>
+	<string name="settings_anim_app_move_desc">앱의 부드러운 재정렬</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">도구 모음 배치</string>
+	<string name="settings_clock">시계</string>
+	<string name="settings_clock_enabled">시계 표시</string>
+	<string name="settings_clock_position">시계 위치</string>
+	<string name="settings_clock_position_start">시작 (왼쪽)</string>
+	<string name="settings_clock_position_end">끝 (오른쪽)</string>
+	<string name="settings_clock_position_hidden">숨김</string>
+	<string name="settings_toolbar_buttons">도구 모음 버튼</string>
+	<string name="settings_toolbar_buttons_description">도구 모음 버튼 활성화/비활성화 및 재정렬</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">시계</string>
+	<string name="toolbar_inputs">입력</string>
+	<string name="toolbar_notifications">알림</string>
+	<string name="toolbar_wifi">Wi-Fi</string>
+	<string name="toolbar_launcher_settings">런처 설정</string>
+	<string name="toolbar_settings">시스템 설정</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">채널 설정</string>
+	<string name="settings_channel_cards_per_row">행당 카드 수: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">성능 향상을 위해 채널당 표시되는 카드 수 제한 (3-20)</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">TV 런처 복구 필요</string>
+	<string name="crash_recovery_message">런처가 여러 번 충돌하여 정상적으로 시작할 수 없습니다.\n\n문제를 해결하려면 아래 옵션 중 하나를 선택하세요:</string>
+	<string name="crash_recovery_reset_settings">설정 초기화</string>
+	<string name="crash_recovery_reset_settings_desc">모든 설정을 기본값으로 초기화합니다. 앱과 채널이 몇 초 후에 표시됩니다.</string>
+	<string name="crash_recovery_open_app_settings">앱 설정 열기</string>
+	<string name="crash_recovery_open_app_settings_desc">시스템 설정을 엽니다. 완전히 초기화하려면 "저장소" → "데이터 삭제"를 선택하세요. 이렇게 하면 모든 앱 데이터와 권한이 삭제됩니다</string>
+</resources>
