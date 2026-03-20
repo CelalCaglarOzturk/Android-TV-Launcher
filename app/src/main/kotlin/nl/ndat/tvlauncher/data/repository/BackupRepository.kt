@@ -22,6 +22,10 @@ class BackupRepository(
     private val settingsRepository: SettingsRepository,
     private val channelRepository: ChannelRepository,
 ) {
+    companion object {
+        private const val CURRENT_BACKUP_VERSION = 2
+    }
+
     private val json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
@@ -31,7 +35,6 @@ class BackupRepository(
     private val backupFileName = "tv_launcher_backup.json"
 
     private fun getBackupDirectory(): File {
-        // Use Documents/TVLauncher directory to persist files after uninstall
         val backupDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
             "TVLauncher"
@@ -83,7 +86,7 @@ class BackupRepository(
     suspend fun createBackup() = withContext(Dispatchers.IO) {
         try {
             val backupData = createBackupData()
-            val jsonString = json.encodeToString(backupData)
+            val jsonString = json.encodeToString(BackupData.serializer(), backupData)
 
             val backupFile = getBackupFile()
             backupFile.writeText(jsonString)
@@ -141,17 +144,24 @@ class BackupRepository(
         // Watch Next Blacklist
         val blacklist = database.watchNextBlacklist.getAll().executeAsList()
 
-        // Settings
+        // Settings (all settings)
         val settings = SettingsBackup(
             appCardSize = settingsRepository.appCardSize.value,
             channelCardSize = settingsRepository.channelCardSize.value,
+            channelCardsPerRow = settingsRepository.channelCardsPerRow.value,
             showMobileApps = settingsRepository.showMobileApps.value,
             enableAnimations = settingsRepository.enableAnimations.value,
+            animAppIcon = settingsRepository.animAppIcon.value,
+            animChannelRow = settingsRepository.animChannelRow.value,
+            animChannelMove = settingsRepository.animChannelMove.value,
+            animAppMove = settingsRepository.animAppMove.value,
             toolbarItemsOrder = settingsRepository.toolbarItemsOrder.value,
-            toolbarItemsEnabled = settingsRepository.toolbarItemsEnabled.value.toList()
+            toolbarItemsEnabled = settingsRepository.toolbarItemsEnabled.value.toList(),
+            hiddenInputs = settingsRepository.hiddenInputs.value.toList()
         )
 
         return BackupData(
+            version = CURRENT_BACKUP_VERSION,
             timestamp = System.currentTimeMillis(),
             settings = settings,
             apps = apps,
@@ -161,13 +171,23 @@ class BackupRepository(
     }
 
     private suspend fun restoreBackupData(data: BackupData) {
+        // Clear existing state before restore
+        clearExistingState()
+
         // Restore Settings
         settingsRepository.setAppCardSize(data.settings.appCardSize)
         settingsRepository.setChannelCardSize(data.settings.channelCardSize)
+        data.settings.channelCardsPerRow?.let { settingsRepository.setChannelCardsPerRow(it) }
         settingsRepository.setShowMobileApps(data.settings.showMobileApps)
         settingsRepository.setEnableAnimations(data.settings.enableAnimations)
+        
+        // Restore individual animation settings
+        data.settings.animAppIcon?.let { settingsRepository.setAnimAppIcon(it) }
+        data.settings.animChannelRow?.let { settingsRepository.setAnimChannelRow(it) }
+        data.settings.animChannelMove?.let { settingsRepository.setAnimChannelMove(it) }
+        data.settings.animAppMove?.let { settingsRepository.setAnimAppMove(it) }
 
-        // Restore Toolbar Settings (unified list)
+        // Restore Toolbar Settings
         data.settings.toolbarItemsOrder?.let { settingsRepository.setToolbarItemsOrder(it) }
         data.settings.toolbarItemsEnabled?.let { enabledList ->
             val allItems = SettingsRepository.Companion.ToolbarItem.entries.map { it.name }
@@ -176,46 +196,81 @@ class BackupRepository(
             }
         }
 
-        // Restore Watch Next Blacklist
-        val currentBlacklist = database.watchNextBlacklist.getAll().executeAsList()
-        currentBlacklist.forEach { packageName ->
-            database.watchNextBlacklist.delete(packageName)
+        // Restore Hidden Inputs
+        data.settings.hiddenInputs?.let { inputs ->
+            inputs.forEach { inputId ->
+                settingsRepository.toggleInputHidden(inputId)
+            }
         }
 
+        // Restore Watch Next Blacklist
         data.watchNextBlacklist.forEach { packageName ->
             database.watchNextBlacklist.insert(packageName)
         }
         channelRepository.refreshWatchNextChannels()
 
         // Restore Apps
-        val appsBackup = data.apps
+        restoreApps(data.apps)
 
+        // Restore Channels
+        restoreChannels(data.channels)
+
+        // Trigger a full refresh to update UI
+        channelRepository.refreshAllChannels()
+    }
+
+    private fun clearExistingState() {
+        Timber.d("Clearing existing state before restore")
+        
+        // Clear all settings to defaults
+        settingsRepository.resetSettings()
+        
+        // Clear watch next blacklist
+        val currentBlacklist = database.watchNextBlacklist.getAll().executeAsList()
+        currentBlacklist.forEach { packageName ->
+            database.watchNextBlacklist.delete(packageName)
+        }
+        
+        // Clear app favorites and hidden status
+        val allApps = database.apps.getAllIncludingHidden().executeAsList()
+        allApps.forEach { app ->
+            if (app.hidden == 1L) {
+                database.apps.unhideApp(app.id)
+            }
+            if (app.favoriteOrder != null) {
+                database.apps.updateFavoriteRemove(app.id)
+            }
+        }
+        
+        // Clear channel customizations
+        val previewChannels = database.channels.getByType(ChannelType.PREVIEW).executeAsList()
+        previewChannels.forEach { channel ->
+            if (!channel.enabled) {
+                database.channels.enableChannel(channel.id)
+            }
+        }
+        
+        Timber.d("Existing state cleared")
+    }
+
+    private fun restoreApps(appsBackup: List<AppBackup>) {
         // 1. Restore Hidden status
         appsBackup.forEach { appBackup ->
             val existingApp = database.apps.getByPackageName(appBackup.packageName).executeAsOneOrNull()
             if (existingApp != null) {
                 if (appBackup.hidden) {
                     database.apps.hideApp(existingApp.id)
-                } else {
-                    database.apps.unhideApp(existingApp.id)
                 }
             }
         }
 
-        // 2. Restore Favorites
-        // Clear existing favorites
-        val currentFavorites = database.apps.getAllFavorites().executeAsList()
-        currentFavorites.forEach { app ->
-            database.apps.updateFavoriteRemove(app.id)
-        }
-
+        // 2. Restore Favorites - clear existing first (already done in clearExistingState)
         // Add from backup, sorted by order
         appsBackup.filter { it.favoriteOrder != null }
             .sortedBy { it.favoriteOrder }
             .forEach { appBackup ->
                 val existingApp = database.apps.getByPackageName(appBackup.packageName).executeAsOneOrNull()
                 if (existingApp != null) {
-                    // Add to favorites (appends to end)
                     database.apps.updateFavoriteAdd(existingApp.id)
                 }
             }
@@ -229,9 +284,9 @@ class BackupRepository(
                     database.apps.updateAllAppsOrder(order = appBackup.allAppsOrder!!.toLong(), id = existingApp.id)
                 }
             }
+    }
 
-        // Restore Channels
-        val channelsBackup = data.channels
+    private fun restoreChannels(channelsBackup: List<ChannelBackup>) {
         val currentChannels = database.channels.getByType(ChannelType.PREVIEW).executeAsList()
 
         channelsBackup.forEach { channelBackup ->
@@ -241,9 +296,7 @@ class BackupRepository(
             }
 
             if (match != null) {
-                if (channelBackup.enabled) {
-                    database.channels.enableChannel(match.id)
-                } else {
+                if (!channelBackup.enabled) {
                     database.channels.disableChannel(match.id)
                 }
 
@@ -257,7 +310,7 @@ class BackupRepository(
 
 @Serializable
 data class BackupData(
-    val version: Int = 1,
+    val version: Int,
     val timestamp: Long,
     val settings: SettingsBackup,
     val apps: List<AppBackup>,
@@ -269,11 +322,17 @@ data class BackupData(
 data class SettingsBackup(
     val appCardSize: Int,
     val channelCardSize: Int = 90,
+    val channelCardsPerRow: Int? = null,
     val showMobileApps: Boolean = false,
     val enableAnimations: Boolean = true,
+    val animAppIcon: Boolean? = null,
+    val animChannelRow: Boolean? = null,
+    val animChannelMove: Boolean? = null,
+    val animAppMove: Boolean? = null,
     val toolbarItemsOrder: List<String>? = null,
     val toolbarItemsEnabled: List<String>? = null,
-    // Legacy fields for backwards compatibility
+    val hiddenInputs: List<String>? = null,
+    // Legacy fields for backwards compatibility (v1)
     val toolbarOrder: List<String>? = null,
     val toolbarEnabled: List<String>? = null,
     val toolbarClockEnabled: Boolean? = null,

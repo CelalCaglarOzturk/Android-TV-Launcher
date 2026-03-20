@@ -202,6 +202,12 @@ class ChannelRepository(
         refreshWatchNextChannels()
     }
 
+    suspend fun resetChannels() = withContext(Dispatchers.IO) {
+        // Delete all channels - they will be re-added on next refresh
+        // This ensures all channels are enabled and ordered correctly
+        database.channels.deleteAllChannels()
+    }
+
     suspend fun removeWatchNextProgram(programId: String) = withContext(Dispatchers.IO) {
         val internalId = programId.removePrefix(ChannelResolver.CHANNEL_PROGRAM_ID_PREFIX).toLongOrNull()
         if (internalId != null) {

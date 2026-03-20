@@ -219,4 +219,9 @@ class SettingsRepository(
         _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
         _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
     }
+    
+    fun clearHiddenInputs() {
+        prefs.edit { remove(KEY_HIDDEN_INPUTS) }
+        _hiddenInputs.value = emptySet()
+    }
 }

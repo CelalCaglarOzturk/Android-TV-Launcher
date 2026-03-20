@@ -106,6 +106,12 @@ updateAllAppsOrder {
 updateAllAppsOrderSimple:
 UPDATE App SET allAppsOrder = :allAppsOrder WHERE id = :id;
 
+resetAllAppsCustomizations:
+UPDATE App SET favoriteOrder = NULL, hidden = 0, allAppsOrder = NULL;
+
+deleteAllApps:
+DELETE FROM App;
+
 hideApp:
 UPDATE App SET hidden = 1, favoriteOrder = NULL WHERE id = :id;
 

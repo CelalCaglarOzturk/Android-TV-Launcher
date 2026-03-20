@@ -108,3 +108,6 @@ DELETE FROM Channel WHERE id = :id;
 
 removeByType:
 DELETE FROM Channel WHERE type = :type;
+
+deleteAllChannels:
+DELETE FROM Channel;

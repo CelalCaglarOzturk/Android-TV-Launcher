@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,9 +28,10 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
+import nl.ndat.tvlauncher.data.DatabaseContainer
 
 class CrashRecoveryActivity : ComponentActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -132,15 +133,28 @@ class CrashRecoveryActivity : ComponentActivity() {
     
     private fun resetSettingsAndRestart() {
         try {
-            val settingsPrefs = getSharedPreferences("launcher_settings", MODE_PRIVATE)
-            settingsPrefs.edit().clear().commit()
+            // Clear settings preferences
+            getSharedPreferences("launcher_settings", MODE_PRIVATE)
+                .edit()
+                .clear()
+                .commit()
             
-            deleteDatabase("data.db")
+            // Clear crash recovery preferences
+            getSharedPreferences("crash_recovery", MODE_PRIVATE)
+                .edit()
+                .clear()
+                .commit()
             
+            // Delete database (this resets apps, channels, blacklist, etc.)
+            DatabaseContainer.deleteDatabase(this)
+            
+            // Clear crash history
             CrashHandler.clearCrashHistory(this)
             
+            // Restart the app - it will refresh apps/channels on startup
             restartApp()
         } catch (e: Exception) {
+            Log.e("CrashRecovery", "Failed to reset settings", e)
             openAppSettings()
         }
     }

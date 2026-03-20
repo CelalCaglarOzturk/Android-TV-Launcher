@@ -188,4 +188,12 @@ class AppRepository(
     suspend fun unhideApp(id: String) = withContext(Dispatchers.IO) {
         database.apps.unhideApp(id)
     }
+
+    suspend fun resetApps() = withContext(Dispatchers.IO) {
+        Timber.d("AppRepository: Clearing all apps to reset customizations")
+        // Delete all apps - they will be re-added as "new" on next refresh
+        // This ensures favorites are auto-populated correctly
+        database.apps.deleteAllApps()
+        Timber.d("AppRepository: All apps deleted, will be re-added on refresh")
+    }
 }

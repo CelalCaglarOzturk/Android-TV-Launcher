@@ -42,6 +42,7 @@ import androidx.tv.material3.Text
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
+import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.BackupRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
@@ -55,6 +56,7 @@ fun LauncherSettingsDialog(
     val settingsRepository = koinInject<SettingsRepository>()
     val backupRepository = koinInject<BackupRepository>()
     val channelRepository = koinInject<ChannelRepository>()
+    val appRepository = koinInject<AppRepository>()
     val appCardSize by settingsRepository.appCardSize.collectAsStateWithLifecycle()
     val showMobileApps by settingsRepository.showMobileApps.collectAsStateWithLifecycle()
     val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
@@ -74,8 +76,23 @@ fun LauncherSettingsDialog(
             onConfirm = {
                 showResetConfirmDialog = false
                 scope.launch {
+                    // Reset all settings
                     settingsRepository.resetSettings()
+                    settingsRepository.clearHiddenInputs()
+                    
+                    // Reset apps (clear favorites, hidden status, custom order)
+                    appRepository.resetApps()
+                    
+                    // Reset channels (enable all, clear custom order)
+                    channelRepository.resetChannels()
+                    
+                    // Clear watch next blacklist
                     channelRepository.clearWatchNextBlacklist()
+                    
+                    // Refresh apps and channels to apply changes
+                    appRepository.refreshAllApplications()
+                    channelRepository.refreshAllChannels()
+                    
                     Toast.makeText(
                         context,
                         context.getString(R.string.settings_reset_success),
