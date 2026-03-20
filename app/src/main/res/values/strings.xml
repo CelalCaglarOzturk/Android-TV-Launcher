@@ -4,7 +4,9 @@
 	<string name="notifications">Notifications</string>
 	<string name="wifi">Network &amp; Internet</string>
 	<string name="channel_watch_next">Watch Next</string>
-	<string name="channel_no_channels">Channels from your apps will appear here</string>
+	<string
+        name="channel_no_channels"
+    >Channels from your apps will appear here</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Launcher settings</string>
 	<string name="input_switch">Switch input</string>
@@ -21,13 +23,17 @@
 	<!-- Settings -->
 	<string name="settings_app_card_size">App Card Size: %1$d dp</string>
 	<string name="settings_channel_card_size">Channel Card Size: %1$d dp</string>
-	<string name="settings_show_mobile_apps_description">Show apps without TV interface</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >Show apps without TV interface</string>
 	<string name="settings_inputs">Inputs</string>
 	<string name="settings_no_inputs">No inputs found</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remove from Watch Next</string>
-	<string name="watch_next_no_apps">No apps support this feature on this TV</string>
+	<string
+        name="watch_next_no_apps"
+    >No apps support this feature on this TV</string>
 
 	<!-- App options -->
 	<string name="app_options">App Options</string>
@@ -39,9 +45,13 @@
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
 	<string name="app_hint_options">Hold OK for options</string>
-	<string name="app_moving_instructions">Use arrows to move • OK to confirm</string>
+	<string
+        name="app_moving_instructions"
+    >Use arrows to move • OK to confirm</string>
 	<string name="channel_hint_options">Hold OK for options</string>
-	<string name="channel_moving_instructions">Use ↑↓ to move • OK to confirm</string>
+	<string
+        name="channel_moving_instructions"
+    >Use ↑↓ to move • OK to confirm</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Show mobile apps</string>
@@ -49,9 +59,13 @@
 
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">No Apps</string>
-	<string name="empty_no_apps_message">No apps found. Install some apps to get started.</string>
+	<string
+        name="empty_no_apps_message"
+    >No apps found. Install some apps to get started.</string>
 	<string name="empty_no_channels_title">No Channels</string>
-	<string name="empty_no_channels_message">Channels from your apps will appear here.</string>
+	<string
+        name="empty_no_channels_message"
+    >Channels from your apps will appear here.</string>
 
 	<!-- Backup/Restore -->
 	<string name="backup">Backup</string>
@@ -62,28 +76,40 @@
 	<string name="restore_failed">Restore failed</string>
 	<string name="restore_not_found">No backup file found</string>
 	<string name="backup_permission_title">Storage Permission Required</string>
-	<string name="backup_permission_message">Please enable storage permissions for TV Launcher to backup and restore your settings. Open Settings > Permissions, then enable "Files and media" or "All files access" permission.</string>
+	<string
+        name="backup_permission_message"
+    >Please enable storage permissions for TV Launcher to backup and restore your settings. Open Settings > Permissions, then enable "Files and media" or "All files access" permission.</string>
 	<string name="backup_permission_open_settings">Open Settings</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Reset Settings</string>
-	<string name="settings_reset_description">Clear all preferences and restore defaults</string>
+	<string
+        name="settings_reset_description"
+    >Clear all preferences and restore defaults</string>
 	<string name="settings_reset_success">Settings reset to default</string>
 	<string name="settings_reset_confirm_title">Reset Settings?</string>
-	<string name="settings_reset_confirm_message">This will clear all your preferences and restore defaults. This action cannot be undone.</string>
+	<string
+        name="settings_reset_confirm_message"
+    >This will clear all your preferences and restore defaults. This action cannot be undone.</string>
 	<string name="settings_reset_confirm_button">Reset</string>
 	<string name="cancel">Cancel</string>
 
 	<!-- Animations -->
 	<string name="settings_animations">Animations</string>
 	<string name="settings_enable_animations">Enable All Animations</string>
-	<string name="settings_enable_animations_description">Toggle all visual effects</string>
+	<string
+        name="settings_enable_animations_description"
+    >Toggle all visual effects</string>
 	<string name="settings_anim_app_icon">App Icon Animations</string>
 	<string name="settings_anim_app_icon_desc">Marquee text on focus</string>
 	<string name="settings_anim_channel_row">Channel Row Animations</string>
-	<string name="settings_anim_channel_row_desc">Scale and fade effects on focus</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Scale and fade effects on focus</string>
 	<string name="settings_anim_channel_move">Channel Movement</string>
-	<string name="settings_anim_channel_move_desc">Smooth reordering of channels</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Smooth reordering of channels</string>
 	<string name="settings_anim_app_move">App Movement</string>
 	<string name="settings_anim_app_move_desc">Smooth reordering of apps</string>
 
@@ -96,7 +122,9 @@
 	<string name="settings_clock_position_end">End (right side)</string>
 	<string name="settings_clock_position_hidden">Hidden</string>
 	<string name="settings_toolbar_buttons">Toolbar Buttons</string>
-	<string name="settings_toolbar_buttons_description">Enable/disable and reorder toolbar buttons</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >Enable/disable and reorder toolbar buttons</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Clock</string>
@@ -109,13 +137,21 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Channel Settings</string>
 	<string name="settings_channel_cards_per_row">Cards per Row: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Limit cards displayed per channel to improve performance (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >Limit cards displayed per channel to improve performance (3–20)</string>
 
 	<!-- Crash Recovery -->
-	<string name="crash_recovery_title">TV Launcher Recovery</string>
-	<string name="crash_recovery_message">The launcher has crashed multiple times. This may be caused by corrupted data or incompatible settings after an update. Choose a recovery option below:</string>
+	<string name="crash_recovery_title">TV Launcher Needs Recovery</string>
+	<string
+        name="crash_recovery_message"
+    >The launcher crashed multiple times and cannot start normally.\n\nChoose an option below to fix the problem:</string>
 	<string name="crash_recovery_reset_settings">Reset Settings</string>
-	<string name="crash_recovery_open_app_settings">Open System Settings</string>
-	<string name="crash_recovery_clear_data">Clear All Data &amp; Restart</string>
-	<string name="crash_recovery_try_again_hint">After clearing data in Settings, the app will restart automatically.</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >Resets all preferences to defaults. Apps and channels will appear after a few seconds.</string>
+	<string name="crash_recovery_open_app_settings">Open App Settings</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >Opens system settings. Select \"Storage\" → \"Clear Data\" to fully reset. This will remove all app data and permissions</string>
 </resources>

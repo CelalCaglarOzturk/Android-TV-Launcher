@@ -2,7 +2,9 @@
 	<string name="app_name">TV Launcher</string>
 	<string name="settings">Ayarlar</string>
     <string name="channel_watch_next">Sıradakini Oynat</string>
-	<string name="channel_no_channels">Uygulamalarınızdan kanallar burada görünecek</string>
+	<string
+        name="channel_no_channels"
+    >Uygulamalarınızdan kanallar burada görünecek</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Başlatıcı ayarları</string>
 	<string name="input_switch">Girişi değiştir</string>
@@ -74,7 +76,9 @@
         name="settings_anim_channel_move_desc"
     >Kanalların düzgün yeniden sıralanması</string>
 	<string name="settings_anim_app_move">Uygulama Taşıma</string>
-	<string name="settings_anim_app_move_desc">Uygulamaların düzgün yeniden sıralanması</string>
+	<string
+        name="settings_anim_app_move_desc"
+    >Uygulamaların düzgün yeniden sıralanması</string>
 
 	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">Araç Çubuğu Konumu</string>
@@ -85,7 +89,9 @@
 	<string name="settings_clock_position_end">Bitiş (sağ taraf)</string>
 	<string name="settings_clock_position_hidden">Gizli</string>
 	<string name="settings_toolbar_buttons">Araç Çubuğu Düğmeleri</string>
-	<string name="settings_toolbar_buttons_description">Araç çubuğu düğmelerini etkinleştir/devre dışı bırak ve sırala</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >Araç çubuğu düğmelerini etkinleştir/devre dışı bırak ve sırala</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Saat</string>
@@ -98,36 +104,58 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Kanal Ayarları</string>
 	<string name="settings_channel_cards_per_row">Satır Başına Kart: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Performansı artırmak için kanal başına görüntülenen kart sayısını sınırla (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >Performansı artırmak için kanal başına görüntülenen kart sayısını sınırla (3–20)</string>
 
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">Uygulama Yok</string>
-	<string name="empty_no_apps_message">Uygulama bulunamadı. Başlamak için uygulama yükleyin.</string>
+	<string
+        name="empty_no_apps_message"
+    >Uygulama bulunamadı. Başlamak için uygulama yükleyin.</string>
 	<string name="empty_no_channels_title">Kanal Yok</string>
-	<string name="empty_no_channels_message">Uygulamalarınızdan kanallar burada görünecek.</string>
+	<string
+        name="empty_no_channels_message"
+    >Uygulamalarınızdan kanallar burada görünecek.</string>
 
 	<!-- Additional -->
 	<string name="notifications">Bildirimler</string>
 	<string name="wifi">Ağ ve İnternet</string>
 	<string name="settings_no_inputs">Giriş bulunamadı</string>
-	<string name="watch_next_no_apps">Bu TV\'de bu özelliği destekleyen uygulama yok</string>
+	<string
+        name="watch_next_no_apps"
+    >Bu TV\'de bu özelliği destekleyen uygulama yok</string>
 	<string name="app_hint_options">Seçenekler için OK\'yi basılı tutun</string>
-	<string name="app_moving_instructions">Taşımak için oklar • Onaylamak için OK</string>
+	<string
+        name="app_moving_instructions"
+    >Taşımak için oklar • Onaylamak için OK</string>
 	<string name="channel_hint_options">Seçenekler için OK\'yi basılı tutun</string>
-	<string name="channel_moving_instructions">Taşımak için ↑↓ • Onaylamak için OK</string>
+	<string
+        name="channel_moving_instructions"
+    >Taşımak için ↑↓ • Onaylamak için OK</string>
 	<string name="backup_permission_title">Depolama İzni Gerekli</string>
-	<string name="backup_permission_message">TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama izinlerini etkinleştirin. Ayarlar > İzinler\'i açın ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
+	<string
+        name="backup_permission_message"
+    >TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama izinlerini etkinleştirin. Ayarlar > İzinler\'i açın ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
 	<string name="backup_permission_open_settings">Ayarları Aç</string>
 	<string name="settings_reset_confirm_title">Ayarları Sıfırla?</string>
-	<string name="settings_reset_confirm_message">Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
+	<string
+        name="settings_reset_confirm_message"
+    >Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
 	<string name="settings_reset_confirm_button">Sıfırla</string>
 	<string name="cancel">İptal</string>
 
 	<!-- Crash Recovery -->
-	<string name="crash_recovery_title">TV Launcher Kurtarma</string>
-	<string name="crash_recovery_message">Başlatıcı birden çok kez çöktü. Bu, güncellemeden sonra bozuk veriler veya uyumsuz ayarlardan kaynaklanıyor olabilir. Aşağıdan bir kurtarma seçeneği seçin:</string>
+	<string name="crash_recovery_title">TV Launcher Kurtarma Gerekiyor</string>
+	<string
+        name="crash_recovery_message"
+    >Başlatıcı birden çok kez çöktü ve normal başlatılamıyor.\n\nSorunu çözmek için aşağıdan bir seçenek seçin:</string>
 	<string name="crash_recovery_reset_settings">Ayarları Sıfırla</string>
-	<string name="crash_recovery_open_app_settings">Sistem Ayarlarını Aç</string>
-	<string name="crash_recovery_clear_data">Tüm Verileri Temizle ve Yeniden Başlat</string>
-	<string name="crash_recovery_try_again_hint">Ayarlardan verileri temizledikten sonra uygulama otomatik olarak yeniden başlayacaktır.</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >Tüm tercihleri varsayılana sıfırlar. Uygulamalar ve kanallar birkaç saniye içinde görünecektir.</string>
+	<string name="crash_recovery_open_app_settings">Uygulama Ayarlarını Aç</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >Sistem ayarlarını açar. \"Depolama\" → \"Verileri Temizle\" seçeneğini seçin. Bu uygulamanın tüm verileri ve izinleri kaldırır.</string>
 </resources>

@@ -8,8 +8,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -46,7 +48,7 @@ class CrashRecoveryActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(32.dp)
+                        .padding(48.dp)
                         .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -61,64 +63,67 @@ class CrashRecoveryActivity : ComponentActivity() {
                         text = stringResource(R.string.crash_recovery_message),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
+                        modifier = Modifier.padding(top = 16.dp)
                     )
                     
+                    Spacer(modifier = Modifier.height(32.dp))
+                    
                     Column(
-                        modifier = Modifier.fillMaxWidth(0.7f),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(
-                            onClick = { resetSettingsAndRestart() },
+                        Column(
                             modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.colors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            )
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Button(
+                                onClick = { resetSettingsAndRestart() },
+                                modifier = Modifier.fillMaxWidth(0.9f),
+                                colors = ButtonDefaults.colors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.crash_recovery_reset_settings),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(vertical = 12.dp)
+                                )
+                            }
                             Text(
-                                text = stringResource(R.string.crash_recovery_reset_settings),
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        
-                        Button(
-                            onClick = { openAppSettings() },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.colors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer
-                            )
-                        ) {
-                            Text(
-                                text = stringResource(R.string.crash_recovery_open_app_settings),
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
-                        
-                        Button(
-                            onClick = { clearDataAndRestart() },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.colors(
-                                containerColor = Color(0xFFB3261E),
-                                contentColor = Color.White
-                            )
-                        ) {
-                            Text(
-                                text = stringResource(R.string.crash_recovery_clear_data),
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(vertical = 8.dp)
+                                text = stringResource(R.string.crash_recovery_reset_settings_desc),
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                modifier = Modifier.padding(top = 8.dp)
                             )
                         }
 
-                        Text(
-                            text = stringResource(R.string.crash_recovery_try_again_hint),
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                            modifier = Modifier.padding(top = 16.dp)
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Button(
+                                onClick = { openAppSettings() },
+                                modifier = Modifier.fillMaxWidth(0.9f),
+                                colors = ButtonDefaults.colors(
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                                )
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.crash_recovery_open_app_settings),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(vertical = 12.dp)
+                                )
+                            }
+                            Text(
+                                text = stringResource(R.string.crash_recovery_open_app_settings_desc),
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -128,7 +133,7 @@ class CrashRecoveryActivity : ComponentActivity() {
     private fun resetSettingsAndRestart() {
         try {
             val settingsPrefs = getSharedPreferences("launcher_settings", MODE_PRIVATE)
-            settingsPrefs.edit().clear().apply()
+            settingsPrefs.edit().clear().commit()
             
             deleteDatabase("data.db")
             
@@ -140,12 +145,8 @@ class CrashRecoveryActivity : ComponentActivity() {
         }
     }
     
-    private fun clearDataAndRestart() {
-        CrashHandler.clearCrashHistory(this)
-        openAppSettings()
-    }
-    
     private fun openAppSettings() {
+        CrashHandler.clearCrashHistory(this)
         try {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                 data = Uri.parse("package:$packageName")
