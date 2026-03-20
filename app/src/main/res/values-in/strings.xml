@@ -4,7 +4,9 @@
 	<string name="notifications">Notifikasi</string>
 	<string name="wifi">Jaringan dan Internet</string>
 	<string name="channel_watch_next">Tonton Berikutnya</string>
-	<string name="channel_no_channels">Saluran dari aplikasi Anda akan muncul di sini</string>
+	<string
+        name="channel_no_channels"
+    >Saluran dari aplikasi Anda akan muncul di sini</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Pengaturan Peluncur</string>
 	<string name="input_switch">Ganti input</string>
@@ -21,13 +23,17 @@
 	<!-- Settings -->
 	<string name="settings_app_card_size">Ukuran Kartu Aplikasi: %1$d dp</string>
 	<string name="settings_channel_card_size">Ukuran Kartu Saluran: %1$d dp</string>
-	<string name="settings_show_mobile_apps_description">Tampilkan aplikasi tanpa antarmuka TV</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >Tampilkan aplikasi tanpa antarmuka TV</string>
 	<string name="settings_inputs">Input</string>
 	<string name="settings_no_inputs">Tidak ada input ditemukan</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Hapus dari Tonton Berikutnya</string>
-	<string name="watch_next_no_apps">Tidak ada aplikasi yang mendukung fitur ini di TV ini</string>
+	<string
+        name="watch_next_no_apps"
+    >Tidak ada aplikasi yang mendukung fitur ini di TV ini</string>
 
 	<!-- App options -->
 	<string name="app_options">Opsi Aplikasi</string>
@@ -38,10 +44,12 @@
 	<string name="app_remove_from_home">Hapus dari Beranda</string>
 	<string name="app_hide">Sembunyikan Aplikasi</string>
 	<string name="app_unhide">Tampilkan Aplikasi</string>
-	<string name="app_hint_options">Tahan OK untuk opsi</string>
-	<string name="app_moving_instructions">Gunakan panah untuk memindahkan • OK untuk konfirmasi</string>
-	<string name="channel_hint_options">Tahan OK untuk opsi</string>
-	<string name="channel_moving_instructions">Gunakan ↑↓ untuk memindahkan • OK untuk konfirmasi</string>
+	<string
+        name="app_moving_instructions"
+    >Gunakan panah untuk memindahkan • OK untuk konfirmasi</string>
+	<string
+        name="channel_moving_instructions"
+    >Gunakan ↑↓ untuk memindahkan • OK untuk konfirmasi</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Tampilkan aplikasi seluler</string>
@@ -49,9 +57,13 @@
 
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">Tidak Ada Aplikasi</string>
-	<string name="empty_no_apps_message">Tidak ada aplikasi ditemukan. Instal beberapa aplikasi untuk memulai.</string>
+	<string
+        name="empty_no_apps_message"
+    >Tidak ada aplikasi ditemukan. Instal beberapa aplikasi untuk memulai.</string>
 	<string name="empty_no_channels_title">Tidak Ada Saluran</string>
-	<string name="empty_no_channels_message">Saluran dari aplikasi Anda akan muncul di sini.</string>
+	<string
+        name="empty_no_channels_message"
+    >Saluran dari aplikasi Anda akan muncul di sini.</string>
 
 	<!-- Backup/Restore -->
 	<string name="backup">Cadangan</string>
@@ -62,30 +74,44 @@
 	<string name="restore_failed">Pemulihan gagal</string>
 	<string name="restore_not_found">File cadangan tidak ditemukan</string>
 	<string name="backup_permission_title">Izin Penyimpanan Diperlukan</string>
-	<string name="backup_permission_message">Harap aktifkan izin penyimpanan untuk TV Launcher untuk mencadangkan dan memulihkan pengaturan Anda. Buka Pengaturan > Izin, lalu aktifkan "File dan media" atau "Akses ke semua file".</string>
+	<string
+        name="backup_permission_message"
+    >Harap aktifkan izin penyimpanan untuk TV Launcher untuk mencadangkan dan memulihkan pengaturan Anda. Buka Pengaturan > Izin, lalu aktifkan "File dan media" atau "Akses ke semua file".</string>
 	<string name="backup_permission_open_settings">Buka Pengaturan</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Reset Pengaturan</string>
-	<string name="settings_reset_description">Hapus semua preferensi dan kembalikan ke default</string>
+	<string
+        name="settings_reset_description"
+    >Hapus semua preferensi dan kembalikan ke default</string>
 	<string name="settings_reset_success">Pengaturan direset ke default</string>
 	<string name="settings_reset_confirm_title">Reset Pengaturan?</string>
-	<string name="settings_reset_confirm_message">Ini akan menghapus semua preferensi Anda dan mengembalikan ke default. Tindakan ini tidak dapat dibatalkan.</string>
+	<string
+        name="settings_reset_confirm_message"
+    >Ini akan menghapus semua preferensi Anda dan mengembalikan ke default. Tindakan ini tidak dapat dibatalkan.</string>
 	<string name="settings_reset_confirm_button">Reset</string>
 	<string name="cancel">Batal</string>
 
 	<!-- Animations -->
 	<string name="settings_animations">Animasi</string>
 	<string name="settings_enable_animations">Aktifkan Semua Animasi</string>
-	<string name="settings_enable_animations_description">Alihkan semua efek visual</string>
+	<string
+        name="settings_enable_animations_description"
+    >Alihkan semua efek visual</string>
 	<string name="settings_anim_app_icon">Animasi Ikon Aplikasi</string>
 	<string name="settings_anim_app_icon_desc">Teks berjalan saat fokus</string>
 	<string name="settings_anim_channel_row">Animasi Baris Saluran</string>
-	<string name="settings_anim_channel_row_desc">Efek skala dan pudar saat fokus</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Efek skala dan pudar saat fokus</string>
 	<string name="settings_anim_channel_move">Gerakan Saluran</string>
-	<string name="settings_anim_channel_move_desc">Pengurutan ulang saluran yang halus</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Pengurutan ulang saluran yang halus</string>
 	<string name="settings_anim_app_move">Gerakan Aplikasi</string>
-	<string name="settings_anim_app_move_desc">Pengurutan ulang aplikasi yang halus</string>
+	<string
+        name="settings_anim_app_move_desc"
+    >Pengurutan ulang aplikasi yang halus</string>
 
 	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">Penempatan Toolbar</string>
@@ -96,7 +122,9 @@
 	<string name="settings_clock_position_end">Akhir (sisi kanan)</string>
 	<string name="settings_clock_position_hidden">Tersembunyi</string>
 	<string name="settings_toolbar_buttons">Tombol Toolbar</string>
-	<string name="settings_toolbar_buttons_description">Aktifkan/nonaktifkan danurutkan ulang tombol toolbar</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >Aktifkan/nonaktifkan danurutkan ulang tombol toolbar</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Jam</string>
@@ -109,13 +137,23 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Pengaturan Saluran</string>
 	<string name="settings_channel_cards_per_row">Kartu per Baris: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Batasi kartu yang ditampilkan per saluran untuk meningkatkan kinerja (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >Batasi kartu yang ditampilkan per saluran untuk meningkatkan kinerja (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher Perlu Pemulihan</string>
-	<string name="crash_recovery_message">PELUNCUR telah crash beberapa kali dan tidak dapat dimulai secara normal.\n\nPilih opsi di bawah untuk memperbaiki masalah:</string>
+	<string
+        name="crash_recovery_message"
+    >PELUNCUR telah crash beberapa kali dan tidak dapat dimulai secara normal.\n\nPilih opsi di bawah untuk memperbaiki masalah:</string>
 	<string name="crash_recovery_reset_settings">Reset Pengaturan</string>
-	<string name="crash_recovery_reset_settings_desc">Mengatur ulang semua preferensi ke default. Aplikasi dan saluran akan muncul dalam beberapa detik.</string>
-	<string name="crash_recovery_open_app_settings">Buka Pengaturan Aplikasi</string>
-	<string name="crash_recovery_open_app_settings_desc">Membuka pengaturan sistem. Pilih "Penyimpanan" → "Hapus Data" untuk reset penuh. Ini akan menghapus semua data dan izin aplikasi</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >Mengatur ulang semua preferensi ke default. Aplikasi dan saluran akan muncul dalam beberapa detik.</string>
+	<string
+        name="crash_recovery_open_app_settings"
+    >Buka Pengaturan Aplikasi</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >Membuka pengaturan sistem. Pilih "Penyimpanan" → "Hapus Data" untuk reset penuh. Ini akan menghapus semua data dan izin aplikasi</string>
 </resources>

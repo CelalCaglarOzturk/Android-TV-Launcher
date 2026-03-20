@@ -48,8 +48,14 @@
 	<string name="restore">Geri Yükle</string>
 	<string name="backup_success">Yedekleme başarılı</string>
 	<string name="backup_failed">Yedekleme başarısız</string>
+	<string
+        name="backup_failed_permission"
+    >Yedekleme başarısız: Depolama izni gerekli</string>
 	<string name="restore_success">Geri yükleme başarılı</string>
 	<string name="restore_failed">Geri yükleme başarısız</string>
+	<string
+        name="restore_failed_permission"
+    >Geri yükleme başarısız: Depolama izni gerekli</string>
 	<string name="restore_not_found">Yedek dosyası bulunamadı</string>
 
 	<!-- Reset Settings -->
@@ -125,19 +131,17 @@
 	<string
         name="watch_next_no_apps"
     >Bu TV\'de bu özelliği destekleyen uygulama yok</string>
-	<string name="app_hint_options">Seçenekler için OK\'yi basılı tutun</string>
 	<string
         name="app_moving_instructions"
     >Taşımak için oklar • Onaylamak için OK</string>
-	<string name="channel_hint_options">Seçenekler için OK\'yi basılı tutun</string>
 	<string
         name="channel_moving_instructions"
     >Taşımak için ↑↓ • Onaylamak için OK</string>
 	<string name="backup_permission_title">Depolama İzni Gerekli</string>
 	<string
         name="backup_permission_message"
-    >TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama izinlerini etkinleştirin. Ayarlar > İzinler\'i açın ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
-	<string name="backup_permission_open_settings">Ayarları Aç</string>
+    >TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama erişimi gerekiyor.\n\nLütfen Uygulama Bilgileri > İzinler\'e gidin ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
+	<string name="backup_permission_open_settings">Uygulama Bilgilerini Aç</string>
 	<string name="settings_reset_confirm_title">Ayarları Sıfırla?</string>
 	<string
         name="settings_reset_confirm_message"

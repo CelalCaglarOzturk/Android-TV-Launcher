@@ -4,7 +4,9 @@
 	<string name="notifications">Benachrichtigungen</string>
 	<string name="wifi">Netzwerk und Internet</string>
 	<string name="channel_watch_next">Watch Next</string>
-	<string name="channel_no_channels">Kanäle aus Ihren Apps erscheinen hier</string>
+	<string
+        name="channel_no_channels"
+    >Kanäle aus Ihren Apps erscheinen hier</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Launcher-Einstellungen</string>
 	<string name="input_switch">Eingang wechseln</string>
@@ -21,13 +23,17 @@
 	<!-- Settings -->
 	<string name="settings_app_card_size">App-Kartengröße: %1$d dp</string>
 	<string name="settings_channel_card_size">Kanal-Kartengröße: %1$d dp</string>
-	<string name="settings_show_mobile_apps_description">Apps ohne TV-Oberfläche anzeigen</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >Apps ohne TV-Oberfläche anzeigen</string>
 	<string name="settings_inputs">Eingänge</string>
 	<string name="settings_no_inputs">Keine Eingänge gefunden</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Aus Watch Next entfernen</string>
-	<string name="watch_next_no_apps">Keine Apps unterstützen diese Funktion auf diesem TV</string>
+	<string
+        name="watch_next_no_apps"
+    >Keine Apps unterstützen diese Funktion auf diesem TV</string>
 
 	<!-- App options -->
 	<string name="app_options">App-Optionen</string>
@@ -38,10 +44,12 @@
 	<string name="app_remove_from_home">Von Startseite entfernen</string>
 	<string name="app_hide">App ausblenden</string>
 	<string name="app_unhide">App einblenden</string>
-	<string name="app_hint_options">OK gedrückt halten für Optionen</string>
-	<string name="app_moving_instructions">Pfeile zum Verschieben • OK zum Bestätigen</string>
-	<string name="channel_hint_options">OK gedrückt halten für Optionen</string>
-	<string name="channel_moving_instructions">↑↓ zum Verschieben • OK zum Bestätigen</string>
+	<string
+        name="app_moving_instructions"
+    >Pfeile zum Verschieben • OK zum Bestätigen</string>
+	<string
+        name="channel_moving_instructions"
+    >↑↓ zum Verschieben • OK zum Bestätigen</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Mobile Apps anzeigen</string>
@@ -49,41 +57,63 @@
 
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">Keine Apps</string>
-	<string name="empty_no_apps_message">Keine Apps gefunden. Installieren Sie Apps, um zu beginnen.</string>
+	<string
+        name="empty_no_apps_message"
+    >Keine Apps gefunden. Installieren Sie Apps, um zu beginnen.</string>
 	<string name="empty_no_channels_title">Keine Kanäle</string>
-	<string name="empty_no_channels_message">Kanäle aus Ihren Apps erscheinen hier.</string>
+	<string
+        name="empty_no_channels_message"
+    >Kanäle aus Ihren Apps erscheinen hier.</string>
 
 	<!-- Backup/Restore -->
 	<string name="backup">Sicherung</string>
 	<string name="restore">Wiederherstellen</string>
 	<string name="backup_success">Sicherung erfolgreich abgeschlossen</string>
 	<string name="backup_failed">Sicherung fehlgeschlagen</string>
-	<string name="restore_success">Wiederherstellung erfolgreich abgeschlossen</string>
+	<string
+        name="restore_success"
+    >Wiederherstellung erfolgreich abgeschlossen</string>
 	<string name="restore_failed">Wiederherstellung fehlgeschlagen</string>
 	<string name="restore_not_found">Sicherungsdatei nicht gefunden</string>
-	<string name="backup_permission_title">Speicherberechtigung erforderlich</string>
-	<string name="backup_permission_message">Bitte aktivieren Sie die Speicherberechtigungen für TV Launcher, um Ihre Einstellungen zu sichern und wiederherzustellen. Öffnen Sie Einstellungen > Berechtigungen und aktivieren Sie "Dateien und Medien" oder "Zugriff auf alle Dateien".</string>
+	<string
+        name="backup_permission_title"
+    >Speicherberechtigung erforderlich</string>
+	<string
+        name="backup_permission_message"
+    >Bitte aktivieren Sie die Speicherberechtigungen für TV Launcher, um Ihre Einstellungen zu sichern und wiederherzustellen. Öffnen Sie Einstellungen > Berechtigungen und aktivieren Sie "Dateien und Medien" oder "Zugriff auf alle Dateien".</string>
 	<string name="backup_permission_open_settings">Einstellungen öffnen</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Einstellungen zurücksetzen</string>
-	<string name="settings_reset_description">Alle Einstellungen löschen und Standardwerte wiederherstellen</string>
-	<string name="settings_reset_success">Einstellungen auf Standardwerte zurückgesetzt</string>
+	<string
+        name="settings_reset_description"
+    >Alle Einstellungen löschen und Standardwerte wiederherstellen</string>
+	<string
+        name="settings_reset_success"
+    >Einstellungen auf Standardwerte zurückgesetzt</string>
 	<string name="settings_reset_confirm_title">Einstellungen zurücksetzen?</string>
-	<string name="settings_reset_confirm_message">Dadurch werden alle Ihre Einstellungen gelöscht und die Standardwerte wiederhergestellt. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+	<string
+        name="settings_reset_confirm_message"
+    >Dadurch werden alle Ihre Einstellungen gelöscht und die Standardwerte wiederhergestellt. Diese Aktion kann nicht rückgängig gemacht werden.</string>
 	<string name="settings_reset_confirm_button">Zurücksetzen</string>
 	<string name="cancel">Abbrechen</string>
 
 	<!-- Animations -->
 	<string name="settings_animations">Animationen</string>
 	<string name="settings_enable_animations">Alle Animationen aktivieren</string>
-	<string name="settings_enable_animations_description">Alle visuellen Effekte umschalten</string>
+	<string
+        name="settings_enable_animations_description"
+    >Alle visuellen Effekte umschalten</string>
 	<string name="settings_anim_app_icon">App-Symbol-Animationen</string>
 	<string name="settings_anim_app_icon_desc">Laufschrift bei Fokus</string>
 	<string name="settings_anim_channel_row">Kanalreihen-Animationen</string>
-	<string name="settings_anim_channel_row_desc">Skalierungs- und Überblendeffekte bei Fokus</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Skalierungs- und Überblendeffekte bei Fokus</string>
 	<string name="settings_anim_channel_move">Kanalbewegung</string>
-	<string name="settings_anim_channel_move_desc">Sanftes Neuanordnen von Kanälen</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Sanftes Neuanordnen von Kanälen</string>
 	<string name="settings_anim_app_move">App-Bewegung</string>
 	<string name="settings_anim_app_move_desc">Sanftes Neuanordnen von Apps</string>
 
@@ -96,7 +126,9 @@
 	<string name="settings_clock_position_end">Ende (rechts)</string>
 	<string name="settings_clock_position_hidden">Ausgeblendet</string>
 	<string name="settings_toolbar_buttons">Werkzeugleistenschaltflächen</string>
-	<string name="settings_toolbar_buttons_description">Werkzeugleistenschaltflächen aktivieren/deaktivieren und neu anordnen</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >Werkzeugleistenschaltflächen aktivieren/deaktivieren und neu anordnen</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Uhr</string>
@@ -109,13 +141,25 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Kanaleinstellungen</string>
 	<string name="settings_channel_cards_per_row">Karten pro Reihe: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Angezeigte Karten pro Kanal begrenzen zur Leistungsverbesserung (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >Angezeigte Karten pro Kanal begrenzen zur Leistungsverbesserung (3–20)</string>
 
 	<!-- Crash Recovery -->
-	<string name="crash_recovery_title">TV Launcher benötigt Wiederherstellung</string>
-	<string name="crash_recovery_message">Der Launcher ist mehrfach abgestürzt und kann nicht normal gestartet werden.\n\nWählen Sie unten eine Option zur Behebung des Problems:</string>
+	<string
+        name="crash_recovery_title"
+    >TV Launcher benötigt Wiederherstellung</string>
+	<string
+        name="crash_recovery_message"
+    >Der Launcher ist mehrfach abgestürzt und kann nicht normal gestartet werden.\n\nWählen Sie unten eine Option zur Behebung des Problems:</string>
 	<string name="crash_recovery_reset_settings">Einstellungen zurücksetzen</string>
-	<string name="crash_recovery_reset_settings_desc">Setzt alle Einstellungen auf Standardwerte zurück. Apps und Kanäle erscheinen nach wenigen Sekunden.</string>
-	<string name="crash_recovery_open_app_settings">App-Einstellungen öffnen</string>
-	<string name="crash_recovery_open_app_settings_desc">Öffnet die Systemeinstellungen. Wählen Sie "Speicher" → "Daten löschen" für vollständiges Zurücksetzen. Dies entfernt alle App-Daten und Berechtigungen</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >Setzt alle Einstellungen auf Standardwerte zurück. Apps und Kanäle erscheinen nach wenigen Sekunden.</string>
+	<string
+        name="crash_recovery_open_app_settings"
+    >App-Einstellungen öffnen</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >Öffnet die Systemeinstellungen. Wählen Sie "Speicher" → "Daten löschen" für vollständiges Zurücksetzen. Dies entfernt alle App-Daten und Berechtigungen</string>
 </resources>

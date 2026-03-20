@@ -44,11 +44,9 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
-	<string name="app_hint_options">Hold OK for options</string>
 	<string
         name="app_moving_instructions"
     >Use arrows to move • OK to confirm</string>
-	<string name="channel_hint_options">Hold OK for options</string>
 	<string
         name="channel_moving_instructions"
     >Use ↑↓ to move • OK to confirm</string>
@@ -72,14 +70,20 @@
 	<string name="restore">Restore</string>
 	<string name="backup_success">Backup completed successfully</string>
 	<string name="backup_failed">Backup failed</string>
+	<string
+        name="backup_failed_permission"
+    >Backup failed: Storage permission required</string>
 	<string name="restore_success">Restore completed successfully</string>
 	<string name="restore_failed">Restore failed</string>
+	<string
+        name="restore_failed_permission"
+    >Restore failed: Storage permission required</string>
 	<string name="restore_not_found">No backup file found</string>
 	<string name="backup_permission_title">Storage Permission Required</string>
 	<string
         name="backup_permission_message"
-    >Please enable storage permissions for TV Launcher to backup and restore your settings. Open Settings > Permissions, then enable "Files and media" or "All files access" permission.</string>
-	<string name="backup_permission_open_settings">Open Settings</string>
+    >TV Launcher needs storage access to backup and restore your settings.\n\nPlease go to App Info > Permissions and enable "Files and media" or "All files access".</string>
+	<string name="backup_permission_open_settings">Open App Info</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Reset Settings</string>

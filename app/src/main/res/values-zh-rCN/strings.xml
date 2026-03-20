@@ -21,7 +21,9 @@
 	<!-- Settings -->
 	<string name="settings_app_card_size">应用卡片大小: %1$d dp</string>
 	<string name="settings_channel_card_size">频道卡片大小: %1$d dp</string>
-	<string name="settings_show_mobile_apps_description">显示没有电视界面的应用</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >显示没有电视界面的应用</string>
 	<string name="settings_inputs">输入</string>
 	<string name="settings_no_inputs">未找到输入</string>
 
@@ -38,9 +40,7 @@
 	<string name="app_remove_from_home">从首页移除</string>
 	<string name="app_hide">隐藏应用</string>
 	<string name="app_unhide">取消隐藏</string>
-	<string name="app_hint_options">长按确定键查看选项</string>
 	<string name="app_moving_instructions">使用方向键移动 • 按确定确认</string>
-	<string name="channel_hint_options">长按确定键查看选项</string>
 	<string name="channel_moving_instructions">使用↑↓移动 • 按确定确认</string>
 
 	<!-- Apps Tab -->
@@ -62,7 +62,9 @@
 	<string name="restore_failed">恢复失败</string>
 	<string name="restore_not_found">未找到备份文件</string>
 	<string name="backup_permission_title">需要存储权限</string>
-	<string name="backup_permission_message">请为电视启动器启用存储权限以备份和恢复设置。打开设置 > 权限，然后启用"文件和媒体"或"所有文件访问"权限。</string>
+	<string
+        name="backup_permission_message"
+    >请为电视启动器启用存储权限以备份和恢复设置。打开设置 > 权限，然后启用"文件和媒体"或"所有文件访问"权限。</string>
 	<string name="backup_permission_open_settings">打开设置</string>
 
 	<!-- Reset Settings -->
@@ -70,7 +72,9 @@
 	<string name="settings_reset_description">清除所有偏好设置并恢复默认值</string>
 	<string name="settings_reset_success">设置已重置为默认值</string>
 	<string name="settings_reset_confirm_title">重置设置？</string>
-	<string name="settings_reset_confirm_message">这将清除所有偏好设置并恢复默认值。此操作无法撤消。</string>
+	<string
+        name="settings_reset_confirm_message"
+    >这将清除所有偏好设置并恢复默认值。此操作无法撤消。</string>
 	<string name="settings_reset_confirm_button">重置</string>
 	<string name="cancel">取消</string>
 
@@ -81,7 +85,9 @@
 	<string name="settings_anim_app_icon">应用图标动画</string>
 	<string name="settings_anim_app_icon_desc">聚焦时显示跑马灯文字</string>
 	<string name="settings_anim_channel_row">频道行动画</string>
-	<string name="settings_anim_channel_row_desc">聚焦时的缩放和淡入淡出效果</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >聚焦时的缩放和淡入淡出效果</string>
 	<string name="settings_anim_channel_move">频道移动</string>
 	<string name="settings_anim_channel_move_desc">频道平滑重新排序</string>
 	<string name="settings_anim_app_move">应用移动</string>
@@ -96,7 +102,9 @@
 	<string name="settings_clock_position_end">结束位置（右侧）</string>
 	<string name="settings_clock_position_hidden">隐藏</string>
 	<string name="settings_toolbar_buttons">工具栏按钮</string>
-	<string name="settings_toolbar_buttons_description">启用/禁用和重新排序工具栏按钮</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >启用/禁用和重新排序工具栏按钮</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">时钟</string>
@@ -109,13 +117,21 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">频道设置</string>
 	<string name="settings_channel_cards_per_row">每行卡片数: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">限制每个频道显示的卡片数量以提高性能 (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >限制每个频道显示的卡片数量以提高性能 (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">电视启动器需要恢复</string>
-	<string name="crash_recovery_message">启动器多次崩溃，无法正常启动。\n\n请选择以下选项之一来修复问题：</string>
+	<string
+        name="crash_recovery_message"
+    >启动器多次崩溃，无法正常启动。\n\n请选择以下选项之一来修复问题：</string>
 	<string name="crash_recovery_reset_settings">重置设置</string>
-	<string name="crash_recovery_reset_settings_desc">将所有偏好设置重置为默认值。应用和频道将在几秒钟后出现。</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >将所有偏好设置重置为默认值。应用和频道将在几秒钟后出现。</string>
 	<string name="crash_recovery_open_app_settings">打开应用设置</string>
-	<string name="crash_recovery_open_app_settings_desc">打开系统设置。选择"存储" → "清除数据"以完全重置。这将删除所有应用数据和权限</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >打开系统设置。选择"存储" → "清除数据"以完全重置。这将删除所有应用数据和权限</string>
 </resources>

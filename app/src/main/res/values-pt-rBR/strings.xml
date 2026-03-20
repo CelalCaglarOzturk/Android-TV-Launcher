@@ -20,14 +20,20 @@
 
 	<!-- Settings -->
 	<string name="settings_app_card_size">Tamanho do Card de App: %1$d dp</string>
-	<string name="settings_channel_card_size">Tamanho do Card de Canal: %1$d dp</string>
-	<string name="settings_show_mobile_apps_description">Mostrar apps sem interface de TV</string>
+	<string
+        name="settings_channel_card_size"
+    >Tamanho do Card de Canal: %1$d dp</string>
+	<string
+        name="settings_show_mobile_apps_description"
+    >Mostrar apps sem interface de TV</string>
 	<string name="settings_inputs">Entradas</string>
 	<string name="settings_no_inputs">Nenhuma entrada encontrada</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remover de Assistir Depois</string>
-	<string name="watch_next_no_apps">Nenhum app suporta este recurso nesta TV</string>
+	<string
+        name="watch_next_no_apps"
+    >Nenhum app suporta este recurso nesta TV</string>
 
 	<!-- App options -->
 	<string name="app_options">Opções do App</string>
@@ -38,10 +44,12 @@
 	<string name="app_remove_from_home">Remover do Início</string>
 	<string name="app_hide">Ocultar App</string>
 	<string name="app_unhide">Mostrar App</string>
-	<string name="app_hint_options">Segure OK para opções</string>
-	<string name="app_moving_instructions">Use as setas para mover • OK para confirmar</string>
-	<string name="channel_hint_options">Segure OK para opções</string>
-	<string name="channel_moving_instructions">Use ↑↓ para mover • OK para confirmar</string>
+	<string
+        name="app_moving_instructions"
+    >Use as setas para mover • OK para confirmar</string>
+	<string
+        name="channel_moving_instructions"
+    >Use ↑↓ para mover • OK para confirmar</string>
 
 	<!-- Apps Tab -->
 	<string name="apps_show_mobile">Mostrar apps móveis</string>
@@ -49,9 +57,13 @@
 
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">Sem Apps</string>
-	<string name="empty_no_apps_message">Nenhum app encontrado. Instale alguns apps para começar.</string>
+	<string
+        name="empty_no_apps_message"
+    >Nenhum app encontrado. Instale alguns apps para começar.</string>
 	<string name="empty_no_channels_title">Sem Canais</string>
-	<string name="empty_no_channels_message">Canais dos seus apps aparecerão aqui.</string>
+	<string
+        name="empty_no_channels_message"
+    >Canais dos seus apps aparecerão aqui.</string>
 
 	<!-- Backup/Restore -->
 	<string name="backup">Backup</string>
@@ -61,34 +73,52 @@
 	<string name="restore_success">Restauração realizada com sucesso</string>
 	<string name="restore_failed">Falha na restauração</string>
 	<string name="restore_not_found">Arquivo de backup não encontrado</string>
-	<string name="backup_permission_title">Permissão de Armazenamento Necessária</string>
-	<string name="backup_permission_message">Por favor, habilite as permissões de armazenamento para o TV Launcher fazer backup e restaurar suas configurações. Abra Configurações > Permissões e habilite "Arquivos e mídia" ou "Acesso a todos os arquivos".</string>
+	<string
+        name="backup_permission_title"
+    >Permissão de Armazenamento Necessária</string>
+	<string
+        name="backup_permission_message"
+    >Por favor, habilite as permissões de armazenamento para o TV Launcher fazer backup e restaurar suas configurações. Abra Configurações > Permissões e habilite "Arquivos e mídia" ou "Acesso a todos os arquivos".</string>
 	<string name="backup_permission_open_settings">Abrir Configurações</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Redefinir Configurações</string>
-	<string name="settings_reset_description">Limpar todas as preferências e restaurar padrões</string>
-	<string name="settings_reset_success">Configurações redefinidas para padrão</string>
+	<string
+        name="settings_reset_description"
+    >Limpar todas as preferências e restaurar padrões</string>
+	<string
+        name="settings_reset_success"
+    >Configurações redefinidas para padrão</string>
 	<string name="settings_reset_confirm_title">Redefinir Configurações?</string>
-	<string name="settings_reset_confirm_message">Isso limpará todas as suas preferências e restaurará os padrões. Esta ação não pode ser desfeita.</string>
+	<string
+        name="settings_reset_confirm_message"
+    >Isso limpará todas as suas preferências e restaurará os padrões. Esta ação não pode ser desfeita.</string>
 	<string name="settings_reset_confirm_button">Redefinir</string>
 	<string name="cancel">Cancelar</string>
 
 	<!-- Animations -->
 	<string name="settings_animations">Animações</string>
 	<string name="settings_enable_animations">Habilitar Todas as Animações</string>
-	<string name="settings_enable_animations_description">Alternar todos os efeitos visuais</string>
+	<string
+        name="settings_enable_animations_description"
+    >Alternar todos os efeitos visuais</string>
 	<string name="settings_anim_app_icon">Animações de Ícone de App</string>
 	<string name="settings_anim_app_icon_desc">Texto rolante no foco</string>
 	<string name="settings_anim_channel_row">Animações de Linha de Canal</string>
-	<string name="settings_anim_channel_row_desc">Efeitos de escala e desvanecimento no foco</string>
+	<string
+        name="settings_anim_channel_row_desc"
+    >Efeitos de escala e desvanecimento no foco</string>
 	<string name="settings_anim_channel_move">Movimento de Canal</string>
-	<string name="settings_anim_channel_move_desc">Reordenamento suave de canais</string>
+	<string
+        name="settings_anim_channel_move_desc"
+    >Reordenamento suave de canais</string>
 	<string name="settings_anim_app_move">Movimento de App</string>
 	<string name="settings_anim_app_move_desc">Reordenamento suave de apps</string>
 
 	<!-- Toolbar Placement -->
-	<string name="settings_toolbar_placement">Posição da Barra de Ferramentas</string>
+	<string
+        name="settings_toolbar_placement"
+    >Posição da Barra de Ferramentas</string>
 	<string name="settings_clock">Relógio</string>
 	<string name="settings_clock_enabled">Mostrar Relógio</string>
 	<string name="settings_clock_position">Posição do Relógio</string>
@@ -96,7 +126,9 @@
 	<string name="settings_clock_position_end">Fim (lado direito)</string>
 	<string name="settings_clock_position_hidden">Oculto</string>
 	<string name="settings_toolbar_buttons">Botões da Barra de Ferramentas</string>
-	<string name="settings_toolbar_buttons_description">Habilitar/desabilitar e reordenar botões da barra de ferramentas</string>
+	<string
+        name="settings_toolbar_buttons_description"
+    >Habilitar/desabilitar e reordenar botões da barra de ferramentas</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Relógio</string>
@@ -109,13 +141,23 @@
 	<!-- Channel Settings -->
 	<string name="settings_channel">Configurações de Canal</string>
 	<string name="settings_channel_cards_per_row">Cards por Linha: %1$d</string>
-	<string name="settings_channel_cards_per_row_description">Limitar cards exibidos por canal para melhorar desempenho (3–20)</string>
+	<string
+        name="settings_channel_cards_per_row_description"
+    >Limitar cards exibidos por canal para melhorar desempenho (3–20)</string>
 
 	<!-- Crash Recovery -->
 	<string name="crash_recovery_title">TV Launcher Precisa de Recuperação</string>
-	<string name="crash_recovery_message">O launcher travou várias vezes e não pode iniciar normalmente.\n\nEscolha uma opção abaixo para corrigir o problema:</string>
+	<string
+        name="crash_recovery_message"
+    >O launcher travou várias vezes e não pode iniciar normalmente.\n\nEscolha uma opção abaixo para corrigir o problema:</string>
 	<string name="crash_recovery_reset_settings">Redefinir Configurações</string>
-	<string name="crash_recovery_reset_settings_desc">Redefine todas as preferências para padrão. Apps e canais aparecerão em alguns segundos.</string>
-	<string name="crash_recovery_open_app_settings">Abrir Configurações do App</string>
-	<string name="crash_recovery_open_app_settings_desc">Abre as configurações do sistema. Selecione "Armazenamento" → "Limpar Dados" para redefinir totalmente. Isso removerá todos os dados e permissões do app</string>
+	<string
+        name="crash_recovery_reset_settings_desc"
+    >Redefine todas as preferências para padrão. Apps e canais aparecerão em alguns segundos.</string>
+	<string
+        name="crash_recovery_open_app_settings"
+    >Abrir Configurações do App</string>
+	<string
+        name="crash_recovery_open_app_settings_desc"
+    >Abre as configurações do sistema. Selecione "Armazenamento" → "Limpar Dados" para redefinir totalmente. Isso removerá todos os dados e permissões do app</string>
 </resources>

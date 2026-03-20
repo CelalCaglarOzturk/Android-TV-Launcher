@@ -47,6 +47,8 @@ import nl.ndat.tvlauncher.data.repository.BackupRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import org.koin.compose.koinInject
+import timber.log.Timber
+import java.io.IOException
 
 @Composable
 fun LauncherSettingsDialog(
@@ -218,7 +220,7 @@ fun LauncherSettingsDialog(
                         onClick = { showInputsSettings = true }
                     )
 
-                    CompactSettingsItem(
+CompactSettingsItem(
                         title = stringResource(R.string.backup),
                         onClick = {
                             if (!backupRepository.hasStoragePermission()) {
@@ -233,7 +235,24 @@ fun LauncherSettingsDialog(
                                         context.getString(R.string.backup_success),
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                } catch (e: IOException) {
+                                    Timber.e(e, "Backup failed - IO exception (likely permission)")
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.backup_failed_permission),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    showPermissionDialog = true
+                                } catch (e: SecurityException) {
+                                    Timber.e(e, "Backup failed - security exception")
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.backup_failed_permission),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    showPermissionDialog = true
                                 } catch (e: Exception) {
+                                    Timber.e(e, "Backup failed")
                                     Toast.makeText(
                                         context,
                                         context.getString(R.string.backup_failed),
@@ -267,9 +286,26 @@ fun LauncherSettingsDialog(
                                         context.getString(R.string.restore_success),
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                } catch (e: IOException) {
+                                    Timber.e(e, "Restore failed - IO exception (likely permission)")
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.restore_failed_permission),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    showPermissionDialog = true
+                                } catch (e: SecurityException) {
+                                    Timber.e(e, "Restore failed - security exception")
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.restore_failed_permission),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    showPermissionDialog = true
                                 } catch (e: CancellationException) {
                                     // Ignore
                                 } catch (e: Exception) {
+                                    Timber.e(e, "Restore failed")
                                     Toast.makeText(
                                         context,
                                         context.getString(R.string.restore_failed),

@@ -55,8 +55,7 @@ fun ChannelProgramCard(
     modifier: Modifier = Modifier,
     baseHeight: Dp = 100.dp,
     overrideAspectRatio: Float? = null,
-    isMoving: Boolean = false,
-    showHint: Boolean = false,
+    isMoving: Boolean = false
 ) {
     val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
@@ -144,15 +143,6 @@ fun ChannelProgramCard(
                             ) else it
                         }
                     )
-                    
-                    if (showHint && isFocused && !isMoving) {
-                        Text(
-                            text = stringResource(R.string.channel_hint_options),
-                            maxLines = 1,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
                 }
             }
         },

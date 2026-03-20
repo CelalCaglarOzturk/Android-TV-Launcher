@@ -59,23 +59,10 @@ class BackupRepository(
 
     fun hasStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val hasManageStorage = Environment.isExternalStorageManager()
-            if (!hasManageStorage) {
-                val canWrite = try {
-                    val backupDir = getBackupDirectory()
-                    val testFile = File(backupDir, ".permission_test")
-                    testFile.createNewFile()
-                    testFile.delete()
-                    true
-                } catch (e: Exception) {
-                    Timber.w(e, "Backup directory not writable")
-                    false
-                }
-                canWrite
-            } else {
-                true
-            }
+            // Android 11+ requires MANAGE_EXTERNAL_STORAGE for full external storage access
+            Environment.isExternalStorageManager()
         } else {
+            // Android 10 and below requires WRITE_EXTERNAL_STORAGE
             ContextCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE

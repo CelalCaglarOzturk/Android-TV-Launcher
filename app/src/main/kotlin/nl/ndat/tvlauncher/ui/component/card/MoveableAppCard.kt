@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
+import timber.log.Timber
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -37,9 +38,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,6 @@ import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.data.sqldelight.App
 import nl.ndat.tvlauncher.ui.component.PopupContainer
@@ -199,8 +197,7 @@ fun MoveableAppCard(
                         title = app.displayName,
                         interactionSource = interactionSource,
                         enableAnimations = areAnimationsEnabled,
-                        isInMoveMode = isInMoveMode,
-                        showHint = isFocused && !isInMoveMode
+                        isInMoveMode = isInMoveMode
                     )
                 },
                 imageCard = { _ ->
@@ -238,7 +235,11 @@ fun MoveableAppCard(
                                     onClick()
                                 } else {
                                     launchIntent?.let { intent ->
-                                        context.startActivity(intent)
+                                        try {
+                                            context.startActivity(intent)
+                                        } catch (e: Exception) {
+                                            Timber.e(e, "MoveableAppCard: Failed to launch app")
+                                        }
                                     }
                                 }
                             }
@@ -249,36 +250,12 @@ fun MoveableAppCard(
                             }
                         }
                     ) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            AsyncImage(
-                                modifier = Modifier.fillMaxSize(),
-                                model = imageRequest,
-                                contentDescription = app.displayName,
-                                contentScale = ContentScale.Fit,
-                            )
-                            
-                            if (isInMoveMode) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .drawBehind {
-                                            drawRoundRect(
-                                                color = Color.Black.copy(alpha = 0.7f),
-                                                cornerRadius = CornerRadius(0.dp.toPx())
-                                            )
-                                        }
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.app_moving_instructions),
-                                        color = Color.White,
-                                        fontSize = with(LocalDensity.current) { (baseHeight.value / 9).dp.toSp() },
-                                        fontWeight = FontWeight.Medium,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier.align(Alignment.Center)
-                                    )
-                                }
-                            }
-                        }
+                        AsyncImage(
+                            modifier = Modifier.fillMaxSize(),
+                            model = imageRequest,
+                            contentDescription = app.displayName,
+                            contentScale = ContentScale.Fit,
+                        )
                     }
                 }
             )
@@ -324,8 +301,7 @@ private fun MoveableAppCardTitle(
     title: String,
     interactionSource: InteractionSource,
     enableAnimations: Boolean,
-    isInMoveMode: Boolean,
-    showHint: Boolean = false
+    isInMoveMode: Boolean
 ) {
     val focused by interactionSource.collectIsFocusedAsState()
 
@@ -352,14 +328,5 @@ private fun MoveableAppCardTitle(
                 }
             )
         )
-        
-        if (showHint) {
-            Text(
-                text = stringResource(R.string.app_hint_options),
-                maxLines = 1,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
     }
 }
