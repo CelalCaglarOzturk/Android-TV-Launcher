@@ -69,6 +69,7 @@ fun LauncherSettingsDialog(
     var showAnimationsSettings by remember { mutableStateOf(false) }
     var showToolbarPlacementSettings by remember { mutableStateOf(false) }
     var showChannelSettings by remember { mutableStateOf(false) }
+    var showAboutSettings by remember { mutableStateOf(false) }
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showResetConfirmDialog by remember { mutableStateOf(false) }
 
@@ -125,6 +126,8 @@ fun LauncherSettingsDialog(
         ToolbarPlacementSettingsDialog(onDismissRequest = { showToolbarPlacementSettings = false })
     } else if (showChannelSettings) {
         ChannelSettingsDialog(onDismissRequest = { showChannelSettings = false })
+    } else if (showAboutSettings) {
+        AboutSettingsDialog(onDismissRequest = { showAboutSettings = false })
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             // Use Surface for the dialog background (non-clickable)
@@ -314,6 +317,11 @@ CompactSettingsItem(
                                 }
                             }
                         }
+                    )
+
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_about),
+                        onClick = { showAboutSettings = true }
                     )
 
                     CompactSettingsItem(
