@@ -22,56 +22,38 @@ class AppResolver {
     fun getApplication(context: Context, packageId: String): App? {
         val packageManager = context.packageManager
 
-        var leanbackIntent: String? = null
-        var defaultIntent: String? = null
-        var displayName: String? = null
-
-        try {
-            val intent = Intent(Intent.ACTION_MAIN)
-                .addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
-                .setPackage(packageId)
-            val activities = queryIntentActivitiesSafe(packageManager, intent)
-            if (activities.isNotEmpty()) {
-                val info = activities.first()
-                leanbackIntent = Intent(Intent.ACTION_MAIN)
-                    .addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
-                    .setClassName(info.activityInfo.packageName, info.activityInfo.name)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
-                    .toUri(0)
-                displayName = info.loadLabel(packageManager).toString()
-            }
+        val leanbackIntent = try {
+            packageManager.getLeanbackLaunchIntentForPackage(packageId)
         } catch (e: Exception) {
-            Timber.e(e, "AppResolver: Error querying leanback for $packageId")
+            null
         }
 
-        try {
-            val intent = Intent(Intent.ACTION_MAIN)
-                .addCategory(Intent.CATEGORY_LAUNCHER)
-                .setPackage(packageId)
-            val activities = queryIntentActivitiesSafe(packageManager, intent)
-            if (activities.isNotEmpty()) {
-                val info = activities.first()
-                defaultIntent = Intent(Intent.ACTION_MAIN)
-                    .addCategory(Intent.CATEGORY_LAUNCHER)
-                    .setClassName(info.activityInfo.packageName, info.activityInfo.name)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
-                    .toUri(0)
-                if (displayName == null) {
-                    displayName = info.loadLabel(packageManager).toString()
-                }
-            }
+        val launchIntent = try {
+            packageManager.getLaunchIntentForPackage(packageId)
         } catch (e: Exception) {
-            Timber.e(e, "AppResolver: Error querying launcher for $packageId")
+            null
         }
 
-        if (leanbackIntent == null && defaultIntent == null) return null
+        if (leanbackIntent == null && launchIntent == null) return null
+
+        val displayName = try {
+            val appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getApplicationInfo(packageId, PackageManager.ApplicationInfoFlags.of(0L))
+            } else {
+                @Suppress("DEPRECATION")
+                packageManager.getApplicationInfo(packageId, 0)
+            }
+            appInfo.loadLabel(packageManager).toString()
+        } catch (e: Exception) {
+            packageId
+        }
 
         return App(
             id = "$APP_ID_PREFIX$packageId",
-            displayName = displayName ?: packageId,
+            displayName = displayName,
             packageName = packageId,
-            launchIntentUriDefault = defaultIntent,
-            launchIntentUriLeanback = leanbackIntent,
+            launchIntentUriDefault = launchIntent?.toUri(0),
+            launchIntentUriLeanback = leanbackIntent?.toUri(0),
             favoriteOrder = null,
             hidden = 0,
             allAppsOrder = null,
@@ -84,16 +66,37 @@ class AppResolver {
         Timber.d("AppResolver: Starting to query applications")
         Timber.d("AppResolver: Android SDK version: ${Build.VERSION.SDK_INT}")
 
-        // First, try the standard approach with launcher categories
+        // Get apps via categories
         val categoryApps = getCategoryApps(packageManager)
-
-        // If that fails, try getting all installed apps as fallback
-        if (categoryApps.isEmpty()) {
-            Timber.w("AppResolver: No apps found via category queries, trying fallback method")
-            return getInstalledAppsWithLaunchIntent(packageManager)
+        
+        // Also get apps via fallback method (installed apps with launch intent)
+        val fallbackApps = getInstalledAppsWithLaunchIntent(packageManager)
+        
+        // Combine them, preferring categoryApps if there's a duplicate
+        val allAppsMap = mutableMapOf<String, App>()
+        
+        // First add all from fallback (more comprehensive but maybe less specific)
+        fallbackApps.forEach { app ->
+            allAppsMap[app.packageName] = app
+        }
+        
+        // Then overwrite/add with categoryApps (more specific launcher activities)
+        categoryApps.forEach { app ->
+            val existing = allAppsMap[app.packageName]
+            if (existing != null) {
+                // If we already have it, merge the intents to ensure we have both if available
+                allAppsMap[app.packageName] = app.copy(
+                    launchIntentUriDefault = app.launchIntentUriDefault ?: existing.launchIntentUriDefault,
+                    launchIntentUriLeanback = app.launchIntentUriLeanback ?: existing.launchIntentUriLeanback
+                )
+            } else {
+                allAppsMap[app.packageName] = app
+            }
         }
 
-        return categoryApps
+        val result = allAppsMap.values.toList()
+        Timber.d("AppResolver: Total unique apps found (combined): ${result.size}")
+        return result
     }
 
     private fun getCategoryApps(packageManager: PackageManager): List<App> {
@@ -114,6 +117,8 @@ class AppResolver {
                 val uri = intent.toUri(0)
 
                 if (isLeanback) {
+                    // Prefer activities that are already set if they are different? 
+                    // Usually there's only one launcher activity per category.
                     leanbackIntents[packageName] = uri
                 } else {
                     defaultIntents[packageName] = uri
@@ -132,6 +137,7 @@ class AppResolver {
         try {
             val intent = Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
             val activities = queryIntentActivitiesSafe(packageManager, intent)
+            Timber.d("AppResolver: Found ${activities.size} leanback activities")
             processActivities(activities, true)
         } catch (e: Exception) {
             Timber.e(e, "AppResolver: Error querying leanback category")
@@ -140,6 +146,7 @@ class AppResolver {
         try {
             val intent = Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER)
             val activities = queryIntentActivitiesSafe(packageManager, intent)
+            Timber.d("AppResolver: Found ${activities.size} launcher activities")
             processActivities(activities, false)
         } catch (e: Exception) {
             Timber.e(e, "AppResolver: Error querying launcher category")
@@ -147,7 +154,7 @@ class AppResolver {
 
         val allPackages = leanbackIntents.keys + defaultIntents.keys
 
-        val apps = allPackages.map { packageName ->
+        return allPackages.map { packageName ->
             App(
                 id = "$APP_ID_PREFIX$packageName",
                 displayName = displayNames[packageName] ?: packageName,
@@ -159,16 +166,13 @@ class AppResolver {
                 allAppsOrder = null,
             )
         }
-
-        Timber.d("AppResolver: Total unique apps found via categories: ${apps.size}")
-        return apps
     }
 
     /**
      * Fallback method: Get all installed applications that have a launch intent
      */
     private fun getInstalledAppsWithLaunchIntent(packageManager: PackageManager): List<App> {
-        Timber.d("AppResolver: Using fallback method to get installed apps")
+        Timber.d("AppResolver: Getting installed apps with launch intent")
 
         val installedApps = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -184,35 +188,18 @@ class AppResolver {
             emptyList()
         }
 
-        Timber.d("AppResolver: Found ${installedApps.size} installed applications")
+        Timber.d("AppResolver: Found ${installedApps.size} total installed applications")
 
         val apps = installedApps
-            .filter { appInfo ->
-                // Filter to only user-visible apps (not system apps without a launcher)
-                val isSystemApp = (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-                val isUpdatedSystemApp = (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
-
-                // Include if it's not a system app, or if it's an updated system app
-                !isSystemApp || isUpdatedSystemApp || hasLaunchIntent(packageManager, appInfo.packageName)
-            }
             .mapNotNull { appInfo ->
                 try {
                     applicationInfoToApp(packageManager, appInfo)
                 } catch (e: Exception) {
-                    Timber.e(e, "AppResolver: Error converting ApplicationInfo to App for ${appInfo.packageName}")
                     null
                 }
             }
-            .filter { app ->
-                // Only include apps that have a launch intent
-                app.launchIntentUriDefault != null || app.launchIntentUriLeanback != null
-            }
 
-        Timber.d("AppResolver: Total launchable apps found via fallback: ${apps.size}")
-        apps.forEach { app ->
-            Timber.d("AppResolver: Fallback App - ${app.displayName} (${app.packageName})")
-        }
-
+        Timber.d("AppResolver: Found ${apps.size} launchable apps via fallback")
         return apps
     }
 
@@ -271,11 +258,11 @@ class AppResolver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 packageManager.queryIntentActivities(
                     intent,
-                    PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong())
+                    PackageManager.ResolveInfoFlags.of(0L)
                 )
             } else {
                 @Suppress("DEPRECATION")
-                packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+                packageManager.queryIntentActivities(intent, 0)
             }
         } catch (e: Exception) {
             Timber.e(e, "AppResolver: Error in queryIntentActivities")
