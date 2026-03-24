@@ -19,18 +19,26 @@ CREATE INDEX channelEnabled ON Channel(enabled);
 CREATE INDEX channelDisplayOrder ON Channel(displayOrder);
 
 getAll:
-SELECT * FROM Channel;
+SELECT * FROM Channel
+WHERE (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0;
 
 getAllEnabled:
-SELECT * FROM Channel WHERE enabled = 1 ORDER BY displayOrder ASC, displayName ASC;
+SELECT * FROM Channel
+WHERE enabled = 1
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
+ORDER BY displayOrder ASC, displayName ASC;
 
 getAllDisabled:
-SELECT * FROM Channel WHERE enabled = 0 ORDER BY displayName ASC;
+SELECT * FROM Channel
+WHERE enabled = 0
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
+ORDER BY displayName ASC;
 
 getFavoriteAppChannels:
 SELECT Channel.* FROM Channel
 WHERE Channel.enabled = 1
 AND (SELECT favoriteOrder FROM App WHERE App.packageName = Channel.packageName) IS NOT NULL
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
 ORDER BY Channel.displayOrder ASC, Channel.displayName ASC;
 
 getAllAppChannels:
@@ -45,7 +53,11 @@ getByType:
 SELECT * FROM Channel WHERE type = :type;
 
 getByTypeEnabled:
-SELECT * FROM Channel WHERE type = :type AND enabled = 1 ORDER BY displayOrder ASC, displayName ASC;
+SELECT * FROM Channel
+WHERE type = :type
+AND enabled = 1
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE channelId = Channel.id) > 0
+ORDER BY displayOrder ASC, displayName ASC;
 
 findPrevious:
 SELECT * FROM Channel WHERE enabled = 1 AND displayOrder < :displayOrder ORDER BY displayOrder DESC LIMIT 1;
