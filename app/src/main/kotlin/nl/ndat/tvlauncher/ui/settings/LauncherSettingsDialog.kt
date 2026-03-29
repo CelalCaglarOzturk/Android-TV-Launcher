@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,6 +63,7 @@ fun LauncherSettingsDialog(
     val appCardSize by settingsRepository.appCardSize.collectAsStateWithLifecycle()
     val showMobileApps by settingsRepository.showMobileApps.collectAsStateWithLifecycle()
     val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
+    val suppressOriginalLauncher by settingsRepository.suppressOriginalLauncher.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
@@ -72,6 +74,17 @@ fun LauncherSettingsDialog(
     var showAboutSettings by remember { mutableStateOf(false) }
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showResetConfirmDialog by remember { mutableStateOf(false) }
+    var showAccessibilityDialog by remember { mutableStateOf(false) }
+
+    fun isAccessibilityServiceEnabled(): Boolean {
+        val enabledServices = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+        val packageName = context.packageName
+        val serviceName = "$packageName/nl.ndat.tvlauncher.accessibility.LauncherAccessibilityService"
+        return enabledServices.contains(serviceName)
+    }
 
     if (showResetConfirmDialog) {
         ResetConfirmDialog(
@@ -128,6 +141,15 @@ fun LauncherSettingsDialog(
         ChannelSettingsDialog(onDismissRequest = { showChannelSettings = false })
     } else if (showAboutSettings) {
         AboutSettingsDialog(onDismissRequest = { showAboutSettings = false })
+    } else if (showAccessibilityDialog) {
+        AccessibilityRequiredDialog(
+            onDismissRequest = { showAccessibilityDialog = false },
+            onOpenSettings = {
+                showAccessibilityDialog = false
+                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                context.startActivity(intent)
+            }
+        )
     } else {
         Dialog(onDismissRequest = onDismissRequest) {
             // Use Surface for the dialog background (non-clickable)
@@ -223,7 +245,28 @@ fun LauncherSettingsDialog(
                         onClick = { showInputsSettings = true }
                     )
 
-CompactSettingsItem(
+                    val accessibilityEnabled = remember { mutableStateOf(isAccessibilityServiceEnabled()) }
+
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_suppress_launcher),
+                        description = stringResource(R.string.settings_suppress_launcher_description),
+                        onClick = {
+                            if (!accessibilityEnabled.value) {
+                                showAccessibilityDialog = true
+                            } else {
+                                settingsRepository.toggleSuppressOriginalLauncher()
+                            }
+                        },
+                        trailingContent = {
+                            Switch(
+                                checked = suppressOriginalLauncher,
+                                onCheckedChange = null,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                    )
+
+                    CompactSettingsItem(
                         title = stringResource(R.string.backup),
                         onClick = {
                             if (!backupRepository.hasStoragePermission()) {
@@ -488,6 +531,50 @@ private fun ResetConfirmDialog(
                         )
                     ) {
                         Text(stringResource(R.string.settings_reset_confirm_button))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AccessibilityRequiredDialog(
+    onDismissRequest: () -> Unit,
+    onOpenSettings: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.width(400.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_suppress_launcher),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(R.string.settings_accessibility_required),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.colors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Text(stringResource(R.string.close))
+                    }
+                    Button(onClick = onOpenSettings) {
+                        Text(stringResource(R.string.settings_open_accessibility))
                     }
                 }
             }

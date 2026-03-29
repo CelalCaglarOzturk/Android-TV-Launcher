@@ -29,6 +29,9 @@ class SettingsRepository(
         // Channel Settings Keys
         private const val KEY_CHANNEL_CARDS_PER_ROW = "channel_cards_per_row"
 
+        // Launcher Suppression Key
+        private const val KEY_SUPPRESS_ORIGINAL_LAUNCHER = "suppress_original_launcher"
+
         // Default height in dp
         const val DEFAULT_APP_CARD_SIZE = 90
         const val DEFAULT_CHANNEL_CARD_SIZE = 90
@@ -98,6 +101,11 @@ class SettingsRepository(
         prefs.getInt(KEY_CHANNEL_CARDS_PER_ROW, DEFAULT_CHANNEL_CARDS_PER_ROW)
     )
     val channelCardsPerRow = _channelCardsPerRow.asStateFlow()
+
+    private val _suppressOriginalLauncher = MutableStateFlow(
+        prefs.getBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, false)
+    )
+    val suppressOriginalLauncher = _suppressOriginalLauncher.asStateFlow()
 
     fun setAppCardSize(size: Int) {
         prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
@@ -200,6 +208,15 @@ class SettingsRepository(
         _toolbarItemsEnabled.value = current
     }
 
+    fun setSuppressOriginalLauncher(suppress: Boolean) {
+        prefs.edit { putBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, suppress) }
+        _suppressOriginalLauncher.value = suppress
+    }
+
+    fun toggleSuppressOriginalLauncher() {
+        setSuppressOriginalLauncher(!_suppressOriginalLauncher.value)
+    }
+
     fun resetSettings() {
         prefs.edit { clear() }
         _appCardSize.value = DEFAULT_APP_CARD_SIZE
@@ -218,6 +235,9 @@ class SettingsRepository(
         // Reset toolbar placement to unified list
         _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
         _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
+
+        // Reset launcher suppression
+        _suppressOriginalLauncher.value = false
     }
     
     fun clearHiddenInputs() {
