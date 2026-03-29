@@ -147,13 +147,7 @@ fun LauncherSettingsDialog(
             onDismissRequest = { showAccessibilityDialog = false },
             onOpenSettings = {
                 showAccessibilityDialog = false
-                try {
-                    val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    context.startActivity(intent)
-                } catch (e: Exception) {
-                    context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-                }
+                context.startActivity(Intent(Settings.ACTION_SETTINGS))
             }
         )
     } else {
@@ -601,7 +595,7 @@ private fun AccessibilityRequiredDialog(
                         Text(stringResource(R.string.close))
                     }
                     Button(onClick = onOpenSettings) {
-                        Text(stringResource(R.string.settings_open_accessibility))
+                        Text(stringResource(R.string.settings_open_settings))
                     }
                 }
             }

@@ -183,10 +183,10 @@
 	<string name="accessibility_service_description">Allows TV Launcher to intercept home button when returning from other apps.</string>
 	<string
         name="settings_accessibility_required"
-    >Go to: Device Preferences > Accessibility > TV Launcher and enable it.</string>
+    >Enable accessibility: Device Preferences > Accessibility > TV Launcher > On</string>
 	<string
-        name="settings_open_accessibility"
-    >Open Accessibility Settings</string>
+        name="settings_open_settings"
+    >Open Settings</string>
 	<string
         name="settings_suppress_only_external"
     >Only intercept from other apps</string>
