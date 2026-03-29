@@ -156,4 +156,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >システム設定を開きます。「ストレージ」→「データを消去」を選択して完全にリセットします。これによりすべてのアプリデータと権限が削除されます</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">元のランチャーを抑制</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >他のアプリからこのランチャーに戻るためにホームボタンをインターセプト</string>
+	<string
+        name="accessibility_service_description"
+    >他のアプリから戻るときにホームボタンをインターセプトすることをTV Launcherに許可します。</string>
+	<string
+        name="settings_accessibility_required"
+    >アクセシビリティを有効化: デバイス設定 > アクセシビリティ > TV Launcher > オン</string>
+	<string name="settings_open_settings">設定を開く</string>
+	<string
+        name="settings_suppress_only_external"
+    >他のアプリからのみインターセプト</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >有効にすると、ホームボタンはランチャー内で正常に動作します。無効にすると、ホームボタンは常にこのランチャーを開きます。</string>
 </resources>

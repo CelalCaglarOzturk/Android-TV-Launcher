@@ -162,4 +162,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >Öffnet die Systemeinstellungen. Wählen Sie "Speicher" → "Daten löschen" für vollständiges Zurücksetzen. Dies entfernt alle App-Daten und Berechtigungen</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Originalen Launcher unterdrücken</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >Home-Taste abfangen, um von anderen Apps zu diesem Launcher zurückzukehren</string>
+	<string
+        name="accessibility_service_description"
+    >Erlaubt TV Launcher, die Home-Taste abzufangen, wenn von anderen Apps zurückgekehrt wird.</string>
+	<string
+        name="settings_accessibility_required"
+    >Bedienungshilfen aktivieren: Geräteeinstellungen > Bedienungshilfen > TV Launcher > Ein</string>
+	<string name="settings_open_settings">Einstellungen öffnen</string>
+	<string
+        name="settings_suppress_only_external"
+    >Nur von anderen Apps abfangen</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >Wenn aktiviert, funktioniert die Home-Taste im Launcher normal. Wenn deaktiviert, öffnet die Home-Taste immer diesen Launcher.</string>
 </resources>

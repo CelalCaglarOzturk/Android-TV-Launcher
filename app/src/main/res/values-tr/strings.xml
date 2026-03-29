@@ -162,4 +162,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >Sistem ayarlarını açar. \"Depolama\" → \"Verileri Temizle\" seçeneğini seçin. Bu uygulamanın tüm verileri ve izinleri kaldırır.</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Orijinal Başlatıcıyı Bastır</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >Diğer uygulamalardan bu başlatıcıya dönmek için ana düğmeyi yakala</string>
+	<string
+        name="accessibility_service_description"
+    >TV Launcher\'ın diğer uygulamalardan dönerken ana düğmeyi yakalamasına izin verir.</string>
+	<string
+        name="settings_accessibility_required"
+    >Erişilebilirliği etkinleştir: Cihaz Tercihleri > Erişilebilirlik > TV Launcher > Açık</string>
+	<string name="settings_open_settings">Ayarları Aç</string>
+	<string
+        name="settings_suppress_only_external"
+    >Sadece diğer uygulamalardan yakala</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >Etkinleştirildiğinde, ana düğme başlatıcı içinde normal çalışır. Devre dışı bırakıldığında, ana düğme her zaman bu başlatıcıyı açar.</string>
 </resources>

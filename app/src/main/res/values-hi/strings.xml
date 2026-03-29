@@ -150,4 +150,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >सिस्टम सेटिंग्स खोलता है। पूर्ण रीसेट के लिए "स्टोरेज" → "डेटा साफ करें" चुनें। यह सभी ऐप डेटा और अनुमतियां हटा देगा</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">मूल लॉन्चर दबाएं</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >अन्य ऐप्स से इस लॉन्चर पर वापस जाने के लिए होम बटन रोकें</string>
+	<string
+        name="accessibility_service_description"
+    >TV Launcher को अन्य ऐप्स से वापस आने पर होम बटन रोकने की अनुमति देता है।</string>
+	<string
+        name="settings_accessibility_required"
+    >एक्सेसिबिलिटी सक्षम करें: डिवाइस प्रेफरेंसेस > एक्सेसिबिलिटी > TV Launcher > चालू</string>
+	<string name="settings_open_settings">सेटिंग्स खोलें</string>
+	<string
+        name="settings_suppress_only_external"
+    >केवल अन्य ऐप्स से रोकें</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >जब सक्षम हो, तो होम बटन लॉन्चर के अंदर सामान्य रूप से काम करता है। जब अक्षम हो, तो होम बटन हमेशा इस लॉन्चर को खोलता है।</string>
 </resources>

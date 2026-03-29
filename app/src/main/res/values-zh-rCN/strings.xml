@@ -134,4 +134,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >打开系统设置。选择"存储" → "清除数据"以完全重置。这将删除所有应用数据和权限</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">抑制原始启动器</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >拦截主页按钮从其他应用返回此启动器</string>
+	<string
+        name="accessibility_service_description"
+    >允许 TV Launcher 在从其他应用返回时拦截主页按钮。</string>
+	<string
+        name="settings_accessibility_required"
+    >启用无障碍功能：设备偏好设置 > 无障碍 > TV Launcher > 开启</string>
+	<string name="settings_open_settings">打开设置</string>
+	<string
+        name="settings_suppress_only_external"
+    >仅从其他应用拦截</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >启用时，主页按钮在启动器内正常工作。禁用时，主页按钮始终打开此启动器。</string>
 </resources>

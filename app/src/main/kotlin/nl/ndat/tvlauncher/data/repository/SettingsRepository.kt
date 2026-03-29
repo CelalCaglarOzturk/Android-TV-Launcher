@@ -109,7 +109,7 @@ class SettingsRepository(
     val suppressOriginalLauncher = _suppressOriginalLauncher.asStateFlow()
 
     private val _suppressLauncherOnlyExternal = MutableStateFlow(
-        prefs.getBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, true)
+        prefs.getBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, false)
     )
     val suppressLauncherOnlyExternal = _suppressLauncherOnlyExternal.asStateFlow()
 
@@ -253,7 +253,7 @@ class SettingsRepository(
 
         // Reset launcher suppression
         _suppressOriginalLauncher.value = false
-        _suppressLauncherOnlyExternal.value = true
+        _suppressLauncherOnlyExternal.value = false
     }
     
     fun clearHiddenInputs() {

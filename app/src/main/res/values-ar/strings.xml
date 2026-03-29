@@ -144,4 +144,22 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >يفتح إعدادات النظام. حدد "التخزين" → "مسح البيانات" لإعادة التعيين بالكامل. سيؤدي هذا إلى إزالة جميع بيانات وأذونات التطبيق</string>
+<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">منع المشغل الأصلي</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >اعتراض زر الرئيسية للعودة إلى هذا المشغل من التطبيقات الأخرى</string>
+	<string
+        name="accessibility_service_description"
+    >يسمح لـ TV Launcher باعتراض زر الرئيسية عند العودة من التطبيقات الأخرى.</string>
+	<string
+        name="settings_accessibility_required"
+    >تفعيل إمكانية الوصول: تفضيلات الجهاز > إمكانية الوصول > TV Launcher > تشغيل</string>
+	<string name="settings_open_settings">فتح الإعدادات</string>
+	<string
+        name="settings_suppress_only_external"
+    >اعتراض فقط من التطبيقات الأخرى</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >عند التفعيل، يعمل زر الرئيسية بشكل طبيعي داخل المشغل. عند التعطيل، يفتح زر الرئيسية دائمًا هذا المشغل.</string>
 </resources>

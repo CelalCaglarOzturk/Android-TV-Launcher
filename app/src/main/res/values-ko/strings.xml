@@ -144,4 +144,22 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >시스템 설정을 엽니다. 완전히 초기화하려면 "저장소" → "데이터 삭제"를 선택하세요. 이렇게 하면 모든 앱 데이터와 권한이 삭제됩니다</string>
+<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">원래 런처 억제</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >다른 앱에서 이 런처로 돌아가기 위해 홈 버튼 가로채기</string>
+	<string
+        name="accessibility_service_description"
+    >다른 앱에서 돌아올 때 홈 버튼을 가로채도록 TV Launcher를 허용합니다.</string>
+	<string
+        name="settings_accessibility_required"
+    >접근성 활성화: 기기 설정 > 접근성 > TV Launcher > 켬</string>
+	<string name="settings_open_settings">설정 열기</string>
+	<string
+        name="settings_suppress_only_external"
+    >다른 앱에서만 가로채기</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >활성화하면 홈 버튼이 런처 내에서 정상적으로 작동합니다. 비활성화하면 홈 버튼이 항상 이 런처를 엽니다.</string>
 </resources>

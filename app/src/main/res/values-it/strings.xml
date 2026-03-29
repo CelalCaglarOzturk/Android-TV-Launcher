@@ -160,4 +160,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >Apre le impostazioni di sistema. Seleziona "Archiviazione" → "Cancella dati" per un ripristino completo. Questo rimuoverà tutti i dati e i permessi dell\'app</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Sopprimi launcher originale</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >Intercetta il tasto home per tornare a questo launcher da altre app</string>
+	<string
+        name="accessibility_service_description"
+    >Permette a TV Launcher di intercettare il tasto home quando si ritorna da altre app.</string>
+	<string
+        name="settings_accessibility_required"
+    >Attiva accessibilità: Preferenze dispositivo > Accessibilità > TV Launcher > Attivo</string>
+	<string name="settings_open_settings">Apri impostazioni</string>
+	<string
+        name="settings_suppress_only_external"
+    >Intercetta solo da altre app</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >Quando attivo, il tasto home funziona normalmente nel launcher. Quando disattivato, il tasto home apre sempre questo launcher.</string>
 </resources>

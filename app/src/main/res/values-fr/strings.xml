@@ -168,4 +168,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >Ouvre les paramètres système. Sélectionnez "Stockage" → "Effacer les données" pour une réinitialisation complète. Cela supprimera toutes les données et autorisations de l\'app</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Supprimer le lanceur original</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >Intercepter le bouton home pour revenir à ce lanceur depuis d\'autres apps</string>
+	<string
+        name="accessibility_service_description"
+    >Permet à TV Launcher d\'intercepter le bouton home lors du retour depuis d\'autres apps.</string>
+	<string
+        name="settings_accessibility_required"
+    >Activer l\'accessibilité: Préférences de l\'appareil > Accessibilité > TV Launcher > Activé</string>
+	<string name="settings_open_settings">Ouvrir les paramètres</string>
+	<string
+        name="settings_suppress_only_external"
+    >Intercepter seulement depuis d\'autres apps</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >Quand activé, le bouton home fonctionne normalement dans le lanceur. Quand désactivé, le bouton home ouvre toujours ce lanceur.</string>
 </resources>

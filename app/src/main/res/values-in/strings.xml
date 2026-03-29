@@ -156,4 +156,23 @@
 	<string
         name="crash_recovery_open_app_settings_desc"
     >Membuka pengaturan sistem. Pilih "Penyimpanan" → "Hapus Data" untuk reset penuh. Ini akan menghapus semua data dan izin aplikasi</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Tekan Launcher Asli</string>
+	<string
+        name="settings_suppress_launcher_description"
+    >Tangkap tombol home untuk kembali ke launcher ini dari aplikasi lain</string>
+	<string
+        name="accessibility_service_description"
+    >Mengizinkan TV Launcher menangkap tombol home saat kembali dari aplikasi lain.</string>
+	<string
+        name="settings_accessibility_required"
+    >Aktifkan aksesibilitas: Preferensi Perangkat > Aksesibilitas > TV Launcher > Hidup</string>
+	<string name="settings_open_settings">Buka Pengaturan</string>
+	<string
+        name="settings_suppress_only_external"
+    >Hanya tangkap dari aplikasi lain</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >Saat diaktifkan, tombol home berfungsi normal di dalam launcher. Saat dinonaktifkan, tombol home selalu membuka launcher ini.</string>
 </resources>
