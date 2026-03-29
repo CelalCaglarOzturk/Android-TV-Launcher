@@ -64,6 +64,7 @@ fun LauncherSettingsDialog(
     val showMobileApps by settingsRepository.showMobileApps.collectAsStateWithLifecycle()
     val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
     val suppressOriginalLauncher by settingsRepository.suppressOriginalLauncher.collectAsStateWithLifecycle()
+    val suppressLauncherOnlyExternal by settingsRepository.suppressLauncherOnlyExternal.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
@@ -146,8 +147,13 @@ fun LauncherSettingsDialog(
             onDismissRequest = { showAccessibilityDialog = false },
             onOpenSettings = {
                 showAccessibilityDialog = false
-                val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-                context.startActivity(intent)
+                try {
+                    val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                } catch (e: Exception) {
+                    context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                }
             }
         )
     } else {
@@ -251,10 +257,16 @@ fun LauncherSettingsDialog(
                         title = stringResource(R.string.settings_suppress_launcher),
                         description = stringResource(R.string.settings_suppress_launcher_description),
                         onClick = {
-                            if (!accessibilityEnabled.value) {
-                                showAccessibilityDialog = true
+                            if (suppressOriginalLauncher) {
+                                // Disabling - no permission needed
+                                settingsRepository.setSuppressOriginalLauncher(false)
                             } else {
-                                settingsRepository.toggleSuppressOriginalLauncher()
+                                // Enabling - check permission
+                                if (!accessibilityEnabled.value) {
+                                    showAccessibilityDialog = true
+                                } else {
+                                    settingsRepository.setSuppressOriginalLauncher(true)
+                                }
                             }
                         },
                         trailingContent = {
@@ -265,6 +277,21 @@ fun LauncherSettingsDialog(
                             )
                         }
                     )
+
+                    if (suppressOriginalLauncher) {
+                        CompactSettingsItem(
+                            title = stringResource(R.string.settings_suppress_only_external),
+                            description = stringResource(R.string.settings_suppress_only_external_description),
+                            onClick = { settingsRepository.toggleSuppressLauncherOnlyExternal() },
+                            trailingContent = {
+                                Switch(
+                                    checked = suppressLauncherOnlyExternal,
+                                    onCheckedChange = null,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        )
+                    }
 
                     CompactSettingsItem(
                         title = stringResource(R.string.backup),

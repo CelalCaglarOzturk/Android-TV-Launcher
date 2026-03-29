@@ -31,6 +31,7 @@ class SettingsRepository(
 
         // Launcher Suppression Key
         private const val KEY_SUPPRESS_ORIGINAL_LAUNCHER = "suppress_original_launcher"
+        private const val KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL = "suppress_launcher_only_external"
 
         // Default height in dp
         const val DEFAULT_APP_CARD_SIZE = 90
@@ -106,6 +107,11 @@ class SettingsRepository(
         prefs.getBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, false)
     )
     val suppressOriginalLauncher = _suppressOriginalLauncher.asStateFlow()
+
+    private val _suppressLauncherOnlyExternal = MutableStateFlow(
+        prefs.getBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, true)
+    )
+    val suppressLauncherOnlyExternal = _suppressLauncherOnlyExternal.asStateFlow()
 
     fun setAppCardSize(size: Int) {
         prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
@@ -217,6 +223,15 @@ class SettingsRepository(
         setSuppressOriginalLauncher(!_suppressOriginalLauncher.value)
     }
 
+    fun setSuppressLauncherOnlyExternal(onlyExternal: Boolean) {
+        prefs.edit { putBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, onlyExternal) }
+        _suppressLauncherOnlyExternal.value = onlyExternal
+    }
+
+    fun toggleSuppressLauncherOnlyExternal() {
+        setSuppressLauncherOnlyExternal(!_suppressLauncherOnlyExternal.value)
+    }
+
     fun resetSettings() {
         prefs.edit { clear() }
         _appCardSize.value = DEFAULT_APP_CARD_SIZE
@@ -238,6 +253,7 @@ class SettingsRepository(
 
         // Reset launcher suppression
         _suppressOriginalLauncher.value = false
+        _suppressLauncherOnlyExternal.value = true
     }
     
     fun clearHiddenInputs() {

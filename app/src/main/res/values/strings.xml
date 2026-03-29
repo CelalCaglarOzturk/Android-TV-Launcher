@@ -179,12 +179,18 @@
 	<string name="settings_suppress_launcher">Suppress Original Launcher</string>
 	<string
         name="settings_suppress_launcher_description"
-    >Intercept home button to open this launcher instead of the original Android TV launcher</string>
-	<string name="accessibility_service_description">Allows TV Launcher to intercept home button presses and launch itself instead of the original Android TV launcher.</string>
+    >Intercept home button to return to this launcher from other apps</string>
+	<string name="accessibility_service_description">Allows TV Launcher to intercept home button when returning from other apps.</string>
 	<string
         name="settings_accessibility_required"
-    >Accessibility permission required. Enable "TV Launcher" in Accessibility settings to intercept home button.</string>
+    >Go to: Device Preferences > Accessibility > TV Launcher and enable it.</string>
 	<string
         name="settings_open_accessibility"
     >Open Accessibility Settings</string>
+	<string
+        name="settings_suppress_only_external"
+    >Only intercept from other apps</string>
+	<string
+        name="settings_suppress_only_external_description"
+    >When enabled, home button works normally inside launcher. When disabled, home always opens this launcher.</string>
 	</resources>
