@@ -245,8 +245,6 @@ fun LauncherSettingsDialog(
                         onClick = { showInputsSettings = true }
                     )
 
-                    val accessibilityEnabled = remember { mutableStateOf(isAccessibilityServiceEnabled()) }
-
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_suppress_launcher),
                         description = stringResource(R.string.settings_suppress_launcher_description),
@@ -256,7 +254,7 @@ fun LauncherSettingsDialog(
                                 settingsRepository.setSuppressOriginalLauncher(false)
                             } else {
                                 // Enabling - check permission
-                                if (!accessibilityEnabled.value) {
+                                if (!isAccessibilityServiceEnabled()) {
                                     showAccessibilityDialog = true
                                 } else {
                                     settingsRepository.setSuppressOriginalLauncher(true)
