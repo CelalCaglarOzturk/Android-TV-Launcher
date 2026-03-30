@@ -1,0 +1,59 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Default preset for use with Jellyfin's JVM repos",
+  "extends": ["github>jellyfin/.github//renovate-presets/default"],
+  "packageRules": [
+    {
+      "description": "Add the gradle GitHub label to Gradle dependency bump PRs",
+      "matchManagers": ["gradle"],
+      "addLabels": ["gradle"]
+    },
+    {
+      "description": "Add the gradle-wrapper GitHub label to Gradle wrapper update PRs",
+      "matchManagers": ["gradle-wrapper"],
+      "addLabels": ["gradle-wrapper"]
+    },
+    {
+      "description": "Group Kotlin specific dependencies",
+      "groupName": "Kotlin",
+      "matchPackagePrefixes": ["org.jetbrains.kotlin"],
+      "matchPackageNames": ["com.google.devtools.ksp"]
+    },
+    {
+      "description": "Group Detekt specific dependencies",
+      "groupName": "detekt",
+      "matchPackagePrefixes": ["io.gitlab.arturbosch.detekt"]
+    },
+    {
+      "description": "Group Kotest specific dependencies",
+      "groupName": "kotest",
+      "matchPackagePrefixes": ["io.kotest"]
+    },
+    {
+      "description": "Group AboutLibraries specific dependencies",
+      "groupName": "aboutlibraries",
+      "matchPackagePrefixes": [
+        "com.mikepenz.aboutlibraries",
+        "com.mikepenz:aboutlibraries"
+      ]
+    },
+    {
+      "description": "Group androidx.media3 specific dependencies",
+      "groupName": "androidx.media3",
+      "matchPackagePrefixes": [
+        "androidx.media3",
+        "org.jellyfin.media3:media3-ffmpeg-decoder"
+      ]
+    },
+    {
+      "description": "Group Koin specific dependencies",
+      "groupName": "koin",
+      "matchPackagePrefixes": ["io.insert-koin"]
+    },
+    {
+      "description": "Group androidx.compose specific dependencies",
+      "groupName": "androidx.compose",
+      "matchPackagePrefixes": ["androidx.compose"]
+    }
+  ]
+}
