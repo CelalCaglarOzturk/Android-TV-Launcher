@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +21,7 @@ import nl.ndat.tvlauncher.ui.settings.LauncherSettingsDialog
 import nl.ndat.tvlauncher.ui.tab.apps.AppsTab
 import nl.ndat.tvlauncher.ui.tab.home.HomeTab
 import nl.ndat.tvlauncher.ui.toolbar.Toolbar
+import nl.ndat.tvlauncher.util.DeepLink
 import nl.ndat.tvlauncher.util.FocusController
 import nl.ndat.tvlauncher.util.composition.LocalBackStack
 import nl.ndat.tvlauncher.util.composition.ProvideNavigation
@@ -27,12 +29,18 @@ import org.koin.compose.koinInject
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun LauncherScreen() {
+fun LauncherScreen(
+	pendingDeepLink: DeepLink? = null,
+	onDeepLinkHandled: () -> Unit = {}
+) {
     val focusController = koinInject<FocusController>()
     var showLauncherSettings by remember { mutableStateOf(false) }
+    var pendingLink by remember { mutableStateOf(pendingDeepLink) }
 
     if (showLauncherSettings) {
-        LauncherSettingsDialog(onDismissRequest = { showLauncherSettings = false })
+        LauncherSettingsDialog(
+            onDismissRequest = { showLauncherSettings = false }
+        )
     }
 
     BackHandler {
@@ -40,6 +48,23 @@ fun LauncherScreen() {
     }
 
     ProvideNavigation {
+        val backStack = LocalBackStack.current
+        
+        LaunchedEffect(pendingLink) {
+            pendingLink?.let { deepLink ->
+                when (deepLink.action) {
+                    DeepLink.ACTION_SETTINGS -> {
+                        showLauncherSettings = true
+                    }
+                    DeepLink.ACTION_APPS -> {
+                        backStack.add(Destinations.Apps)
+                    }
+                }
+                pendingLink = null
+                onDeepLinkHandled()
+            }
+        }
+        
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -57,7 +82,6 @@ fun LauncherScreen() {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                val backStack = LocalBackStack.current
                 val currentDestination by remember {
                     derivedStateOf {
                         backStack.lastOrNull() ?: Destinations.Home

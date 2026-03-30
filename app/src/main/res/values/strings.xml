@@ -206,4 +206,18 @@
 	<string
         name="settings_suppress_only_external_description"
     >When enabled, home button works normally inside launcher. When disabled, home button always opens this launcher.</string>
+
+	<!-- Onboarding -->
+	<string name="onboarding_welcome">Welcome to TV Launcher</string>
+	<string name="onboarding_skip">Skip</string>
+	<string name="onboarding_next">Next</string>
+	<string name="onboarding_get_started">Get Started</string>
+	<string name="onboarding_page1_title">Your Custom Home Screen</string>
+	<string name="onboarding_page1_description">TV Launcher gives you a clean, customizable home screen for your Android TV. Organize your apps, channels, and inputs the way you want.</string>
+	<string name="onboarding_page2_title">Organize Your Apps</string>
+	<string name="onboarding_page2_description">Press and hold any app to move it. Use the menu to add favorites to your home row, hide apps you don\'t need, or access app info.</string>
+	<string name="onboarding_page3_title">Customize Your Experience</string>
+	<string name="onboarding_page3_description">Open Settings to change app card sizes, enable animations, configure channel display, backup your preferences, and more.</string>
+	<string name="onboarding_page4_title">Set as Default</string>
+	<string name="onboarding_page4_description">For the best experience, set TV Launcher as your default home app. You can always change this later in Android TV settings.</string>
 	</resources>

@@ -25,7 +25,10 @@ import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.ui.AppBase
+import nl.ndat.tvlauncher.ui.onboarding.OnboardingManager
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
+import nl.ndat.tvlauncher.util.DeepLink
+import nl.ndat.tvlauncher.util.DeepLinkHandler
 import nl.ndat.tvlauncher.util.FocusController
 import nl.ndat.tvlauncher.util.LauncherConstants
 import org.koin.android.ext.android.inject
@@ -45,6 +48,10 @@ class LauncherActivity : ComponentActivity() {
 	private val inputRepository: InputRepository by inject()
 	private val channelRepository: ChannelRepository by inject()
 	private val settingsRepository: SettingsRepository by inject()
+	private lateinit var onboardingManager: OnboardingManager
+
+	private var showOnboarding = false
+	private var pendingDeepLink: DeepLink? = null
 
 	private val permissionsLauncher =
 		registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -57,8 +64,21 @@ class LauncherActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
+		onboardingManager = OnboardingManager(this)
+		showOnboarding = !onboardingManager.isCompleted()
+
+		handleIntent(intent)
+
 		setContent {
-			AppBase()
+			AppBase(
+				showOnboarding = showOnboarding,
+				pendingDeepLink = pendingDeepLink,
+				onOnboardingComplete = {
+					showOnboarding = false
+					onboardingManager.markCompleted()
+				},
+				onDeepLinkHandled = { pendingDeepLink = null }
+			)
 		}
 
 		validateDefaultLauncher()
@@ -170,13 +190,27 @@ class LauncherActivity : ComponentActivity() {
 		private const val REQUEST_DEFAULT_LAUNCHER = 100
 		private var testCrashPressCount = 0
 		private var lastTestCrashPressTime = 0L
-		private val TEST_CRASH_TIMEOUT_MS = 60000L // Reset counter after 10 seconds
+		private const val TEST_CRASH_TIMEOUT_MS = 10000L // Reset counter after 10 seconds
 	}
 
 	override fun onNewIntent(intent: Intent) {
 		super.onNewIntent(intent)
+		handleIntent(intent)
 		if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_HOME)) {
 			focusController.requestFocusReset()
+		}
+	}
+
+	private fun handleIntent(intent: Intent) {
+		when (intent.action) {
+			Intent.ACTION_VIEW -> {
+				intent.data?.let { uri ->
+					DeepLinkHandler.parse(uri)?.let { deepLink ->
+						Timber.d("DeepLink received: $deepLink")
+						pendingDeepLink = deepLink
+					}
+				}
+			}
 		}
 	}
 

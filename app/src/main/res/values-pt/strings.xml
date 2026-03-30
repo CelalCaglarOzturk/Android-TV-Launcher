@@ -148,9 +148,6 @@
 	<string name="settings_developer_mode_description">Ativar funcionalidade de teste de crash (pressione 9 cinco vezes)</string>
 	<string name="about_app_info">Info da App</string>
 	<string name="about_version">Versão %1$s (%2$d)</string>
-	<string name="about_developer_mode">Modo Programador</string>
-	<string name="about_developer_mode_enabled">Modo programador ativado! Funcionalidade de teste de crash disponível.</string>
-	<string name="about_developer_mode_remaining">Toque mais %1$d vezes para ativar o modo programador</string>
 	<string name="about_bug_reporting">Reportar Erros</string>
 	<string name="about_email">Email: %1$s</string>
 	<string name="about_email_address">support@example.com</string>
@@ -162,4 +159,18 @@
 	<string name="about_website">Website</string>
 	<string name="about_website_url">https://example.com/tv-launcher</string>
 	<string name="about_github_qr_desc">Digitalize para reportar um problema no GitHub</string>
+
+	<!-- Onboarding -->
+	<string name="onboarding_welcome">Bem-vindo ao TV Launcher</string>
+	<string name="onboarding_skip">Ignorar</string>
+	<string name="onboarding_next">Seguinte</string>
+	<string name="onboarding_get_started">Começar</string>
+	<string name="onboarding_page1_title">O Seu Ecrã Principal Personalizado</string>
+	<string name="onboarding_page1_description">O TV Launcher dá-lhe um ecrã inicial limpo e personalizável para a sua Android TV. Organize as suas apps, canais e entradas como quiser.</string>
+	<string name="onboarding_page2_title">Organize as Suas Apps</string>
+	<string name="onboarding_page2_description">Prima e mantenha qualquer app para a mover. Use o menu para adicionar favoritos à sua fila inicial, ocultar apps que não precisa, ou aceder às informações da app.</string>
+	<string name="onboarding_page3_title">Personalize a Sua Experiência</string>
+	<string name="onboarding_page3_description">Abra as Definições para alterar tamanhos de cards, ativar animações, configurar visualização de canais, fazer cópia de segurança das preferências, e mais.</string>
+	<string name="onboarding_page4_title">Definir como Padrão</string>
+	<string name="onboarding_page4_description">Para a melhor experiência, defina o TV Launcher como a sua app inicial padrão. Pode sempre alterar isto mais tarde nas definições da Android TV.</string>
 </resources>
