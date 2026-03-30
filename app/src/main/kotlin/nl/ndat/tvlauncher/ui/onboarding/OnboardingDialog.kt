@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.edit
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
@@ -182,10 +183,10 @@ class OnboardingManager(context: Context) {
     }
 
     fun markCompleted() {
-        prefs.edit().putBoolean(KEY_COMPLETED, true).apply()
+        prefs.edit { putBoolean(KEY_COMPLETED, true) }
     }
 
     fun reset() {
-        prefs.edit().remove(KEY_COMPLETED).apply()
+        prefs.edit { remove(KEY_COMPLETED) }
     }
 }

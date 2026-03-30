@@ -132,7 +132,7 @@ class CrashRecoveryActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("ApplySharedPref")
+    @SuppressLint("ApplySharedPref", "UseKtx")
 	private fun resetSettingsAndRestart() {
         try {
             // Clear settings preferences

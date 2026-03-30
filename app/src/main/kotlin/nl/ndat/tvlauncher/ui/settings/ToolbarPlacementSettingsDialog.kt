@@ -76,7 +76,6 @@ fun ToolbarPlacementSettingsDialog(
 
                     ToolbarItemRow(
                         item = item,
-                        itemName = itemName,
                         isEnabled = isEnabled,
                         isMoving = isMoving,
                         isLauncherSettings = isLauncherSettings,
@@ -126,7 +125,6 @@ private enum class ToolbarItem {
 @Composable
 private fun ToolbarItemRow(
     item: ToolbarItem,
-    itemName: String,
     isEnabled: Boolean,
     isMoving: Boolean,
     isLauncherSettings: Boolean,

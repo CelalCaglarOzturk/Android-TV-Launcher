@@ -280,7 +280,6 @@ fun HomeTab(
                         programs = programs,
                         channel = channel,
                         baseHeight = channelCardSize.dp,
-                        overrideAspectRatio = 16f / 9f,
                         onToggleEnabled = onToggleEnabled,
                         onMoveUp = onMoveUp,
                         onMoveDown = onMoveDown,

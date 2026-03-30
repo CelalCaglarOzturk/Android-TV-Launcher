@@ -9,6 +9,7 @@ import nl.ndat.tvlauncher.util.LauncherConstants
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
+@SuppressLint("ApplySharedPref", "UseKtx")
 class CrashHandler(
     private val appContext: Context
 ) : Thread.UncaughtExceptionHandler {

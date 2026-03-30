@@ -60,7 +60,6 @@ fun ChannelProgramCardRow(
     programs: List<ChannelProgram>,
     channel: Channel? = null,
     baseHeight: Dp = 90.dp,
-    overrideAspectRatio: Float? = null,
     onToggleEnabled: ((enabled: Boolean) -> Unit)? = null,
     onMoveUp: (() -> Unit)? = null,
     onMoveDown: (() -> Unit)? = null,
@@ -199,7 +198,6 @@ fun ChannelProgramCardRow(
                                     ChannelProgramCard(
                                         program = program,
                                         baseHeight = baseHeight,
-                                        overrideAspectRatio = overrideAspectRatio,
                                         isMoving = isInMoveMode,
                                         modifier = Modifier
                                             .focusRequester(programFocusRequester)
