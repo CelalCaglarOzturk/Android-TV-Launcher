@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 
 class SettingsRepository(
     context: Context
@@ -114,34 +115,55 @@ class SettingsRepository(
     val suppressLauncherOnlyExternal = _suppressLauncherOnlyExternal.asStateFlow()
 
     fun setAppCardSize(size: Int) {
-        prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
-        _appCardSize.value = size
+        try {
+            prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
+            _appCardSize.value = size
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set app card size")
+        }
     }
 
     fun setChannelCardSize(size: Int) {
-        prefs.edit { putInt(KEY_CHANNEL_CARD_SIZE, size) }
-        _channelCardSize.value = size
+        try {
+            prefs.edit { putInt(KEY_CHANNEL_CARD_SIZE, size) }
+            _channelCardSize.value = size
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set channel card size")
+        }
     }
 
     fun setChannelCardsPerRow(count: Int) {
-        prefs.edit { putInt(KEY_CHANNEL_CARDS_PER_ROW, count.coerceIn(3, 20)) }
-        _channelCardsPerRow.value = count.coerceIn(3, 20)
+        try {
+            val coercedCount = count.coerceIn(3, 20)
+            prefs.edit { putInt(KEY_CHANNEL_CARDS_PER_ROW, coercedCount) }
+            _channelCardsPerRow.value = coercedCount
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set channel cards per row")
+        }
     }
 
     fun toggleInputHidden(inputId: String) {
-        val current = _hiddenInputs.value.toMutableSet()
-        if (current.contains(inputId)) {
-            current.remove(inputId)
-        } else {
-            current.add(inputId)
+        try {
+            val current = _hiddenInputs.value.toMutableSet()
+            if (current.contains(inputId)) {
+                current.remove(inputId)
+            } else {
+                current.add(inputId)
+            }
+            prefs.edit { putStringSet(KEY_HIDDEN_INPUTS, current) }
+            _hiddenInputs.value = current
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to toggle input hidden state")
         }
-        prefs.edit { putStringSet(KEY_HIDDEN_INPUTS, current) }
-        _hiddenInputs.value = current
     }
 
     fun setShowMobileApps(show: Boolean) {
-        prefs.edit { putBoolean(KEY_SHOW_MOBILE_APPS, show) }
-        _showMobileApps.value = show
+        try {
+            prefs.edit { putBoolean(KEY_SHOW_MOBILE_APPS, show) }
+            _showMobileApps.value = show
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set show mobile apps")
+        }
     }
 
     fun toggleShowMobileApps() {
@@ -150,8 +172,12 @@ class SettingsRepository(
 
     // Animation Setters
     fun setEnableAnimations(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ENABLE_ANIMATIONS, enable) }
-        _enableAnimations.value = enable
+        try {
+            prefs.edit { putBoolean(KEY_ENABLE_ANIMATIONS, enable) }
+            _enableAnimations.value = enable
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set enable animations")
+        }
     }
 
     fun toggleEnableAnimations() {
@@ -159,29 +185,49 @@ class SettingsRepository(
     }
 
     fun setAnimAppIcon(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ANIM_APP_ICON, enable) }
-        _animAppIcon.value = enable
+        try {
+            prefs.edit { putBoolean(KEY_ANIM_APP_ICON, enable) }
+            _animAppIcon.value = enable
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set anim app icon")
+        }
     }
 
     fun setAnimChannelRow(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ANIM_CHANNEL_ROW, enable) }
-        _animChannelRow.value = enable
+        try {
+            prefs.edit { putBoolean(KEY_ANIM_CHANNEL_ROW, enable) }
+            _animChannelRow.value = enable
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set anim channel row")
+        }
     }
 
     fun setAnimChannelMove(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ANIM_CHANNEL_MOVE, enable) }
-        _animChannelMove.value = enable
+        try {
+            prefs.edit { putBoolean(KEY_ANIM_CHANNEL_MOVE, enable) }
+            _animChannelMove.value = enable
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set anim channel move")
+        }
     }
 
     fun setAnimAppMove(enable: Boolean) {
-        prefs.edit { putBoolean(KEY_ANIM_APP_MOVE, enable) }
-        _animAppMove.value = enable
+        try {
+            prefs.edit { putBoolean(KEY_ANIM_APP_MOVE, enable) }
+            _animAppMove.value = enable
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set anim app move")
+        }
     }
 
     // Toolbar Placement Setters - Single unified list
     fun setToolbarItemsOrder(order: List<String>) {
-        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ORDER, order.toSet()) }
-        _toolbarItemsOrder.value = order
+        try {
+            prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ORDER, order.toSet()) }
+            _toolbarItemsOrder.value = order
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set toolbar items order")
+        }
     }
 
     fun toggleToolbarItem(itemName: String) {
@@ -189,14 +235,18 @@ class SettingsRepository(
         if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name) {
             return
         }
-        val current = _toolbarItemsEnabled.value.toMutableSet()
-        if (current.contains(itemName)) {
-            current.remove(itemName)
-        } else {
-            current.add(itemName)
+        try {
+            val current = _toolbarItemsEnabled.value.toMutableSet()
+            if (current.contains(itemName)) {
+                current.remove(itemName)
+            } else {
+                current.add(itemName)
+            }
+            prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
+            _toolbarItemsEnabled.value = current
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to toggle toolbar item")
         }
-        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
-        _toolbarItemsEnabled.value = current
     }
 
     fun setToolbarItemEnabled(itemName: String, enabled: Boolean) {
@@ -204,19 +254,27 @@ class SettingsRepository(
         if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name && !enabled) {
             return
         }
-        val current = _toolbarItemsEnabled.value.toMutableSet()
-        if (enabled) {
-            current.add(itemName)
-        } else {
-            current.remove(itemName)
+        try {
+            val current = _toolbarItemsEnabled.value.toMutableSet()
+            if (enabled) {
+                current.add(itemName)
+            } else {
+                current.remove(itemName)
+            }
+            prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
+            _toolbarItemsEnabled.value = current
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set toolbar item enabled")
         }
-        prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ENABLED, current) }
-        _toolbarItemsEnabled.value = current
     }
 
     fun setSuppressOriginalLauncher(suppress: Boolean) {
-        prefs.edit { putBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, suppress) }
-        _suppressOriginalLauncher.value = suppress
+        try {
+            prefs.edit { putBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, suppress) }
+            _suppressOriginalLauncher.value = suppress
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set suppress original launcher")
+        }
     }
 
     fun toggleSuppressOriginalLauncher() {
@@ -224,8 +282,12 @@ class SettingsRepository(
     }
 
     fun setSuppressLauncherOnlyExternal(onlyExternal: Boolean) {
-        prefs.edit { putBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, onlyExternal) }
-        _suppressLauncherOnlyExternal.value = onlyExternal
+        try {
+            prefs.edit { putBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, onlyExternal) }
+            _suppressLauncherOnlyExternal.value = onlyExternal
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set suppress launcher only external")
+        }
     }
 
     fun toggleSuppressLauncherOnlyExternal() {
@@ -233,31 +295,39 @@ class SettingsRepository(
     }
 
     fun resetSettings() {
-        prefs.edit { clear() }
-        _appCardSize.value = DEFAULT_APP_CARD_SIZE
-        _channelCardSize.value = DEFAULT_CHANNEL_CARD_SIZE
-        _channelCardsPerRow.value = DEFAULT_CHANNEL_CARDS_PER_ROW
-        _hiddenInputs.value = emptySet()
-        _showMobileApps.value = false
+        try {
+            prefs.edit { clear() }
+            _appCardSize.value = DEFAULT_APP_CARD_SIZE
+            _channelCardSize.value = DEFAULT_CHANNEL_CARD_SIZE
+            _channelCardsPerRow.value = DEFAULT_CHANNEL_CARDS_PER_ROW
+            _hiddenInputs.value = emptySet()
+            _showMobileApps.value = false
 
-        // Reset animations
-        _enableAnimations.value = true
-        _animAppIcon.value = true
-        _animChannelRow.value = true
-        _animChannelMove.value = true
-        _animAppMove.value = true
+            // Reset animations
+            _enableAnimations.value = true
+            _animAppIcon.value = true
+            _animChannelRow.value = true
+            _animChannelMove.value = true
+            _animAppMove.value = true
 
-        // Reset toolbar placement to unified list
-        _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
-        _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
+            // Reset toolbar placement to unified list
+            _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
+            _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
 
-        // Reset launcher suppression
-        _suppressOriginalLauncher.value = false
-        _suppressLauncherOnlyExternal.value = false
+            // Reset launcher suppression
+            _suppressOriginalLauncher.value = false
+            _suppressLauncherOnlyExternal.value = false
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to reset settings")
+        }
     }
     
     fun clearHiddenInputs() {
-        prefs.edit { remove(KEY_HIDDEN_INPUTS) }
-        _hiddenInputs.value = emptySet()
+        try {
+            prefs.edit { remove(KEY_HIDDEN_INPUTS) }
+            _hiddenInputs.value = emptySet()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to clear hidden inputs")
+        }
     }
 }
