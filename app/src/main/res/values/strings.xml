@@ -28,6 +28,11 @@
     >Show apps without TV interface</string>
 	<string name="settings_inputs">Inputs</string>
 	<string name="settings_no_inputs">No inputs found</string>
+	<string name="settings_section_appearance">Appearance</string>
+	<string name="settings_section_layout">Layout</string>
+	<string name="settings_section_behavior">Behavior</string>
+	<string name="settings_section_data">Data</string>
+	<string name="settings_section_system">System</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remove from Watch Next</string>
@@ -44,6 +49,7 @@
 	<string name="app_remove_from_home">Remove from Home</string>
 	<string name="app_hide">Hide App</string>
 	<string name="app_unhide">Unhide App</string>
+	<string name="app_uninstall">Uninstall</string>
 	<string
         name="app_moving_instructions"
     >Use arrows to move • OK to confirm</string>
@@ -191,6 +197,8 @@
         name="settings_accessibility_required"
     >Enable accessibility: Device Preferences > Accessibility > TV Launcher > On</string>
 	<string name="settings_open_settings">Open Settings</string>
+	<string name="settings_accessibility_enabled">Accessibility: Enabled</string>
+	<string name="settings_accessibility_disabled">Accessibility: Required</string>
 	<string
         name="settings_suppress_only_external"
     >Only intercept from other apps</string>

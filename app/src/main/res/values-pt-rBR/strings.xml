@@ -28,6 +28,13 @@
     >Mostrar apps sem interface de TV</string>
 	<string name="settings_inputs">Entradas</string>
 	<string name="settings_no_inputs">Nenhuma entrada encontrada</string>
+	<string name="settings_section_appearance">Aparência</string>
+	<string name="settings_section_layout">Layout</string>
+	<string name="settings_section_behavior">Comportamento</string>
+	<string name="settings_section_data">Dados</string>
+	<string name="settings_section_system">Sistema</string>
+	<string name="settings_accessibility_enabled">Acessibilidade: Ativada</string>
+	<string name="settings_accessibility_disabled">Acessibilidade: Necessária</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remover de Assistir Depois</string>
@@ -43,6 +50,7 @@
 	<string name="app_add_to_home">Adicionar ao Início</string>
 	<string name="app_remove_from_home">Remover do Início</string>
 	<string name="app_hide">Ocultar App</string>
+	<string name="app_uninstall">Desinstalar</string>
 	<string name="app_unhide">Mostrar App</string>
 	<string
         name="app_moving_instructions"

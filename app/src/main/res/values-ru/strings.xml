@@ -32,6 +32,13 @@
     >Показывать приложения без ТВ-интерфейса</string>
 	<string name="settings_inputs">Входы</string>
 	<string name="settings_no_inputs">Входы не найдены</string>
+	<string name="settings_section_appearance">Внешний вид</string>
+	<string name="settings_section_layout">Макет</string>
+	<string name="settings_section_behavior">Поведение</string>
+	<string name="settings_section_data">Данные</string>
+	<string name="settings_section_system">Система</string>
+	<string name="settings_accessibility_enabled">Спец. возможности: Включено</string>
+	<string name="settings_accessibility_disabled">Спец. возможности: Требуется</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Удалить из Смотреть далее</string>
@@ -47,6 +54,7 @@
 	<string name="app_add_to_home">Добавить на главную</string>
 	<string name="app_remove_from_home">Удалить с главной</string>
 	<string name="app_hide">Скрыть приложение</string>
+	<string name="app_uninstall">Удалить</string>
 	<string name="app_unhide">Показать приложение</string>
 	<string
         name="app_moving_instructions"

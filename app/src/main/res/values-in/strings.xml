@@ -28,6 +28,13 @@
     >Tampilkan aplikasi tanpa antarmuka TV</string>
 	<string name="settings_inputs">Input</string>
 	<string name="settings_no_inputs">Tidak ada input ditemukan</string>
+	<string name="settings_section_appearance">Tampilan</string>
+	<string name="settings_section_layout">Tata Letak</string>
+	<string name="settings_section_behavior">Perilaku</string>
+	<string name="settings_section_data">Data</string>
+	<string name="settings_section_system">Sistem</string>
+	<string name="settings_accessibility_enabled">Aksesibilitas: Diaktifkan</string>
+	<string name="settings_accessibility_disabled">Aksesibilitas: Diperlukan</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Hapus dari Tonton Berikutnya</string>
@@ -43,6 +50,7 @@
 	<string name="app_add_to_home">Tambah ke Beranda</string>
 	<string name="app_remove_from_home">Hapus dari Beranda</string>
 	<string name="app_hide">Sembunyikan Aplikasi</string>
+	<string name="app_uninstall">Hapus Instalasi</string>
 	<string name="app_unhide">Tampilkan Aplikasi</string>
 	<string
         name="app_moving_instructions"

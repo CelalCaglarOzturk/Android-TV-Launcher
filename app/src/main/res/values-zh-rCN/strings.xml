@@ -26,6 +26,13 @@
     >显示没有电视界面的应用</string>
 	<string name="settings_inputs">输入</string>
 	<string name="settings_no_inputs">未找到输入</string>
+	<string name="settings_section_appearance">外观</string>
+	<string name="settings_section_layout">布局</string>
+	<string name="settings_section_behavior">行为</string>
+	<string name="settings_section_data">数据</string>
+	<string name="settings_section_system">系统</string>
+	<string name="settings_accessibility_enabled">无障碍功能：已启用</string>
+	<string name="settings_accessibility_disabled">无障碍功能：需要启用</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">从稍后观看移除</string>
@@ -39,6 +46,7 @@
 	<string name="app_add_to_home">添加到首页</string>
 	<string name="app_remove_from_home">从首页移除</string>
 	<string name="app_hide">隐藏应用</string>
+	<string name="app_uninstall">卸载</string>
 	<string name="app_unhide">取消隐藏</string>
 	<string name="app_moving_instructions">使用方向键移动 • 按确定确认</string>
 	<string name="channel_moving_instructions">使用↑↓移动 • 按确定确认</string>

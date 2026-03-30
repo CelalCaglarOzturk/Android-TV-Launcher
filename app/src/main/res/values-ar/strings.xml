@@ -26,6 +26,13 @@
     >إظهار التطبيقات بدون واجهة التلفزيون</string>
 	<string name="settings_inputs">المدخلات</string>
 	<string name="settings_no_inputs">لم يتم العثور على مدخلات</string>
+	<string name="settings_section_appearance">المظهر</string>
+	<string name="settings_section_layout">التخطيط</string>
+	<string name="settings_section_behavior">السلوك</string>
+	<string name="settings_section_data">البيانات</string>
+	<string name="settings_section_system">النظام</string>
+	<string name="settings_accessibility_enabled">إمكانية الوصول: مفعّل</string>
+	<string name="settings_accessibility_disabled">إمكانية الوصول: مطلوب</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">إزالة من المشاهدة لاحقاً</string>
@@ -41,6 +48,7 @@
 	<string name="app_add_to_home">إضافة إلى الرئيسية</string>
 	<string name="app_remove_from_home">إزالة من الرئيسية</string>
 	<string name="app_hide">إخفاء التطبيق</string>
+	<string name="app_uninstall">إلغاء التثبيت</string>
 	<string name="app_unhide">إظهار التطبيق</string>
 	<string name="app_moving_instructions">استخدم الأسهم للنقل • OK للتأكيد</string>
 	<string name="channel_moving_instructions">استخدم ↑↓ للنقل • OK للتأكيد</string>

@@ -30,6 +30,13 @@
     >TVインターフェースのないアプリを表示</string>
 	<string name="settings_inputs">入力</string>
 	<string name="settings_no_inputs">入力が見つかりません</string>
+	<string name="settings_section_appearance">外観</string>
+	<string name="settings_section_layout">レイアウト</string>
+	<string name="settings_section_behavior">動作</string>
+	<string name="settings_section_data">データ</string>
+	<string name="settings_section_system">システム</string>
+	<string name="settings_accessibility_enabled">アクセシビリティ: 有効</string>
+	<string name="settings_accessibility_disabled">アクセシビリティ: 必要</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">ウォッチネクストから削除</string>
@@ -45,6 +52,7 @@
 	<string name="app_add_to_home">ホームに追加</string>
 	<string name="app_remove_from_home">ホームから削除</string>
 	<string name="app_hide">アプリを非表示</string>
+	<string name="app_uninstall">アンインストール</string>
 	<string name="app_unhide">アプリを表示</string>
 	<string name="app_moving_instructions">矢印で移動 • OKで確定</string>
 	<string name="channel_moving_instructions">↑↓で移動 • OKで確定</string>

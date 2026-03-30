@@ -28,6 +28,13 @@
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Sıradakilerden Kaldır</string>
+	<string name="settings_section_appearance">Görünüm</string>
+	<string name="settings_section_layout">Düzen</string>
+	<string name="settings_section_behavior">Davranış</string>
+	<string name="settings_section_data">Veri</string>
+	<string name="settings_section_system">Sistem</string>
+	<string name="settings_accessibility_enabled">Erişilebilirlik: Etkin</string>
+	<string name="settings_accessibility_disabled">Erişilebilirlik: Gerekli</string>
 
 	<!-- App options -->
 	<string name="app_options">Uygulama Seçenekleri</string>
@@ -37,6 +44,7 @@
 	<string name="app_add_to_home">Ana Ekrana Ekle</string>
 	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
 	<string name="app_hide">Uygulamayı Gizle</string>
+	<string name="app_uninstall">Kaldır</string>
 	<string name="app_unhide">Uygulamayı Göster</string>
 
 	<!-- Apps Tab -->

@@ -263,6 +263,7 @@ fun MoveableAppCard(
         popupContent = {
             AppOptionsPopup(
                 isFavorite = isFavorite,
+                packageName = app.packageName,
                 onOpen = {
                     menuVisible = false
                     if (onClick != null) {

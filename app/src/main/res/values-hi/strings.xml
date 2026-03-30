@@ -26,6 +26,13 @@
     >TV इंटरफ़ेस के बिना ऐप्स दिखाएं</string>
 	<string name="settings_inputs">इनपुट</string>
 	<string name="settings_no_inputs">कोई इनपुट नहीं मिला</string>
+	<string name="settings_section_appearance">दिखावट</string>
+	<string name="settings_section_layout">लेआउट</string>
+	<string name="settings_section_behavior">व्यवहार</string>
+	<string name="settings_section_data">डेटा</string>
+	<string name="settings_section_system">सिस्टम</string>
+	<string name="settings_accessibility_enabled">एक्सेसिबिलिटी: सक्षम</string>
+	<string name="settings_accessibility_disabled">एक्सेसिबिलिटी: आवश्यक</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">वॉच नेक्स्ट से हटाएं</string>
@@ -41,6 +48,7 @@
 	<string name="app_add_to_home">होम में जोड़ें</string>
 	<string name="app_remove_from_home">होम से हटाएं</string>
 	<string name="app_hide">ऐप छुपाएं</string>
+	<string name="app_uninstall">स्थापना रद्द करें</string>
 	<string name="app_unhide">ऐप दिखाएं</string>
 	<string
         name="app_moving_instructions"

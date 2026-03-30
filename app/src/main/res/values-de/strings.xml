@@ -28,6 +28,13 @@
     >Apps ohne TV-Oberfläche anzeigen</string>
 	<string name="settings_inputs">Eingänge</string>
 	<string name="settings_no_inputs">Keine Eingänge gefunden</string>
+	<string name="settings_section_appearance">Aussehen</string>
+	<string name="settings_section_layout">Layout</string>
+	<string name="settings_section_behavior">Verhalten</string>
+	<string name="settings_section_data">Daten</string>
+	<string name="settings_section_system">System</string>
+	<string name="settings_accessibility_enabled">Bedienungshilfen: Aktiviert</string>
+	<string name="settings_accessibility_disabled">Bedienungshilfen: Erforderlich</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Aus Watch Next entfernen</string>
@@ -43,6 +50,7 @@
 	<string name="app_add_to_home">Zur Startseite hinzufügen</string>
 	<string name="app_remove_from_home">Von Startseite entfernen</string>
 	<string name="app_hide">App ausblenden</string>
+	<string name="app_uninstall">Deinstallieren</string>
 	<string name="app_unhide">App einblenden</string>
 	<string
         name="app_moving_instructions"

@@ -169,6 +169,9 @@ fun LauncherSettingsDialog(
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
+                    // === Appearance Section ===
+                    SettingsSectionHeader(title = stringResource(R.string.settings_section_appearance))
+
                     // App Card Size
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -225,6 +228,9 @@ fun LauncherSettingsDialog(
                         onClick = { showAnimationsSettings = true }
                     )
 
+                    // === Layout Section ===
+                    SettingsSectionHeader(title = stringResource(R.string.settings_section_layout))
+
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_toolbar_placement),
                         onClick = { showToolbarPlacementSettings = true }
@@ -245,9 +251,20 @@ fun LauncherSettingsDialog(
                         onClick = { showInputsSettings = true }
                     )
 
+                    // === Behavior Section ===
+                    SettingsSectionHeader(title = stringResource(R.string.settings_section_behavior))
+
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_suppress_launcher),
-                        description = stringResource(R.string.settings_suppress_launcher_description),
+                        description = if (suppressOriginalLauncher) {
+                            if (isAccessibilityServiceEnabled()) {
+                                stringResource(R.string.settings_accessibility_enabled)
+                            } else {
+                                stringResource(R.string.settings_accessibility_disabled)
+                            }
+                        } else {
+                            stringResource(R.string.settings_suppress_launcher_description)
+                        },
                         onClick = {
                             if (suppressOriginalLauncher) {
                                 // Disabling - no permission needed
@@ -284,6 +301,9 @@ fun LauncherSettingsDialog(
                             }
                         )
                     }
+
+                    // === Data Section ===
+                    SettingsSectionHeader(title = stringResource(R.string.settings_section_data))
 
                     CompactSettingsItem(
                         title = stringResource(R.string.backup),
@@ -381,6 +401,9 @@ fun LauncherSettingsDialog(
                         }
                     )
 
+                    // === System Section ===
+                    SettingsSectionHeader(title = stringResource(R.string.settings_section_system))
+
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_about),
                         onClick = { showAboutSettings = true }
@@ -445,6 +468,19 @@ private fun CompactSettingsItem(
             }
         }
     }
+}
+
+@Composable
+private fun SettingsSectionHeader(
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = modifier.padding(top = 12.dp, bottom = 4.dp)
+    )
 }
 
 @Composable
