@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 	<string name="app_name">TV Launcher</string>
 	<string name="settings">Configurações</string>
@@ -197,9 +198,8 @@
 	<string name="settings_developer_mode_description">Ativar recurso de teste de crash (pressione 9 cinco vezes)</string>
 	<string name="settings_background">Fundo</string>
 	<string name="settings_background_description">Escolha uma cor ou imagem de fundo para sua tela inicial</string>
-	<string name="settings_background_enabled">Fundo Personalizado</string>
 	<string name="settings_background_colors">Cores Predefinidas</string>
-	<string name="settings_background_image">Imagem de Fundo</string>
+	<string name="settings_background_image">Imagem Personalizada</string>
 	<string name="settings_background_select_image">Selecionar Imagem</string>
 	<string name="settings_background_clear_image">Limpar</string>
 	<string name="settings_background_current_image">Imagem atual:</string>

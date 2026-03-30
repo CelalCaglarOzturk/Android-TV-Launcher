@@ -37,19 +37,17 @@ fun AppBase(
 ) {
 	val settingsRepository = koinInject<SettingsRepository>()
 	val backgroundColor by settingsRepository.backgroundColor.collectAsStateWithLifecycle()
-	val backgroundEnabled by settingsRepository.backgroundEnabled.collectAsStateWithLifecycle()
 	val backgroundImageUri by settingsRepository.backgroundImageUri.collectAsStateWithLifecycle()
 	
 	var onboardingShown by remember { mutableStateOf(showOnboarding) }
 	var deepLink by remember { mutableStateOf(pendingDeepLink) }
 
 	val baseColor = Color(backgroundColor)
-	val compositionColor = if (backgroundEnabled) baseColor else Color.Black
 
 	MaterialTheme(
 		colorScheme = darkColorScheme(
-			background = compositionColor,
-			surface = compositionColor,
+			background = baseColor,
+			surface = baseColor,
 		),
 		shapes = Shapes(
 			small = RoundedCornerShape(4.dp),
@@ -64,14 +62,14 @@ fun AppBase(
 				modifier = Modifier.fillMaxSize()
 			) {
 				// Background layer (image or color)
-				if (backgroundEnabled && backgroundImageUri != null) {
+				if (backgroundImageUri != null) {
 					AsyncImage(
 						model = Uri.parse(backgroundImageUri),
 						contentDescription = null,
 						modifier = Modifier.fillMaxSize(),
 						contentScale = ContentScale.Crop
 					)
-				} else if (backgroundEnabled) {
+				} else {
 					Box(
 						modifier = Modifier
 							.fillMaxSize()

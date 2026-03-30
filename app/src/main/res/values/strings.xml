@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
 	<string name="app_name">TV Launcher</string>
 	<string name="settings">Settings</string>
@@ -20,7 +21,7 @@
 	<string name="close">Close</string>
 	<string name="disabled_channels">Disabled Channels</string>
 
-	<!-- Settings -->
+<!-- Settings -->
 	<string name="settings_app_card_size">App Card Size: %1$d dp</string>
 	<string name="settings_channel_card_size">Channel Card Size: %1$d dp</string>
 	<string
@@ -35,9 +36,8 @@
 	<string name="settings_section_system">System</string>
 	<string name="settings_background">Background</string>
 	<string name="settings_background_description">Choose a background color or image for your home screen</string>
-	<string name="settings_background_enabled">Custom Background</string>
 	<string name="settings_background_colors">Preset Colors</string>
-	<string name="settings_background_image">Background Image</string>
+	<string name="settings_background_image">Custom Image</string>
 	<string name="settings_background_select_image">Select Image</string>
 	<string name="settings_background_clear_image">Clear</string>
 	<string name="settings_background_current_image">Current image:</string>
@@ -229,4 +229,4 @@
 	<string name="onboarding_page3_description">Open Settings to change app card sizes, enable animations, configure channel display, backup your preferences, and more.</string>
 	<string name="onboarding_page4_title">Set as Default</string>
 	<string name="onboarding_page4_description">For the best experience, set TV Launcher as your default home app. You can always change this later in Android TV settings.</string>
-	</resources>
+</resources>

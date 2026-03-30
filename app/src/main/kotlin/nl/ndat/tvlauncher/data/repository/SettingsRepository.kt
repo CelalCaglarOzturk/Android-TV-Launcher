@@ -30,7 +30,6 @@ class SettingsRepository(
         private const val KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL = "suppress_launcher_only_external"
         private const val KEY_DEVELOPER_MODE = "developer_mode"
         private const val KEY_BACKGROUND_COLOR = "background_color"
-        private const val KEY_BACKGROUND_ENABLED = "background_enabled"
         private const val KEY_BACKGROUND_IMAGE_URI = "background_image_uri"
 
         // Legacy constants for backwards compatibility
@@ -128,11 +127,6 @@ class SettingsRepository(
         prefs.getLong(KEY_BACKGROUND_COLOR, LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR)
     )
     val backgroundColor = _backgroundColor.asStateFlow()
-
-    private val _backgroundEnabled = MutableStateFlow(
-        prefs.getBoolean(KEY_BACKGROUND_ENABLED, true)
-    )
-    val backgroundEnabled = _backgroundEnabled.asStateFlow()
 
     private val _backgroundImageUri = MutableStateFlow(
         prefs.getString(KEY_BACKGROUND_IMAGE_URI, null)
@@ -373,19 +367,6 @@ class SettingsRepository(
         }
     }
 
-    fun setBackgroundEnabled(enabled: Boolean) {
-        try {
-            prefs.edit { putBoolean(KEY_BACKGROUND_ENABLED, enabled) }
-            _backgroundEnabled.value = enabled
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to set background enabled")
-        }
-    }
-
-    fun toggleBackgroundEnabled() {
-        setBackgroundEnabled(!_backgroundEnabled.value)
-    }
-
     fun setBackgroundImageUri(uri: String?) {
         try {
             if (uri == null) {
@@ -402,7 +383,6 @@ class SettingsRepository(
     fun resetBackground() {
         setBackgroundColor(LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR)
         setBackgroundImageUri(null)
-        setBackgroundEnabled(true)
     }
 
     // === Reset Operations ===
@@ -436,7 +416,6 @@ class SettingsRepository(
 
             // Reset background
             _backgroundColor.value = LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR
-            _backgroundEnabled.value = true
             _backgroundImageUri.value = null
         } catch (e: Exception) {
             Timber.e(e, "Failed to reset settings")

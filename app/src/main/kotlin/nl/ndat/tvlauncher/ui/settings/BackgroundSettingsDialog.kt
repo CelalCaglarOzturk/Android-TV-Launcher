@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -34,7 +35,6 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
-import androidx.tv.material3.Switch
 import androidx.tv.material3.Text
 import coil.compose.AsyncImage
 import nl.ndat.tvlauncher.R
@@ -47,10 +47,9 @@ import timber.log.Timber
 fun BackgroundSettingsDialog(
     onDismissRequest: () -> Unit
 ) {
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
     val settingsRepository = koinInject<SettingsRepository>()
     val backgroundColor by settingsRepository.backgroundColor.collectAsStateWithLifecycle()
-    val backgroundEnabled by settingsRepository.backgroundEnabled.collectAsStateWithLifecycle()
     val backgroundImageUri by settingsRepository.backgroundImageUri.collectAsStateWithLifecycle()
 
     val imagePicker = rememberLauncherForActivityResult(
@@ -86,105 +85,84 @@ fun BackgroundSettingsDialog(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Enable/Disable Toggle
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.settings_background_enabled),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Switch(
-                        checked = backgroundEnabled,
-                        onCheckedChange = null,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.settings_background_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
 
-                if (backgroundEnabled) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                // Color Presets
+                Text(
+                    text = stringResource(R.string.settings_background_colors),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
 
-                    // Background Image Option
-                    Text(
-                        text = stringResource(R.string.settings_background_image),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
+                LauncherConstants.Background.PRESET_BACKGROUNDS.chunked(3).forEach { colorChunk ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
                     ) {
-                        Button(
-                            onClick = {
-                                imagePicker.launch(arrayOf("image/*"))
-                            },
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(stringResource(R.string.settings_background_select_image))
-                        }
-                        if (backgroundImageUri != null) {
-                            Button(
-                                onClick = { settingsRepository.setBackgroundImageUri(null) },
-                                colors = ButtonDefaults.colors(
-                                    containerColor = MaterialTheme.colorScheme.error
-                                )
-                            ) {
-                                Text(stringResource(R.string.settings_background_clear_image))
-                            }
-                        }
-                    }
-
-                    // Show current image preview
-                    if (backgroundImageUri != null) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(R.string.settings_background_current_image),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(80.dp)
-                                .clip(MaterialTheme.shapes.small)
-                                .background(Color(backgroundColor))
-                        ) {
-                            AsyncImage(
-                                model = Uri.parse(backgroundImageUri),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
+                        colorChunk.forEach { colorLong ->
+                            ColorOption(
+                                color = Color(colorLong),
+                                isSelected = backgroundColor == colorLong && backgroundImageUri == null,
+                                onClick = {
+                                    settingsRepository.setBackgroundColor(colorLong)
+                                    settingsRepository.setBackgroundImageUri(null)
+                                }
                             )
                         }
                     }
+                }
 
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Custom Image Option
+                Text(
+                    text = stringResource(R.string.settings_background_image),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                // Current image preview (if set)
+                if (backgroundImageUri != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(80.dp)
+                            .clip(MaterialTheme.shapes.small)
+                            .background(Color(backgroundColor))
+                    ) {
+                        AsyncImage(
+                            model = Uri.parse(backgroundImageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                     Spacer(modifier = Modifier.height(8.dp))
+                }
 
-                    // Color Presets
-                    Text(
-                        text = stringResource(R.string.settings_background_colors),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
-                    LauncherConstants.Background.PRESET_BACKGROUNDS.chunked(3).forEach { colorChunk ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = { imagePicker.launch(arrayOf("image/*")) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(R.string.settings_background_select_image))
+                    }
+                    if (backgroundImageUri != null) {
+                        Button(
+                            onClick = { settingsRepository.setBackgroundImageUri(null) },
+                            colors = ButtonDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.error
+                            )
                         ) {
-                            colorChunk.forEach { colorLong ->
-                                ColorOption(
-                                    color = Color(colorLong),
-                                    isSelected = backgroundColor == colorLong && backgroundImageUri == null,
-                                    onClick = {
-                                        settingsRepository.setBackgroundColor(colorLong)
-                                        settingsRepository.setBackgroundImageUri(null)
-                                    }
-                                )
-                            }
+                            Text(stringResource(R.string.settings_background_clear_image))
                         }
                     }
                 }
@@ -196,9 +174,7 @@ fun BackgroundSettingsDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Button(
-                        onClick = { 
-                            settingsRepository.resetBackground()
-                        },
+                        onClick = { settingsRepository.resetBackground() },
                         colors = ButtonDefaults.colors(
                             containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = MaterialTheme.colorScheme.onSurface
