@@ -71,7 +71,7 @@ object LauncherConstants {
     }
     
     object Developer {
-        const val TEST_CRASH_TRIGGER_COUNT = 3
-        const val TEST_CRASH_TRIGGER_NUMBER = 9
+        const val TEST_CRASH_TRIGGER_COUNT = 5
+        const val TEST_CRASH_KEY = 9 // KeyEvent.KEYCODE_9
     }
 }

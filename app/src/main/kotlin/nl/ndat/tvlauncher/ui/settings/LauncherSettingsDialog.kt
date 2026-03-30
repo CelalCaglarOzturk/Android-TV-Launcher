@@ -66,6 +66,7 @@ fun LauncherSettingsDialog(
     val enableAnimations by settingsRepository.enableAnimations.collectAsStateWithLifecycle()
     val suppressOriginalLauncher by settingsRepository.suppressOriginalLauncher.collectAsStateWithLifecycle()
     val suppressLauncherOnlyExternal by settingsRepository.suppressLauncherOnlyExternal.collectAsStateWithLifecycle()
+    val developerMode by settingsRepository.developerMode.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
     var showWatchNextSettings by remember { mutableStateOf(false) }
@@ -416,6 +417,19 @@ fun LauncherSettingsDialog(
 
                     // === System Section ===
                     SettingsSectionHeader(title = stringResource(R.string.settings_section_system))
+
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_developer_mode),
+                        description = stringResource(R.string.settings_developer_mode_description),
+                        onClick = { settingsRepository.toggleDeveloperMode() },
+                        trailingContent = {
+                            Switch(
+                                checked = developerMode,
+                                onCheckedChange = null,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                    )
 
                     CompactSettingsItem(
                         title = stringResource(R.string.settings_about),

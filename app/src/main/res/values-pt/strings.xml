@@ -142,10 +142,15 @@
 	<string name="settings_suppress_only_external">Interceptar apenas de outras aplicações</string>
 	<string name="settings_suppress_only_external_description">Quando ativado, o botão home funciona normalmente dentro do launcher. Quando desativado, o botão home abre sempre este launcher.</string>
 
-	<!-- About -->
+	<!-- System -->
 	<string name="settings_about">Sobre</string>
+	<string name="settings_developer_mode">Modo Programador</string>
+	<string name="settings_developer_mode_description">Ativar funcionalidade de teste de crash (pressione 9 cinco vezes)</string>
 	<string name="about_app_info">Info da App</string>
 	<string name="about_version">Versão %1$s (%2$d)</string>
+	<string name="about_developer_mode">Modo Programador</string>
+	<string name="about_developer_mode_enabled">Modo programador ativado! Funcionalidade de teste de crash disponível.</string>
+	<string name="about_developer_mode_remaining">Toque mais %1$d vezes para ativar o modo programador</string>
 	<string name="about_bug_reporting">Reportar Erros</string>
 	<string name="about_email">Email: %1$s</string>
 	<string name="about_email_address">support@example.com</string>

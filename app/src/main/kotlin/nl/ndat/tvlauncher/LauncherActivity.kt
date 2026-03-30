@@ -33,6 +33,7 @@ import timber.log.Timber
 
 @SuppressLint("RestrictedApi")
 val PERMISSION_READ_CHANNELS = TvContractCompat.PERMISSION_READ_TV_LISTINGS
+
 @Suppress("MayBeConstant")
 val PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
 val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS, PERMISSION_WRITE_STORAGE)
@@ -169,7 +170,7 @@ class LauncherActivity : ComponentActivity() {
 		private const val REQUEST_DEFAULT_LAUNCHER = 100
 		private var testCrashPressCount = 0
 		private var lastTestCrashPressTime = 0L
-		private val TEST_CRASH_TIMEOUT_MS = LauncherConstants.Developer.TEST_CRASH_TRIGGER_COUNT * 10000L
+		private val TEST_CRASH_TIMEOUT_MS = 60000L // Reset counter after 10 seconds
 	}
 
 	override fun onNewIntent(intent: Intent) {
@@ -181,8 +182,7 @@ class LauncherActivity : ComponentActivity() {
 
 	@SuppressLint("RestrictedApi")
 	override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-		// Hidden test crash trigger: Press "9" key multiple times within timeout to simulate crash loop
-		// Only works when developer mode is enabled
+		// Developer mode test crash: Press "9" key 5 times within 10 seconds
 		if (keyCode == KeyEvent.KEYCODE_9 && settingsRepository.developerMode.value) {
 			val currentTime = System.currentTimeMillis()
 			val triggerCount = LauncherConstants.Developer.TEST_CRASH_TRIGGER_COUNT
@@ -194,7 +194,7 @@ class LauncherActivity : ComponentActivity() {
 			Timber.d("Test crash trigger: press $testCrashPressCount (requires $triggerCount)")
 			if (testCrashPressCount >= triggerCount) {
 				Timber.w("Triggering test crash")
-				throw RuntimeException("Test crash triggered by user (key 9 pressed $testCrashPressCount times)")
+				throw RuntimeException("Test crash triggered by developer mode (key 9 pressed $testCrashPressCount times)")
 			}
 			return true
 		}
