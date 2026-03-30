@@ -65,9 +65,9 @@ fun ChannelProgramCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
 
-    // Memoize aspect ratio calculation to avoid recalculating on every recomposition
-    val aspectRatio = remember(overrideAspectRatio, program.posterArtAspectRatio) {
-        overrideAspectRatio ?: program.posterArtAspectRatio?.floatValue ?: (16f / 9f)
+    // Always use 16:9 aspect ratio for channel cards
+    val aspectRatio = remember(overrideAspectRatio) {
+        overrideAspectRatio ?: (16f / 9f)
     }
 
     // Memoize card width calculation
