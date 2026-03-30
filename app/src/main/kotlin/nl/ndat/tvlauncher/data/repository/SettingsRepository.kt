@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import nl.ndat.tvlauncher.util.LauncherConstants
 import timber.log.Timber
 
 class SettingsRepository(
@@ -11,33 +12,28 @@ class SettingsRepository(
 ) {
     companion object {
         private const val PREFS_NAME = "launcher_settings"
+        
+        // Preference Keys
         private const val KEY_APP_CARD_SIZE = "app_card_size"
         private const val KEY_CHANNEL_CARD_SIZE = "channel_card_size"
         private const val KEY_HIDDEN_INPUTS = "hidden_inputs"
         private const val KEY_SHOW_MOBILE_APPS = "show_mobile_apps"
-
-        // Animation Keys
-        private const val KEY_ENABLE_ANIMATIONS = "enable_animations" // Master switch
+        private const val KEY_ENABLE_ANIMATIONS = "enable_animations"
         private const val KEY_ANIM_APP_ICON = "anim_app_icon"
         private const val KEY_ANIM_CHANNEL_ROW = "anim_channel_row"
         private const val KEY_ANIM_CHANNEL_MOVE = "anim_channel_move"
         private const val KEY_ANIM_APP_MOVE = "anim_app_move"
-
-        // Toolbar Placement Keys - Single unified list for all items including clock
         private const val KEY_TOOLBAR_ITEMS_ORDER = "toolbar_items_order"
         private const val KEY_TOOLBAR_ITEMS_ENABLED = "toolbar_items_enabled"
-
-        // Channel Settings Keys
         private const val KEY_CHANNEL_CARDS_PER_ROW = "channel_cards_per_row"
-
-        // Launcher Suppression Key
         private const val KEY_SUPPRESS_ORIGINAL_LAUNCHER = "suppress_original_launcher"
         private const val KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL = "suppress_launcher_only_external"
+        private const val KEY_DEVELOPER_MODE = "developer_mode"
 
-        // Default height in dp
-        const val DEFAULT_APP_CARD_SIZE = 90
-        const val DEFAULT_CHANNEL_CARD_SIZE = 90
-        const val DEFAULT_CHANNEL_CARDS_PER_ROW = 7
+        // Legacy constants for backwards compatibility
+        const val DEFAULT_APP_CARD_SIZE = LauncherConstants.CardSize.DEFAULT_APP_CARD_SIZE
+        const val DEFAULT_CHANNEL_CARD_SIZE = LauncherConstants.CardSize.DEFAULT_CHANNEL_CARD_SIZE
+        const val DEFAULT_CHANNEL_CARDS_PER_ROW = LauncherConstants.ChannelSettings.DEFAULT_CARDS_PER_ROW
 
         // Default toolbar items order (includes clock at the end/right side)
         val DEFAULT_TOOLBAR_ITEMS_ORDER = listOf(
@@ -59,35 +55,44 @@ class SettingsRepository(
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    private val _appCardSize = MutableStateFlow(prefs.getInt(KEY_APP_CARD_SIZE, DEFAULT_APP_CARD_SIZE))
+    // App Settings
+    private val _appCardSize = MutableStateFlow(prefs.getInt(KEY_APP_CARD_SIZE, LauncherConstants.CardSize.DEFAULT_APP_CARD_SIZE))
     val appCardSize = _appCardSize.asStateFlow()
 
-    private val _channelCardSize = MutableStateFlow(prefs.getInt(KEY_CHANNEL_CARD_SIZE, DEFAULT_CHANNEL_CARD_SIZE))
+    // Channel Settings
+    private val _channelCardSize = MutableStateFlow(prefs.getInt(KEY_CHANNEL_CARD_SIZE, LauncherConstants.CardSize.DEFAULT_CHANNEL_CARD_SIZE))
     val channelCardSize = _channelCardSize.asStateFlow()
 
+    private val _channelCardsPerRow = MutableStateFlow(
+        prefs.getInt(KEY_CHANNEL_CARDS_PER_ROW, LauncherConstants.ChannelSettings.DEFAULT_CARDS_PER_ROW)
+    )
+    val channelCardsPerRow = _channelCardsPerRow.asStateFlow()
+
+    // Input Settings
     private val _hiddenInputs = MutableStateFlow(prefs.getStringSet(KEY_HIDDEN_INPUTS, emptySet()) ?: emptySet())
     val hiddenInputs = _hiddenInputs.asStateFlow()
 
+    // App Display Settings
     private val _showMobileApps = MutableStateFlow(prefs.getBoolean(KEY_SHOW_MOBILE_APPS, false))
     val showMobileApps = _showMobileApps.asStateFlow()
 
-    // Animation States
-    private val _enableAnimations = MutableStateFlow(prefs.getBoolean(KEY_ENABLE_ANIMATIONS, true))
+    // Animation Settings
+    private val _enableAnimations = MutableStateFlow(prefs.getBoolean(KEY_ENABLE_ANIMATIONS, LauncherConstants.Animations.DEFAULT_ENABLED))
     val enableAnimations = _enableAnimations.asStateFlow()
 
-    private val _animAppIcon = MutableStateFlow(prefs.getBoolean(KEY_ANIM_APP_ICON, true))
+    private val _animAppIcon = MutableStateFlow(prefs.getBoolean(KEY_ANIM_APP_ICON, LauncherConstants.Animations.DEFAULT_ENABLED))
     val animAppIcon = _animAppIcon.asStateFlow()
 
-    private val _animChannelRow = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CHANNEL_ROW, true))
+    private val _animChannelRow = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CHANNEL_ROW, LauncherConstants.Animations.DEFAULT_ENABLED))
     val animChannelRow = _animChannelRow.asStateFlow()
 
-    private val _animChannelMove = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CHANNEL_MOVE, true))
+    private val _animChannelMove = MutableStateFlow(prefs.getBoolean(KEY_ANIM_CHANNEL_MOVE, LauncherConstants.Animations.DEFAULT_ENABLED))
     val animChannelMove = _animChannelMove.asStateFlow()
 
-    private val _animAppMove = MutableStateFlow(prefs.getBoolean(KEY_ANIM_APP_MOVE, true))
+    private val _animAppMove = MutableStateFlow(prefs.getBoolean(KEY_ANIM_APP_MOVE, LauncherConstants.Animations.DEFAULT_ENABLED))
     val animAppMove = _animAppMove.asStateFlow()
 
-    // Toolbar Placement States - Single unified list
+    // Toolbar Settings
     private val _toolbarItemsOrder = MutableStateFlow(
         prefs.getStringSet(KEY_TOOLBAR_ITEMS_ORDER, null)?.toList() ?: DEFAULT_TOOLBAR_ITEMS_ORDER
     )
@@ -98,12 +103,7 @@ class SettingsRepository(
     )
     val toolbarItemsEnabled = _toolbarItemsEnabled.asStateFlow()
 
-    // Channel Settings States
-    private val _channelCardsPerRow = MutableStateFlow(
-        prefs.getInt(KEY_CHANNEL_CARDS_PER_ROW, DEFAULT_CHANNEL_CARDS_PER_ROW)
-    )
-    val channelCardsPerRow = _channelCardsPerRow.asStateFlow()
-
+    // Launcher Suppression Settings
     private val _suppressOriginalLauncher = MutableStateFlow(
         prefs.getBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, false)
     )
@@ -114,46 +114,24 @@ class SettingsRepository(
     )
     val suppressLauncherOnlyExternal = _suppressLauncherOnlyExternal.asStateFlow()
 
+    // Developer Settings
+    private val _developerMode = MutableStateFlow(
+        prefs.getBoolean(KEY_DEVELOPER_MODE, false)
+    )
+    val developerMode = _developerMode.asStateFlow()
+
+    // === App Settings ===
+
     fun setAppCardSize(size: Int) {
         try {
-            prefs.edit { putInt(KEY_APP_CARD_SIZE, size) }
-            _appCardSize.value = size
+            val coercedSize = size.coerceIn(
+                LauncherConstants.CardSize.MIN_APP_CARD_SIZE,
+                LauncherConstants.CardSize.MAX_APP_CARD_SIZE
+            )
+            prefs.edit { putInt(KEY_APP_CARD_SIZE, coercedSize) }
+            _appCardSize.value = coercedSize
         } catch (e: Exception) {
             Timber.e(e, "Failed to set app card size")
-        }
-    }
-
-    fun setChannelCardSize(size: Int) {
-        try {
-            prefs.edit { putInt(KEY_CHANNEL_CARD_SIZE, size) }
-            _channelCardSize.value = size
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to set channel card size")
-        }
-    }
-
-    fun setChannelCardsPerRow(count: Int) {
-        try {
-            val coercedCount = count.coerceIn(3, 20)
-            prefs.edit { putInt(KEY_CHANNEL_CARDS_PER_ROW, coercedCount) }
-            _channelCardsPerRow.value = coercedCount
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to set channel cards per row")
-        }
-    }
-
-    fun toggleInputHidden(inputId: String) {
-        try {
-            val current = _hiddenInputs.value.toMutableSet()
-            if (current.contains(inputId)) {
-                current.remove(inputId)
-            } else {
-                current.add(inputId)
-            }
-            prefs.edit { putStringSet(KEY_HIDDEN_INPUTS, current) }
-            _hiddenInputs.value = current
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to toggle input hidden state")
         }
     }
 
@@ -170,7 +148,62 @@ class SettingsRepository(
         setShowMobileApps(!_showMobileApps.value)
     }
 
-    // Animation Setters
+    // === Channel Settings ===
+
+    fun setChannelCardSize(size: Int) {
+        try {
+            val coercedSize = size.coerceIn(
+                LauncherConstants.CardSize.MIN_APP_CARD_SIZE,
+                LauncherConstants.CardSize.MAX_APP_CARD_SIZE
+            )
+            prefs.edit { putInt(KEY_CHANNEL_CARD_SIZE, coercedSize) }
+            _channelCardSize.value = coercedSize
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set channel card size")
+        }
+    }
+
+    fun setChannelCardsPerRow(count: Int) {
+        try {
+            val coercedCount = count.coerceIn(
+                LauncherConstants.ChannelSettings.MIN_CARDS_PER_ROW,
+                LauncherConstants.ChannelSettings.MAX_CARDS_PER_ROW
+            )
+            prefs.edit { putInt(KEY_CHANNEL_CARDS_PER_ROW, coercedCount) }
+            _channelCardsPerRow.value = coercedCount
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set channel cards per row")
+        }
+    }
+
+    // === Input Settings ===
+
+    fun toggleInputHidden(inputId: String) {
+        try {
+            val current = _hiddenInputs.value.toMutableSet()
+            if (current.contains(inputId)) {
+                current.remove(inputId)
+            } else {
+                current.add(inputId)
+            }
+            prefs.edit { putStringSet(KEY_HIDDEN_INPUTS, current) }
+            _hiddenInputs.value = current
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to toggle input hidden state")
+        }
+    }
+
+    fun clearHiddenInputs() {
+        try {
+            prefs.edit { remove(KEY_HIDDEN_INPUTS) }
+            _hiddenInputs.value = emptySet()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to clear hidden inputs")
+        }
+    }
+
+    // === Animation Settings ===
+
     fun setEnableAnimations(enable: Boolean) {
         try {
             prefs.edit { putBoolean(KEY_ENABLE_ANIMATIONS, enable) }
@@ -220,7 +253,8 @@ class SettingsRepository(
         }
     }
 
-    // Toolbar Placement Setters - Single unified list
+    // === Toolbar Settings ===
+
     fun setToolbarItemsOrder(order: List<String>) {
         try {
             prefs.edit { putStringSet(KEY_TOOLBAR_ITEMS_ORDER, order.toSet()) }
@@ -231,7 +265,6 @@ class SettingsRepository(
     }
 
     fun toggleToolbarItem(itemName: String) {
-        // Don't allow disabling launcher settings
         if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name) {
             return
         }
@@ -250,7 +283,6 @@ class SettingsRepository(
     }
 
     fun setToolbarItemEnabled(itemName: String, enabled: Boolean) {
-        // Don't allow disabling launcher settings
         if (itemName == ToolbarItem.LAUNCHER_SETTINGS.name && !enabled) {
             return
         }
@@ -267,6 +299,8 @@ class SettingsRepository(
             Timber.e(e, "Failed to set toolbar item enabled")
         }
     }
+
+    // === Launcher Suppression Settings ===
 
     fun setSuppressOriginalLauncher(suppress: Boolean) {
         try {
@@ -294,23 +328,40 @@ class SettingsRepository(
         setSuppressLauncherOnlyExternal(!_suppressLauncherOnlyExternal.value)
     }
 
+    // === Developer Settings ===
+
+    fun setDeveloperMode(enabled: Boolean) {
+        try {
+            prefs.edit { putBoolean(KEY_DEVELOPER_MODE, enabled) }
+            _developerMode.value = enabled
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set developer mode")
+        }
+    }
+
+    fun toggleDeveloperMode() {
+        setDeveloperMode(!_developerMode.value)
+    }
+
+    // === Reset Operations ===
+
     fun resetSettings() {
         try {
             prefs.edit { clear() }
-            _appCardSize.value = DEFAULT_APP_CARD_SIZE
-            _channelCardSize.value = DEFAULT_CHANNEL_CARD_SIZE
-            _channelCardsPerRow.value = DEFAULT_CHANNEL_CARDS_PER_ROW
+            _appCardSize.value = LauncherConstants.CardSize.DEFAULT_APP_CARD_SIZE
+            _channelCardSize.value = LauncherConstants.CardSize.DEFAULT_CHANNEL_CARD_SIZE
+            _channelCardsPerRow.value = LauncherConstants.ChannelSettings.DEFAULT_CARDS_PER_ROW
             _hiddenInputs.value = emptySet()
             _showMobileApps.value = false
 
             // Reset animations
-            _enableAnimations.value = true
-            _animAppIcon.value = true
-            _animChannelRow.value = true
-            _animChannelMove.value = true
-            _animAppMove.value = true
+            _enableAnimations.value = LauncherConstants.Animations.DEFAULT_ENABLED
+            _animAppIcon.value = LauncherConstants.Animations.DEFAULT_ENABLED
+            _animChannelRow.value = LauncherConstants.Animations.DEFAULT_ENABLED
+            _animChannelMove.value = LauncherConstants.Animations.DEFAULT_ENABLED
+            _animAppMove.value = LauncherConstants.Animations.DEFAULT_ENABLED
 
-            // Reset toolbar placement to unified list
+            // Reset toolbar placement
             _toolbarItemsOrder.value = DEFAULT_TOOLBAR_ITEMS_ORDER
             _toolbarItemsEnabled.value = DEFAULT_TOOLBAR_ITEMS_ENABLED
 
@@ -319,15 +370,6 @@ class SettingsRepository(
             _suppressLauncherOnlyExternal.value = false
         } catch (e: Exception) {
             Timber.e(e, "Failed to reset settings")
-        }
-    }
-    
-    fun clearHiddenInputs() {
-        try {
-            prefs.edit { remove(KEY_HIDDEN_INPUTS) }
-            _hiddenInputs.value = emptySet()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to clear hidden inputs")
         }
     }
 }

@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.model.ChannelType
+import nl.ndat.tvlauncher.util.LauncherConstants
 import timber.log.Timber
 import java.io.File
 
@@ -23,9 +24,9 @@ class BackupRepository(
     private val channelRepository: ChannelRepository,
 ) {
     companion object {
-        private const val CURRENT_BACKUP_VERSION = 2
-        private const val MAX_BACKUP_HISTORY = 5
-        private const val BACKUP_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss"
+        private val CURRENT_BACKUP_VERSION = LauncherConstants.Backup.CURRENT_VERSION
+        private val MAX_BACKUP_HISTORY = LauncherConstants.Backup.MAX_HISTORY_COUNT
+        private val BACKUP_DATE_FORMAT = LauncherConstants.Backup.DATE_FORMAT
     }
 
     private val json = Json {
@@ -34,12 +35,10 @@ class BackupRepository(
         encodeDefaults = true
     }
 
-    private val backupFileName = "tv_launcher_backup.json"
-
     private fun getBackupDirectory(): File {
         val backupDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-            "TVLauncher"
+            LauncherConstants.Backup.BACKUP_DIR_NAME
         )
         if (!backupDir.exists()) {
             backupDir.mkdirs()
@@ -48,7 +47,7 @@ class BackupRepository(
     }
 
     private fun getBackupFile(): File {
-        return File(getBackupDirectory(), backupFileName)
+        return File(getBackupDirectory(), LauncherConstants.Backup.BACKUP_FILE_NAME)
     }
 
     private fun getTimestampedBackupFile(): File {

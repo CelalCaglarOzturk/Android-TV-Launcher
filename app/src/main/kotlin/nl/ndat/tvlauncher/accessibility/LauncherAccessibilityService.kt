@@ -2,49 +2,66 @@ package nl.ndat.tvlauncher.accessibility
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
+import android.content.SharedPreferences
 import android.view.accessibility.AccessibilityEvent
 import nl.ndat.tvlauncher.LauncherActivity
-import nl.ndat.tvlauncher.data.repository.SettingsRepository
-import org.koin.android.ext.android.inject
+import nl.ndat.tvlauncher.util.LauncherConstants
 import timber.log.Timber
 
 class LauncherAccessibilityService : AccessibilityService() {
 
-    private val settingsRepository: SettingsRepository by inject()
+    private lateinit var prefs: SharedPreferences
     private var lastForegroundPackage: String? = null
+    private var lastEventTime: Long = 0
 
-    private val systemLauncherPackages = listOf(
-        "com.google.android.tvlauncher",
-        "com.android.tv.launcher",
-        "com.google.android.apps.tv.launcherx",
-        "com.android.launcher",
-        "com.android.launcher2"
-    )
+    companion object {
+        private const val PREFS_NAME = "launcher_settings"
+        private const val KEY_SUPPRESS_ORIGINAL_LAUNCHER = "suppress_original_launcher"
+        private const val KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL = "suppress_launcher_only_external"
+    }
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        Timber.d("Accessibility service connected")
+    }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
 
         try {
-            val packageName = event.packageName?.toString() ?: return
+            val packageName = event.packageName
+            if (packageName == null) {
+                Timber.d("Event has null package name, skipping")
+                return
+            }
+            
+            val packageNameStr = packageName.toString()
             val tvLauncherPackage = this.packageName
+            val currentTime = System.currentTimeMillis()
 
             if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-                // Track the last app that was in foreground (before system launcher)
-                if (!systemLauncherPackages.contains(packageName)) {
-                    lastForegroundPackage = packageName
+                if (shouldDebounceEvent(currentTime)) {
+                    return
+                }
+                lastEventTime = currentTime
+
+                if (!LauncherConstants.SystemLaunchers.isSystemLauncher(packageNameStr)) {
+                    lastForegroundPackage = packageNameStr
                 }
 
-                if (!settingsRepository.suppressOriginalLauncher.value) return
+                val suppressEnabled = prefs.getBoolean(KEY_SUPPRESS_ORIGINAL_LAUNCHER, false)
+                if (!suppressEnabled) return
 
-                // System launcher detected
-                if (systemLauncherPackages.contains(packageName)) {
-                    // Check if "only intercept from other apps" is enabled
-                    if (settingsRepository.suppressLauncherOnlyExternal.value) {
-                        // If we were in TV Launcher before system launcher opened, don't redirect
-                        if (lastForegroundPackage == tvLauncherPackage) {
-                            return
-                        }
+                if (LauncherConstants.SystemLaunchers.isSystemLauncher(packageNameStr)) {
+                    val onlyExternal = prefs.getBoolean(KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL, false)
+                    
+                    if (onlyExternal && lastForegroundPackage == tvLauncherPackage) {
+                        Timber.d("System launcher opened from TV Launcher, not redirecting")
+                        return
                     }
+                    
+                    Timber.d("System launcher detected: $packageNameStr, redirecting to TV Launcher")
                     launchTvLauncher()
                 }
             }
@@ -53,10 +70,12 @@ class LauncherAccessibilityService : AccessibilityService() {
         }
     }
 
-    override fun onInterrupt() {}
+    override fun onInterrupt() {
+        Timber.d("Accessibility service interrupted")
+    }
 
-    override fun onServiceConnected() {
-        super.onServiceConnected()
+    private fun shouldDebounceEvent(currentTime: Long): Boolean {
+        return (currentTime - lastEventTime) < LauncherConstants.Accessibility.EVENT_DEBOUNCE_MS
     }
 
     private fun launchTvLauncher() {
@@ -67,8 +86,14 @@ class LauncherAccessibilityService : AccessibilityService() {
                 addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
             }
             startActivity(intent)
+            Timber.d("Launched TV Launcher successfully")
         } catch (e: Exception) {
             Timber.e(e, "Error launching TV Launcher")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("Accessibility service destroyed")
     }
 }

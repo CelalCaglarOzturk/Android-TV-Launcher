@@ -23,9 +23,11 @@ import nl.ndat.tvlauncher.crash.CrashHandler
 import nl.ndat.tvlauncher.data.repository.AppRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.InputRepository
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.ui.AppBase
 import nl.ndat.tvlauncher.util.DefaultLauncherHelper
 import nl.ndat.tvlauncher.util.FocusController
+import nl.ndat.tvlauncher.util.LauncherConstants
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -41,6 +43,7 @@ class LauncherActivity : ComponentActivity() {
 	private val appRepository: AppRepository by inject()
 	private val inputRepository: InputRepository by inject()
 	private val channelRepository: ChannelRepository by inject()
+	private val settingsRepository: SettingsRepository by inject()
 
 	private val permissionsLauncher =
 		registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -166,7 +169,7 @@ class LauncherActivity : ComponentActivity() {
 		private const val REQUEST_DEFAULT_LAUNCHER = 100
 		private var testCrashPressCount = 0
 		private var lastTestCrashPressTime = 0L
-		private const val TEST_CRASH_TIMEOUT_MS = 60000L // Reset counter after 10 seconds
+		private val TEST_CRASH_TIMEOUT_MS = LauncherConstants.Developer.TEST_CRASH_TRIGGER_COUNT * 10000L
 	}
 
 	override fun onNewIntent(intent: Intent) {
@@ -178,17 +181,18 @@ class LauncherActivity : ComponentActivity() {
 
 	@SuppressLint("RestrictedApi")
 	override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-		// Hidden test crash trigger: Press "9" key 3+ times within 10 seconds to simulate crash loop
-		// This is for testing the crash recovery system
-		if (keyCode == KeyEvent.KEYCODE_9) {
+		// Hidden test crash trigger: Press "9" key multiple times within timeout to simulate crash loop
+		// Only works when developer mode is enabled
+		if (keyCode == KeyEvent.KEYCODE_9 && settingsRepository.developerMode.value) {
 			val currentTime = System.currentTimeMillis()
+			val triggerCount = LauncherConstants.Developer.TEST_CRASH_TRIGGER_COUNT
 			if (currentTime - lastTestCrashPressTime > TEST_CRASH_TIMEOUT_MS) {
 				testCrashPressCount = 0
 			}
 			lastTestCrashPressTime = currentTime
 			testCrashPressCount++
-			Timber.d("Test crash trigger: press $testCrashPressCount")
-			if (testCrashPressCount >= 3) {
+			Timber.d("Test crash trigger: press $testCrashPressCount (requires $triggerCount)")
+			if (testCrashPressCount >= triggerCount) {
 				Timber.w("Triggering test crash")
 				throw RuntimeException("Test crash triggered by user (key 9 pressed $testCrashPressCount times)")
 			}

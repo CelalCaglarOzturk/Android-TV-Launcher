@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Process
+import nl.ndat.tvlauncher.util.LauncherConstants
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -13,11 +14,11 @@ class CrashHandler(
 ) : Thread.UncaughtExceptionHandler {
 
     companion object {
-        private const val PREFS_NAME = "crash_recovery"
+        private val PREFS_NAME = LauncherConstants.CrashRecovery.CRASH_COUNT_PREFS
         private const val KEY_CRASH_TIMESTAMPS = "crash_timestamps"
-        private const val KEY_CRASH_COUNT = "crash_count"
-        private const val MAX_CRASH_COUNT = 3
-        private val CRASH_WINDOW_MS = TimeUnit.SECONDS.toMillis(60)
+        private val KEY_CRASH_COUNT = LauncherConstants.CrashRecovery.KEY_CRASH_COUNT
+        private val MAX_CRASH_COUNT = LauncherConstants.CrashRecovery.MAX_CRASH_COUNT
+        private val CRASH_WINDOW_MS = TimeUnit.HOURS.toMillis(LauncherConstants.CrashRecovery.CRASH_COUNT_RESET_HOURS.toLong())
 
         private const val KEY_LAST_CRASH_MESSAGE = "last_crash_message"
         private const val KEY_LAST_CRASH_STACK = "last_crash_stack"
