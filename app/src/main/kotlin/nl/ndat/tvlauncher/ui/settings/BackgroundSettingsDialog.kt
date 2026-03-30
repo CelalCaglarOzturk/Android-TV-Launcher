@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
@@ -127,7 +128,7 @@ fun BackgroundSettingsDialog(
                 )
 
                 // Current image preview (if set)
-                if (backgroundImageUri != null) {
+                backgroundImageUri?.let { uri ->
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -136,7 +137,7 @@ fun BackgroundSettingsDialog(
                             .background(Color(backgroundColor))
                     ) {
                         AsyncImage(
-                            model = Uri.parse(backgroundImageUri),
+                            model = uri.toUri(),
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop

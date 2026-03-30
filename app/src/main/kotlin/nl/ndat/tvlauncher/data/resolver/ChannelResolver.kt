@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.CancellationSignal
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.tvprovider.media.tv.PreviewChannel
 import androidx.tvprovider.media.tv.PreviewProgram
 import androidx.tvprovider.media.tv.TvContractCompat
@@ -167,7 +168,7 @@ class ChannelResolver {
         val channels = mutableListOf<Channel>()
         
         try {
-            val uri = Uri.parse("content://android.media.tv.channel")
+            val uri = "content://android.media.tv.channel".toUri()
             val projection = arrayOf(
                 "_id",
                 "display_name",

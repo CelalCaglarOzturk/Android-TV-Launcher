@@ -1,7 +1,6 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
 import android.content.Intent
-import android.net.Uri
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
@@ -89,7 +89,7 @@ fun AppPopup(
         KeyDownButton(
             onClick = {
                 val intent = Intent(Intent.ACTION_DELETE).apply {
-                    data = Uri.parse("package:$packageName")
+                    data = "package:$packageName".toUri()
                 }
                 context.startActivity(intent)
             },

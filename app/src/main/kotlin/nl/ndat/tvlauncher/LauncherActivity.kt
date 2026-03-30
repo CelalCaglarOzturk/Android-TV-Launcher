@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -14,6 +13,7 @@ import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -34,14 +34,18 @@ import nl.ndat.tvlauncher.util.LauncherConstants
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
-@SuppressLint("RestrictedApi")
-val PERMISSION_READ_CHANNELS = TvContractCompat.PERMISSION_READ_TV_LISTINGS
-
-@Suppress("MayBeConstant")
-val PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
-val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS, PERMISSION_WRITE_STORAGE)
-
 class LauncherActivity : ComponentActivity() {
+	companion object {
+		@SuppressLint("RestrictedApi")
+		const val PERMISSION_READ_CHANNELS = TvContractCompat.PERMISSION_READ_TV_LISTINGS
+		const val PERMISSION_WRITE_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE
+		val PERMISSIONS = listOf(PERMISSION_READ_CHANNELS, PERMISSION_WRITE_STORAGE)
+		private const val REQUEST_DEFAULT_LAUNCHER = 100
+		private var testCrashPressCount = 0
+		private var lastTestCrashPressTime = 0L
+		private const val TEST_CRASH_TIMEOUT_MS = 10000L // Reset counter after 10 seconds
+	}
+
 	private val defaultLauncherHelper: DefaultLauncherHelper by inject()
 	private val focusController: FocusController by inject()
 	private val appRepository: AppRepository by inject()
@@ -145,9 +149,9 @@ class LauncherActivity : ComponentActivity() {
 	private fun validateDefaultLauncher() {
 		if (!defaultLauncherHelper.isDefaultLauncher() && defaultLauncherHelper.canRequestDefaultLauncher()) {
 			val intent = defaultLauncherHelper.requestDefaultLauncherIntent()
-			@Suppress("DEPRECATION")
 			if (intent != null) {
 				shouldCheckAllFilesAccess = true
+				@Suppress("DEPRECATION")
 				startActivityForResult(intent, REQUEST_DEFAULT_LAUNCHER)
 			}
 		}
@@ -175,7 +179,7 @@ class LauncherActivity : ComponentActivity() {
 			.setPositiveButton(getString(R.string.backup_permission_open_settings)) { _, _ ->
 				// Open app settings where user can manage permissions
 				val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-					data = Uri.parse("package:$packageName")
+					data = "package:$packageName".toUri()
 				}
 				startActivity(intent)
 			}
@@ -184,13 +188,6 @@ class LauncherActivity : ComponentActivity() {
 			}
 			.setCancelable(false)
 			.show()
-	}
-
-	companion object {
-		private const val REQUEST_DEFAULT_LAUNCHER = 100
-		private var testCrashPressCount = 0
-		private var lastTestCrashPressTime = 0L
-		private const val TEST_CRASH_TIMEOUT_MS = 10000L // Reset counter after 10 seconds
 	}
 
 	override fun onNewIntent(intent: Intent) {

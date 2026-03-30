@@ -3,7 +3,6 @@ package nl.ndat.tvlauncher.ui.settings
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.tv.material3.Card
 import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.MaterialTheme
@@ -86,7 +86,7 @@ fun AboutSettingsDialog(
 							title = stringResource(R.string.about_email, emailAddress),
 							onClick = {
 								val intent = Intent(Intent.ACTION_SENDTO).apply {
-									data = Uri.parse("mailto:$emailAddress")
+									data = "mailto:$emailAddress".toUri()
 									putExtra(Intent.EXTRA_SUBJECT, "Bug Report: TV Launcher")
 								}
 								try {
@@ -100,7 +100,7 @@ fun AboutSettingsDialog(
 							title = stringResource(R.string.about_github_issues),
 							description = githubIssuesUrl,
 							onClick = {
-								val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubIssuesUrl))
+								val intent = Intent(Intent.ACTION_VIEW, githubIssuesUrl.toUri())
 								context.startActivity(intent)
 							}
 						)
@@ -136,7 +136,7 @@ fun AboutSettingsDialog(
 							onClick = {
 								val intent = Intent(
 									Intent.ACTION_VIEW,
-									Uri.parse("https://github.com/CelalCaglarOzturk/Android-TV-Launcher/blob/master/LICENSE")
+									"https://github.com/CelalCaglarOzturk/Android-TV-Launcher/blob/master/LICENSE".toUri()
 								)
 								context.startActivity(intent)
 							}
@@ -149,7 +149,7 @@ fun AboutSettingsDialog(
 							title = stringResource(R.string.about_privacy_policy),
 							description = privacyPolicyUrl,
 							onClick = {
-								val intent = Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicyUrl))
+								val intent = Intent(Intent.ACTION_VIEW, privacyPolicyUrl.toUri())
 								context.startActivity(intent)
 							}
 						)
@@ -161,7 +161,7 @@ fun AboutSettingsDialog(
 							title = stringResource(R.string.about_website),
 							description = websiteUrl,
 							onClick = {
-								val intent = Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl))
+								val intent = Intent(Intent.ACTION_VIEW, websiteUrl.toUri())
 								context.startActivity(intent)
 							}
 						)

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Shapes
@@ -26,7 +27,6 @@ import nl.ndat.tvlauncher.ui.onboarding.OnboardingDialog
 import nl.ndat.tvlauncher.ui.screen.launcher.LauncherScreen
 import nl.ndat.tvlauncher.util.DeepLink
 import org.koin.compose.koinInject
-import android.net.Uri
 
 @Composable
 fun AppBase(
@@ -64,7 +64,7 @@ fun AppBase(
 				// Background layer (image or color)
 				if (backgroundImageUri != null) {
 					AsyncImage(
-						model = Uri.parse(backgroundImageUri),
+						model = backgroundImageUri!!.toUri(),
 						contentDescription = null,
 						modifier = Modifier.fillMaxSize(),
 						contentScale = ContentScale.Crop
