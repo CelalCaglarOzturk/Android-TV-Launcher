@@ -7,6 +7,7 @@ import nl.ndat.tvlauncher.data.DatabaseContainer
 import nl.ndat.tvlauncher.data.executeAsListFlow
 import nl.ndat.tvlauncher.data.resolver.InputResolver
 import nl.ndat.tvlauncher.data.sqldelight.Input
+import timber.log.Timber
 
 class InputRepository(
     private val context: Context,
@@ -14,6 +15,7 @@ class InputRepository(
     private val database: DatabaseContainer
 ) {
     private suspend fun commitInputs(inputs: Collection<Input>) = withContext(Dispatchers.IO) {
+        Timber.d("Committing ${inputs.size} inputs")
         // Remove inputs found in database but not in committed list
         val existingIds = database.inputs.getAll().executeAsList().map { it.id }
         val newIds = inputs.map { it.id }.toSet()
@@ -41,8 +43,10 @@ class InputRepository(
     }
 
     suspend fun refreshAllInputs() {
+        Timber.d("Refreshing all inputs")
         val inputs = inputResolver.getInputs(context)
         commitInputs(inputs)
+        Timber.d("Inputs refreshed: ${inputs.size} inputs")
     }
 
     fun getInputs() = database.inputs.getAll().executeAsListFlow()

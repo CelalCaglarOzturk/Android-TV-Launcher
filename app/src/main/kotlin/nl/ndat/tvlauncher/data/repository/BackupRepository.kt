@@ -57,6 +57,28 @@ class BackupRepository(
         return getBackupFile().exists()
     }
 
+    fun getBackupInfo(): BackupInfo? {
+        return try {
+            val backupFile = getBackupFile()
+            if (!backupFile.exists()) return null
+            
+            val jsonString = backupFile.readText()
+            val backupData = json.decodeFromString<BackupData>(jsonString)
+            
+            BackupInfo(
+                timestamp = backupData.timestamp,
+                appCardSize = backupData.settings.appCardSize,
+                channelCardSize = backupData.settings.channelCardSize,
+                hiddenAppsCount = backupData.apps.count { it.hidden },
+                favoriteAppsCount = backupData.apps.count { it.favoriteOrder != null },
+                disabledChannelsCount = backupData.channels.count { !it.enabled }
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to read backup info")
+            null
+        }
+    }
+
     fun hasStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // Android 11+ requires MANAGE_EXTERNAL_STORAGE for full external storage access
@@ -341,3 +363,17 @@ data class ChannelBackup(
     val enabled: Boolean,
     val displayOrder: Long?
 )
+
+data class BackupInfo(
+    val timestamp: Long,
+    val appCardSize: Int,
+    val channelCardSize: Int,
+    val hiddenAppsCount: Int,
+    val favoriteAppsCount: Int,
+    val disabledChannelsCount: Int
+) {
+    fun getFormattedDate(): String {
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+        return sdf.format(java.util.Date(timestamp))
+    }
+}

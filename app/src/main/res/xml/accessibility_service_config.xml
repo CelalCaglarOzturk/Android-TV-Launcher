@@ -5,5 +5,5 @@
     android:accessibilityFlags="flagDefault|flagRequestTouchExplorationMode"
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_description"
-    android:notificationTimeout="100"
+    android:notificationTimeout="@integer/accessibility_notification_timeout"
     android:settingsActivity="nl.ndat.tvlauncher.LauncherActivity"/>

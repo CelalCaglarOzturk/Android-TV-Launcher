@@ -71,25 +71,24 @@
         name="empty_no_channels_message"
     >Channels from your apps will appear here.</string>
 
-	<!-- Backup/Restore -->
+<!-- Backup/Restore -->
 	<string name="backup">Backup</string>
 	<string name="restore">Restore</string>
 	<string name="backup_success">Backup completed successfully</string>
 	<string name="backup_failed">Backup failed</string>
-	<string
-        name="backup_failed_permission"
-    >Backup failed: Storage permission required</string>
+	<string name="backup_failed_permission">Backup failed: Storage permission required</string>
 	<string name="restore_success">Restore completed successfully</string>
 	<string name="restore_failed">Restore failed</string>
-	<string
-        name="restore_failed_permission"
-    >Restore failed: Storage permission required</string>
+	<string name="restore_failed_permission">Restore failed: Storage permission required</string>
 	<string name="restore_not_found">No backup file found</string>
 	<string name="backup_permission_title">Storage Permission Required</string>
-	<string
-        name="backup_permission_message"
-    >TV Launcher needs storage access to backup and restore your settings.\n\nPlease go to App Info > Permissions and enable "Files and media" or "All files access".</string>
+	<string name="backup_permission_message">TV Launcher needs storage permission to save and load your backup file. The backup file will be stored at:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\nThis file contains your app preferences, channel settings, and hidden inputs. Without this permission, backup and restore features cannot work.</string>
 	<string name="backup_permission_open_settings">Open App Info</string>
+	<string name="restore_preview_title">Restore Backup?</string>
+	<string name="restore_preview_message">This will replace your current settings with the backup from:\n\n%1$s\n\nChanges that will be applied:\n• App card size: %2$d dp\n• Channel card size: %3$d dp\n• Hidden apps: %4$d\n• Favorite apps: %5$d\n• Disabled channels: %6$d\n\nCurrent settings will be lost.</string>
+	<string name="restore_preview_backup_date">Backup from: %1$s</string>
+	<string name="restore_button">Restore</string>
+	<string name="backup_created_at">Backup created: %1$s</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Reset Settings</string>

@@ -9,6 +9,7 @@ import nl.ndat.tvlauncher.data.model.ChannelType
 import nl.ndat.tvlauncher.data.resolver.ChannelResolver
 import nl.ndat.tvlauncher.data.sqldelight.Channel
 import nl.ndat.tvlauncher.data.sqldelight.ChannelProgram
+import timber.log.Timber
 
 class ChannelRepository(
     private val context: Context,
@@ -104,18 +105,23 @@ class ChannelRepository(
     }
 
     suspend fun refreshAllChannels() {
+        Timber.d("Refreshing all channels")
         refreshWatchNextChannels()
         refreshPreviewChannels()
+        Timber.d("All channels refreshed")
     }
 
     suspend fun refreshPreviewChannels() {
+        Timber.d("Refreshing preview channels")
         val channels = channelResolver.getPreviewChannels(context)
         commitChannels(ChannelType.PREVIEW, channels)
 
         for (channel in channels) refreshChannelPrograms(channel)
+        Timber.d("Preview channels refreshed: ${channels.size} channels")
     }
 
     suspend fun refreshWatchNextChannels() {
+        Timber.d("Refreshing Watch Next channels")
         val channel = Channel(
             id = ChannelResolver.CHANNEL_ID_WATCH_NEXT,
             type = ChannelType.WATCH_NEXT,
@@ -133,6 +139,7 @@ class ChannelRepository(
 
         commitChannel(channel)
         commitChannelPrograms(channel.id, filteredPrograms)
+        Timber.d("Watch Next channels refreshed: ${filteredPrograms.size} programs")
     }
 
     suspend fun refreshChannelPrograms(channel: Channel) {
