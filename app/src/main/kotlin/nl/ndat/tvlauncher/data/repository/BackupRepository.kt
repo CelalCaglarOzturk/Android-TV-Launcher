@@ -24,6 +24,8 @@ class BackupRepository(
 ) {
     companion object {
         private const val CURRENT_BACKUP_VERSION = 2
+        private const val MAX_BACKUP_HISTORY = 5
+        private const val BACKUP_DATE_FORMAT = "yyyy-MM-dd_HH-mm-ss"
     }
 
     private val json = Json {
@@ -49,8 +51,40 @@ class BackupRepository(
         return File(getBackupDirectory(), backupFileName)
     }
 
+    private fun getTimestampedBackupFile(): File {
+        val timestamp = java.text.SimpleDateFormat(BACKUP_DATE_FORMAT, java.util.Locale.getDefault())
+            .format(java.util.Date())
+        return File(getBackupDirectory(), "tv_launcher_backup_$timestamp.json")
+    }
+
     fun getBackupPath(): String {
         return getBackupFile().absolutePath
+    }
+
+    fun getBackupHistory(): List<BackupInfo> {
+        val backupDir = getBackupDirectory()
+        val backupFiles = backupDir.listFiles()?.filter {
+            it.name.startsWith("tv_launcher_backup") && it.name.endsWith(".json")
+        }?.sortedByDescending { it.lastModified() } ?: emptyList()
+
+        return backupFiles.mapNotNull { file ->
+            try {
+                val jsonString = file.readText()
+                val backupData = json.decodeFromString<BackupData>(jsonString)
+                BackupInfo(
+                    timestamp = backupData.timestamp,
+                    appCardSize = backupData.settings.appCardSize,
+                    channelCardSize = backupData.settings.channelCardSize,
+                    hiddenAppsCount = backupData.apps.count { it.hidden },
+                    favoriteAppsCount = backupData.apps.count { it.favoriteOrder != null },
+                    disabledChannelsCount = backupData.channels.count { !it.enabled },
+                    fileName = file.name
+                )
+            } catch (e: Exception) {
+                Timber.w(e, "Failed to read backup file: ${file.name}")
+                null
+            }
+        }
     }
 
     fun backupExists(): Boolean {
@@ -97,12 +131,40 @@ class BackupRepository(
             val backupData = createBackupData()
             val jsonString = json.encodeToString(BackupData.serializer(), backupData)
 
+            // Save timestamped backup for history
+            val timestampedFile = getTimestampedBackupFile()
+            timestampedFile.writeText(jsonString)
+            Timber.d("Timestamped backup created at: ${timestampedFile.absolutePath}")
+
+            // Also save as the main backup file
             val backupFile = getBackupFile()
             backupFile.writeText(jsonString)
-            Timber.d("Backup created at: ${backupFile.absolutePath}")
+            Timber.d("Main backup created at: ${backupFile.absolutePath}")
+
+            // Cleanup old backups to keep only the most recent ones
+            cleanupOldBackups()
         } catch (e: Exception) {
             Timber.e(e, "Failed to create backup")
             throw e
+        }
+    }
+
+    private fun cleanupOldBackups() {
+        try {
+            val backupDir = getBackupDirectory()
+            val backupFiles = backupDir.listFiles()?.filter {
+                it.name.startsWith("tv_launcher_backup_") && it.name.endsWith(".json")
+            }?.sortedByDescending { it.lastModified() } ?: return
+
+            // Keep only the most recent MAX_BACKUP_HISTORY backups
+            if (backupFiles.size > MAX_BACKUP_HISTORY) {
+                backupFiles.drop(MAX_BACKUP_HISTORY).forEach { file ->
+                    Timber.d("Deleting old backup: ${file.name}")
+                    file.delete()
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to cleanup old backups")
         }
     }
 
@@ -111,6 +173,28 @@ class BackupRepository(
             withContext(Dispatchers.IO + NonCancellable) {
                 try {
                     val backupFile = getBackupFile()
+                    if (!backupFile.exists()) {
+                        throw IllegalStateException("Backup file not found at: ${backupFile.absolutePath}")
+                    }
+
+                    val jsonString = backupFile.readText()
+                    val backupData = json.decodeFromString<BackupData>(jsonString)
+                    restoreBackupData(backupData)
+                    Timber.d("Backup restored from: ${backupFile.absolutePath}")
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to restore backup")
+                    throw e
+                }
+            }
+        } catch (e: CancellationException) {
+            // Ignore cancellation as the operation completed via NonCancellable
+        }
+    }
+
+    suspend fun restoreFromSpecificBackup(backupFile: File) {
+        try {
+            withContext(Dispatchers.IO + NonCancellable) {
+                try {
                     if (!backupFile.exists()) {
                         throw IllegalStateException("Backup file not found at: ${backupFile.absolutePath}")
                     }
@@ -370,7 +454,8 @@ data class BackupInfo(
     val channelCardSize: Int,
     val hiddenAppsCount: Int,
     val favoriteAppsCount: Int,
-    val disabledChannelsCount: Int
+    val disabledChannelsCount: Int,
+    val fileName: String = "tv_launcher_backup.json"
 ) {
     fun getFormattedDate(): String {
         val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())

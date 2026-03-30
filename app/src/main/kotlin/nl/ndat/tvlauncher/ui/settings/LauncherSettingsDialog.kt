@@ -44,6 +44,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.repository.AppRepository
+import nl.ndat.tvlauncher.data.repository.BackupInfo
 import nl.ndat.tvlauncher.data.repository.BackupRepository
 import nl.ndat.tvlauncher.data.repository.ChannelRepository
 import nl.ndat.tvlauncher.data.repository.SettingsRepository
@@ -76,6 +77,7 @@ fun LauncherSettingsDialog(
     var showPermissionDialog by remember { mutableStateOf(false) }
     var showResetConfirmDialog by remember { mutableStateOf(false) }
     var showAccessibilityDialog by remember { mutableStateOf(false) }
+    var showRestorePreviewDialog by remember { mutableStateOf<BackupInfo?>(null) }
 
     fun isAccessibilityServiceEnabled(): Boolean {
         val enabledServices = Settings.Secure.getString(
@@ -148,6 +150,50 @@ fun LauncherSettingsDialog(
             onOpenSettings = {
                 showAccessibilityDialog = false
                 context.startActivity(Intent(Settings.ACTION_SETTINGS))
+            }
+        )
+    } else if (showRestorePreviewDialog != null) {
+        val backupInfo = showRestorePreviewDialog!!
+        RestorePreviewDialog(
+            backupInfo = backupInfo,
+            onDismissRequest = { showRestorePreviewDialog = null },
+            onConfirm = {
+                showRestorePreviewDialog = null
+                scope.launch {
+                    try {
+                        backupRepository.restoreBackup()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.restore_success),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } catch (e: IOException) {
+                        Timber.e(e, "Restore failed - IO exception (likely permission)")
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.restore_failed_permission),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        showPermissionDialog = true
+                    } catch (e: SecurityException) {
+                        Timber.e(e, "Restore failed - security exception")
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.restore_failed_permission),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        showPermissionDialog = true
+                    } catch (e: CancellationException) {
+                        // Ignore
+                    } catch (e: Exception) {
+                        Timber.e(e, "Restore failed")
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.restore_failed),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         )
     } else {
@@ -355,49 +401,16 @@ fun LauncherSettingsDialog(
                                 showPermissionDialog = true
                                 return@CompactSettingsItem
                             }
-                            scope.launch {
-                                try {
-                                    if (!backupRepository.backupExists()) {
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.restore_not_found),
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        return@launch
-                                    }
-                                    backupRepository.restoreBackup()
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.restore_success),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } catch (e: IOException) {
-                                    Timber.e(e, "Restore failed - IO exception (likely permission)")
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.restore_failed_permission),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    showPermissionDialog = true
-                                } catch (e: SecurityException) {
-                                    Timber.e(e, "Restore failed - security exception")
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.restore_failed_permission),
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    showPermissionDialog = true
-                                } catch (e: CancellationException) {
-                                    // Ignore
-                                } catch (e: Exception) {
-                                    Timber.e(e, "Restore failed")
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.restore_failed),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                            val backupInfo = backupRepository.getBackupInfo()
+                            if (backupInfo == null) {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.restore_not_found),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                return@CompactSettingsItem
                             }
+                            showRestorePreviewDialog = backupInfo
                         }
                     )
 
@@ -630,6 +643,59 @@ private fun AccessibilityRequiredDialog(
                     }
                     Button(onClick = onOpenSettings) {
                         Text(stringResource(R.string.settings_open_settings))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RestorePreviewDialog(
+    backupInfo: BackupInfo,
+    onDismissRequest: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.width(400.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.restore_preview_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(
+                        R.string.restore_preview_message,
+                        backupInfo.getFormattedDate(),
+                        backupInfo.appCardSize,
+                        backupInfo.channelCardSize,
+                        backupInfo.hiddenAppsCount,
+                        backupInfo.favoriteAppsCount,
+                        backupInfo.disabledChannelsCount
+                    ),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.colors(
+                            containerColor = Color.Transparent,
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    Button(onClick = onConfirm) {
+                        Text(stringResource(R.string.restore_button))
                     }
                 }
             }

@@ -65,12 +65,19 @@
 	<string name="restore">Restaurar</string>
 	<string name="backup_success">Cópia de segurança efetuada com sucesso</string>
 	<string name="backup_failed">Falha na cópia de segurança</string>
+	<string name="backup_failed_permission">Falha na cópia de segurança: Permissão de armazenamento necessária</string>
 	<string name="restore_success">Restauração efetuada com sucesso</string>
 	<string name="restore_failed">Falha na restauração</string>
+	<string name="restore_failed_permission">Falha na restauração: Permissão de armazenamento necessária</string>
 	<string name="restore_not_found">Ficheiro de cópia de segurança não encontrado</string>
 	<string name="backup_permission_title">Permissão de Armazenamento Necessária</string>
-	<string name="backup_permission_message">Por favor, ative as permissões de armazenamento para o TV Launcher fazer cópia de segurança e restaurar as suas definições. Abra Definições > Permissões e ative "Ficheiros e multimédia" ou "Acesso a todos os ficheiros".</string>
-	<string name="backup_permission_open_settings">Abrir Definições</string>
+	<string name="backup_permission_message">O TV Launcher precisa de permissão de armazenamento para guardar e carregar o seu ficheiro de cópia de segurança. O ficheiro será guardado em:\n\nDocumentos/TVLauncher/tv_launcher_backup.json\n\nEste ficheiro contém as suas preferências de aplicações, definições de canais e entradas ocultas. Sem esta permissão, as funcionalidades de cópia de segurança e restauração não podem funcionar.</string>
+	<string name="backup_permission_open_settings">Abrir Info da App</string>
+	<string name="restore_preview_title">Restaurar Cópia de Segurança?</string>
+	<string name="restore_preview_message">Isto substituirá as suas definições atuais pela cópia de segurança de:\n\n%1$s\n\nAlterações que serão aplicadas:\n• Tamanho do card de app: %2$d dp\n• Tamanho do card de canal: %3$d dp\n• Apps ocultas: %4$d\n• Apps favoritas: %5$d\n• Canais desativados: %6$d\n\nAs definições atuais serão perdidas.</string>
+	<string name="restore_preview_backup_date">Cópia de segurança de: %1$s</string>
+	<string name="restore_button">Restaurar</string>
+	<string name="backup_created_at">Cópia de segurança criada: %1$s</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Repor Definições</string>
@@ -134,4 +141,20 @@
 	<string name="settings_open_settings">Abrir Definições</string>
 	<string name="settings_suppress_only_external">Interceptar apenas de outras aplicações</string>
 	<string name="settings_suppress_only_external_description">Quando ativado, o botão home funciona normalmente dentro do launcher. Quando desativado, o botão home abre sempre este launcher.</string>
+
+	<!-- About -->
+	<string name="settings_about">Sobre</string>
+	<string name="about_app_info">Info da App</string>
+	<string name="about_version">Versão %1$s (%2$d)</string>
+	<string name="about_bug_reporting">Reportar Erros</string>
+	<string name="about_email">Email: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">Issues no GitHub</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">Licença</string>
+	<string name="about_privacy_policy">Política de Privacidade</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">Website</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">Digitalize para reportar um problema no GitHub</string>
 </resources>
