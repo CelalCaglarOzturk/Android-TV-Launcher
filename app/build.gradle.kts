@@ -57,6 +57,7 @@ dependencies {
 	implementation(libs.androidx.palette)
 	implementation(libs.androidx.savedstate)
 	implementation(libs.androidx.tv.material)
+	implementation(libs.material.icons.extended)
 	implementation(libs.coil.compose)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 }

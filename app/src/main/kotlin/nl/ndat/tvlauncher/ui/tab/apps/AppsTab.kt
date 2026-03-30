@@ -280,6 +280,7 @@ fun AppsTab(
                                 AppPopup(
                                     isFavorite = isFavorite,
                                     isHidden = true,
+                                    packageName = app.packageName,
                                     onToggleFavorite = { favorite -> viewModel.favoriteApp(app, favorite) },
                                     onToggleHidden = {
                                         focusedAppId = app.id

@@ -1,5 +1,7 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
+import android.content.Intent
+import android.net.Uri
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +32,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
@@ -42,9 +46,12 @@ import nl.ndat.tvlauncher.R
 fun AppPopup(
     isFavorite: Boolean,
     isHidden: Boolean = false,
+    packageName: String,
     onToggleFavorite: (favorite: Boolean) -> Unit,
     onToggleHidden: ((hidden: Boolean) -> Unit)? = null,
 ) {
+    val context = LocalContext.current
+
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -72,11 +79,24 @@ fun AppPopup(
         if (onToggleHidden != null) {
             KeyDownButton(
                 onClick = { onToggleHidden(!isHidden) },
-                icon = if (isHidden) Icons.Default.Add else Icons.Default.Delete,
+                icon = if (isHidden) Icons.Default.Add else Icons.Filled.VisibilityOff,
                 text = if (isHidden) stringResource(R.string.app_unhide) else stringResource(R.string.app_hide),
                 modifier = Modifier.fillMaxWidth()
             )
         }
+
+        // Uninstall
+        KeyDownButton(
+            onClick = {
+                val intent = Intent(Intent.ACTION_DELETE).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                context.startActivity(intent)
+            },
+            icon = Icons.Default.Delete,
+            text = stringResource(R.string.app_uninstall),
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

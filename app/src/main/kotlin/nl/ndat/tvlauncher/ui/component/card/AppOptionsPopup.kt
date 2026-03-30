@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -96,7 +97,7 @@ fun AppOptionsPopup(
         if (onToggleHidden != null) {
             KeyDownButton(
                 onClick = { onToggleHidden(true) },
-                icon = Icons.Default.Delete,
+                icon = Icons.Filled.VisibilityOff,
                 text = stringResource(R.string.app_hide),
                 modifier = Modifier.fillMaxWidth()
             )

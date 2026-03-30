@@ -21,6 +21,7 @@ koin-android = "4.2.0"
 koin-compose = "4.2.0"
 kotlin = "2.3.20"
 kotlinx-serialization = "1.10.0"
+material-icons = "1.6.8"
 sqldelight = "2.3.2"
 timber = "5.0.1"
 
@@ -51,6 +52,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-compose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+material-icons-extended = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "material-icons" }
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

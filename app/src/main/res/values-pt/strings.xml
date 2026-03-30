@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TV Launcher</string>
+	<string name="settings">Definições</string>
+	<string name="notifications">Notificações</string>
+	<string name="wifi">Rede e Internet</string>
+	<string name="channel_watch_next">Ver Depois</string>
+	<string name="channel_no_channels">Os canais das suas aplicações aparecerão aqui</string>
+	<string name="channel_preview">%1$s: %2$s</string>
+	<string name="settings_launcher">Definições do Launcher</string>
+	<string name="input_switch">Mudar entrada</string>
+	<string name="tab_home">Início</string>
+	<string name="tab_apps">Todas as aplicações</string>
+
+	<!-- Channel management -->
+	<string name="channel_enable">Ativar Canal</string>
+	<string name="channel_disable">Desativar Canal</string>
+	<string name="channel_move">Mover Canal</string>
+	<string name="close">Fechar</string>
+	<string name="disabled_channels">Canais Desativados</string>
+
+	<!-- Settings -->
+	<string name="settings_app_card_size">Tamanho do Card de App: %1$d dp</string>
+	<string name="settings_channel_card_size">Tamanho do Card de Canal: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">Mostrar aplicações sem interface de TV</string>
+	<string name="settings_inputs">Entradas</string>
+	<string name="settings_no_inputs">Nenhuma entrada encontrada</string>
+	<string name="settings_section_appearance">Aparência</string>
+	<string name="settings_section_layout">Esquema</string>
+	<string name="settings_section_behavior">Comportamento</string>
+	<string name="settings_section_data">Dados</string>
+	<string name="settings_section_system">Sistema</string>
+	<string name="settings_accessibility_enabled">Acessibilidade: Ativada</string>
+	<string name="settings_accessibility_disabled">Acessibilidade: Necessária</string>
+
+	<!-- Watch Next -->
+	<string name="watch_next_remove">Remover de Ver Depois</string>
+	<string name="watch_next_no_apps">Nenhuma aplicação suporta esta funcionalidade nesta TV</string>
+
+	<!-- App options -->
+	<string name="app_options">Opções da Aplicação</string>
+	<string name="app_open">Abrir</string>
+	<string name="app_move">Mover</string>
+	<string name="app_info">Informações</string>
+	<string name="app_add_to_home">Adicionar ao Início</string>
+	<string name="app_remove_from_home">Remover do Início</string>
+	<string name="app_hide">Ocultar Aplicação</string>
+	<string name="app_uninstall">Desinstalar</string>
+	<string name="app_unhide">Mostrar Aplicação</string>
+	<string name="app_moving_instructions">Use as setas para mover • OK para confirmar</string>
+	<string name="channel_moving_instructions">Use ↑↓ para mover • OK para confirmar</string>
+
+	<!-- Apps Tab -->
+	<string name="apps_show_mobile">Mostrar aplicações móveis</string>
+	<string name="apps_hidden_title">Aplicações Ocultas</string>
+
+	<!-- Empty States -->
+	<string name="empty_no_apps_title">Sem Aplicações</string>
+	<string name="empty_no_apps_message">Nenhuma aplicação encontrada. Instale algumas aplicações para começar.</string>
+	<string name="empty_no_channels_title">Sem Canais</string>
+	<string name="empty_no_channels_message">Os canais das suas aplicações aparecerão aqui.</string>
+
+	<!-- Backup/Restore -->
+	<string name="backup">Cópia de Segurança</string>
+	<string name="restore">Restaurar</string>
+	<string name="backup_success">Cópia de segurança efetuada com sucesso</string>
+	<string name="backup_failed">Falha na cópia de segurança</string>
+	<string name="restore_success">Restauração efetuada com sucesso</string>
+	<string name="restore_failed">Falha na restauração</string>
+	<string name="restore_not_found">Ficheiro de cópia de segurança não encontrado</string>
+	<string name="backup_permission_title">Permissão de Armazenamento Necessária</string>
+	<string name="backup_permission_message">Por favor, ative as permissões de armazenamento para o TV Launcher fazer cópia de segurança e restaurar as suas definições. Abra Definições > Permissões e ative "Ficheiros e multimédia" ou "Acesso a todos os ficheiros".</string>
+	<string name="backup_permission_open_settings">Abrir Definições</string>
+
+	<!-- Reset Settings -->
+	<string name="settings_reset">Repor Definições</string>
+	<string name="settings_reset_description">Limpar todas as preferências e repor predefinições</string>
+	<string name="settings_reset_success">Definições repostas para predefinição</string>
+	<string name="settings_reset_confirm_title">Repor Definições?</string>
+	<string name="settings_reset_confirm_message">Isto limpará todas as suas preferências e repor as predefinições. Esta ação não pode ser desfeita.</string>
+	<string name="settings_reset_confirm_button">Repor</string>
+	<string name="cancel">Cancelar</string>
+
+	<!-- Animations -->
+	<string name="settings_animations">Animações</string>
+	<string name="settings_enable_animations">Ativar Todas as Animações</string>
+	<string name="settings_enable_animations_description">Alternar todos os efeitos visuais</string>
+	<string name="settings_anim_app_icon">Animações de Ícone de Aplicação</string>
+	<string name="settings_anim_app_icon_desc">Texto rolante em foco</string>
+	<string name="settings_anim_channel_row">Animações de Linha de Canal</string>
+	<string name="settings_anim_channel_row_desc">Efeitos de escala e desvanecimento em foco</string>
+	<string name="settings_anim_channel_move">Movimento de Canal</string>
+	<string name="settings_anim_channel_move_desc">Reordenação suave de canais</string>
+	<string name="settings_anim_app_move">Movimento de Aplicação</string>
+	<string name="settings_anim_app_move_desc">Reordenação suave de aplicações</string>
+
+	<!-- Toolbar Placement -->
+	<string name="settings_toolbar_placement">Posição da Barra de Ferramentas</string>
+	<string name="settings_clock">Relógio</string>
+	<string name="settings_clock_enabled">Mostrar Relógio</string>
+	<string name="settings_clock_position">Posição do Relógio</string>
+	<string name="settings_clock_position_start">Início (lado esquerdo)</string>
+	<string name="settings_clock_position_end">Fim (lado direito)</string>
+	<string name="settings_clock_position_hidden">Oculto</string>
+	<string name="settings_toolbar_buttons">Botões da Barra de Ferramentas</string>
+	<string name="settings_toolbar_buttons_description">Ativar/desativar e reordenar botões da barra de ferramentas</string>
+
+	<!-- Toolbar Button Names -->
+	<string name="toolbar_clock">Relógio</string>
+	<string name="toolbar_inputs">Entradas</string>
+	<string name="toolbar_notifications">Notificações</string>
+	<string name="toolbar_wifi">Wi-Fi</string>
+	<string name="toolbar_launcher_settings">Definições do Launcher</string>
+	<string name="toolbar_settings">Definições do Sistema</string>
+
+	<!-- Channel Settings -->
+	<string name="settings_channel">Definições de Canal</string>
+	<string name="settings_channel_cards_per_row">Cards por Linha: %1$d</string>
+	<string name="settings_channel_cards_per_row_description">Limitar cards exibidos por canal para melhorar o desempenho (3–20)</string>
+
+	<!-- Crash Recovery -->
+	<string name="crash_recovery_title">TV Launcher Precisa de Recuperação</string>
+	<string name="crash_recovery_message">O launcher falhou várias vezes e não pode iniciar normalmente.\n\nEscolha uma opção abaixo para corrigir o problema:</string>
+	<string name="crash_recovery_reset_settings">Repor Definições</string>
+	<string name="crash_recovery_reset_settings_desc">Repoe todas as preferências para predefinição. As aplicações e canais aparecerão em alguns segundos.</string>
+	<string name="crash_recovery_open_app_settings">Abrir Definições da Aplicação</string>
+	<string name="crash_recovery_open_app_settings_desc">Abre as definições do sistema. Selecione "Armazenamento" → "Limpar Dados" para repor totalmente. Isto removerá todos os dados e permissões da aplicação</string>
+
+	<!-- Launcher Suppression -->
+	<string name="settings_suppress_launcher">Suprimir Launcher Original</string>
+	<string name="settings_suppress_launcher_description">Interceptar botão home para voltar a este launcher de outras aplicações</string>
+	<string name="accessibility_service_description">Permite ao TV Launcher interceptar o botão home ao voltar de outras aplicações.</string>
+	<string name="settings_accessibility_required">Ativar acessibilidade: Preferências do dispositivo > Acessibilidade > TV Launcher > Ligado</string>
+	<string name="settings_open_settings">Abrir Definições</string>
+	<string name="settings_suppress_only_external">Interceptar apenas de outras aplicações</string>
+	<string name="settings_suppress_only_external_description">Quando ativado, o botão home funciona normalmente dentro do launcher. Quando desativado, o botão home abre sempre este launcher.</string>
+</resources>
