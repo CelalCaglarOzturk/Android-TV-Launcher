@@ -72,6 +72,28 @@ object LauncherConstants {
     
     object Developer {
         const val TEST_CRASH_TRIGGER_COUNT = 5
-        const val TEST_CRASH_KEY = 9 // KeyEvent.KEYCODE_9
+        const val TEST_CRASH_KEY = 9
+    }
+    
+    object Background {
+        object Presets {
+            const val BLACK = 0xFF000000L
+            const val DARK_GRAY = 0xFF1A1A1AL
+            const val DARK_BLUE = 0xFF0D1B2AL
+            const val DARK_GREEN = 0xFF1B2D1BL
+            const val DARK_PURPLE = 0xFF2D1B2DL
+            const val DARK_RED = 0xFF2D1B1BL
+        }
+        
+        const val DEFAULT_BACKGROUND_COLOR = 0xFF000000L
+        
+        val PRESET_BACKGROUNDS = listOf(
+            Presets.BLACK,
+            Presets.DARK_GRAY,
+            Presets.DARK_BLUE,
+            Presets.DARK_GREEN,
+            Presets.DARK_PURPLE,
+            Presets.DARK_RED
+        )
     }
 }

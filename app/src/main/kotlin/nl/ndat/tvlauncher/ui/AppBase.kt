@@ -1,6 +1,9 @@
 package nl.ndat.tvlauncher.ui
 
 import androidx.compose.foundation.LocalOverscrollFactory
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -8,15 +11,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Shapes
 import androidx.tv.material3.Surface
 import androidx.tv.material3.darkColorScheme
+import coil.compose.AsyncImage
+import nl.ndat.tvlauncher.data.repository.SettingsRepository
 import nl.ndat.tvlauncher.ui.onboarding.OnboardingDialog
 import nl.ndat.tvlauncher.ui.screen.launcher.LauncherScreen
 import nl.ndat.tvlauncher.util.DeepLink
+import org.koin.compose.koinInject
+import android.net.Uri
 
 @Composable
 fun AppBase(
@@ -25,13 +35,21 @@ fun AppBase(
 	onOnboardingComplete: () -> Unit = {},
 	onDeepLinkHandled: () -> Unit = {}
 ) {
+	val settingsRepository = koinInject<SettingsRepository>()
+	val backgroundColor by settingsRepository.backgroundColor.collectAsStateWithLifecycle()
+	val backgroundEnabled by settingsRepository.backgroundEnabled.collectAsStateWithLifecycle()
+	val backgroundImageUri by settingsRepository.backgroundImageUri.collectAsStateWithLifecycle()
+	
 	var onboardingShown by remember { mutableStateOf(showOnboarding) }
 	var deepLink by remember { mutableStateOf(pendingDeepLink) }
 
+	val baseColor = Color(backgroundColor)
+	val compositionColor = if (backgroundEnabled) baseColor else Color.Black
+
 	MaterialTheme(
 		colorScheme = darkColorScheme(
-			background = Color.Black,
-			surface = Color.Black,
+			background = compositionColor,
+			surface = compositionColor,
 		),
 		shapes = Shapes(
 			small = RoundedCornerShape(4.dp),
@@ -42,7 +60,25 @@ fun AppBase(
 		CompositionLocalProvider(
 			LocalOverscrollFactory provides null
 		) {
-			Surface {
+			Surface(
+				modifier = Modifier.fillMaxSize()
+			) {
+				// Background layer (image or color)
+				if (backgroundEnabled && backgroundImageUri != null) {
+					AsyncImage(
+						model = Uri.parse(backgroundImageUri),
+						contentDescription = null,
+						modifier = Modifier.fillMaxSize(),
+						contentScale = ContentScale.Crop
+					)
+				} else if (backgroundEnabled) {
+					Box(
+						modifier = Modifier
+							.fillMaxSize()
+							.background(baseColor)
+					)
+				}
+				
 				if (onboardingShown) {
 					OnboardingDialog(
 						onDismiss = {

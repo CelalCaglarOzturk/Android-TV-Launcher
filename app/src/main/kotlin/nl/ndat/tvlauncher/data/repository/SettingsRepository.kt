@@ -29,6 +29,9 @@ class SettingsRepository(
         private const val KEY_SUPPRESS_ORIGINAL_LAUNCHER = "suppress_original_launcher"
         private const val KEY_SUPPRESS_LAUNCHER_ONLY_EXTERNAL = "suppress_launcher_only_external"
         private const val KEY_DEVELOPER_MODE = "developer_mode"
+        private const val KEY_BACKGROUND_COLOR = "background_color"
+        private const val KEY_BACKGROUND_ENABLED = "background_enabled"
+        private const val KEY_BACKGROUND_IMAGE_URI = "background_image_uri"
 
         // Legacy constants for backwards compatibility
         const val DEFAULT_APP_CARD_SIZE = LauncherConstants.CardSize.DEFAULT_APP_CARD_SIZE
@@ -119,6 +122,22 @@ class SettingsRepository(
         prefs.getBoolean(KEY_DEVELOPER_MODE, false)
     )
     val developerMode = _developerMode.asStateFlow()
+
+    // Background Settings
+    private val _backgroundColor = MutableStateFlow(
+        prefs.getLong(KEY_BACKGROUND_COLOR, LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR)
+    )
+    val backgroundColor = _backgroundColor.asStateFlow()
+
+    private val _backgroundEnabled = MutableStateFlow(
+        prefs.getBoolean(KEY_BACKGROUND_ENABLED, true)
+    )
+    val backgroundEnabled = _backgroundEnabled.asStateFlow()
+
+    private val _backgroundImageUri = MutableStateFlow(
+        prefs.getString(KEY_BACKGROUND_IMAGE_URI, null)
+    )
+    val backgroundImageUri = _backgroundImageUri.asStateFlow()
 
     // === App Settings ===
 
@@ -343,6 +362,49 @@ class SettingsRepository(
         setDeveloperMode(!_developerMode.value)
     }
 
+    // === Background Settings ===
+
+    fun setBackgroundColor(color: Long) {
+        try {
+            prefs.edit { putLong(KEY_BACKGROUND_COLOR, color) }
+            _backgroundColor.value = color
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set background color")
+        }
+    }
+
+    fun setBackgroundEnabled(enabled: Boolean) {
+        try {
+            prefs.edit { putBoolean(KEY_BACKGROUND_ENABLED, enabled) }
+            _backgroundEnabled.value = enabled
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set background enabled")
+        }
+    }
+
+    fun toggleBackgroundEnabled() {
+        setBackgroundEnabled(!_backgroundEnabled.value)
+    }
+
+    fun setBackgroundImageUri(uri: String?) {
+        try {
+            if (uri == null) {
+                prefs.edit { remove(KEY_BACKGROUND_IMAGE_URI) }
+            } else {
+                prefs.edit { putString(KEY_BACKGROUND_IMAGE_URI, uri) }
+            }
+            _backgroundImageUri.value = uri
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set background image uri")
+        }
+    }
+
+    fun resetBackground() {
+        setBackgroundColor(LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR)
+        setBackgroundImageUri(null)
+        setBackgroundEnabled(true)
+    }
+
     // === Reset Operations ===
 
     fun resetSettings() {
@@ -368,6 +430,14 @@ class SettingsRepository(
             // Reset launcher suppression
             _suppressOriginalLauncher.value = false
             _suppressLauncherOnlyExternal.value = false
+
+            // Reset developer mode
+            _developerMode.value = false
+
+            // Reset background
+            _backgroundColor.value = LauncherConstants.Background.DEFAULT_BACKGROUND_COLOR
+            _backgroundEnabled.value = true
+            _backgroundImageUri.value = null
         } catch (e: Exception) {
             Timber.e(e, "Failed to reset settings")
         }

@@ -33,6 +33,15 @@
 	<string name="settings_section_behavior">Behavior</string>
 	<string name="settings_section_data">Data</string>
 	<string name="settings_section_system">System</string>
+	<string name="settings_background">Background</string>
+	<string name="settings_background_description">Choose a background color or image for your home screen</string>
+	<string name="settings_background_enabled">Custom Background</string>
+	<string name="settings_background_colors">Preset Colors</string>
+	<string name="settings_background_image">Background Image</string>
+	<string name="settings_background_select_image">Select Image</string>
+	<string name="settings_background_clear_image">Clear</string>
+	<string name="settings_background_current_image">Current image:</string>
+	<string name="settings_background_reset">Reset to Default</string>
 
 	<!-- Watch Next -->
 	<string name="watch_next_remove">Remove from Watch Next</string>

@@ -79,6 +79,7 @@ fun LauncherSettingsDialog(
     var showResetConfirmDialog by remember { mutableStateOf(false) }
     var showAccessibilityDialog by remember { mutableStateOf(false) }
     var showRestorePreviewDialog by remember { mutableStateOf<BackupInfo?>(null) }
+    var showBackgroundSettings by remember { mutableStateOf(false) }
 
     fun isAccessibilityServiceEnabled(): Boolean {
         val enabledServices = Settings.Secure.getString(
@@ -153,6 +154,8 @@ fun LauncherSettingsDialog(
                 context.startActivity(Intent(Settings.ACTION_SETTINGS))
             }
         )
+    } else if (showBackgroundSettings) {
+        BackgroundSettingsDialog(onDismissRequest = { showBackgroundSettings = false })
     } else if (showRestorePreviewDialog != null) {
         val backupInfo = showRestorePreviewDialog!!
         RestorePreviewDialog(
@@ -266,6 +269,13 @@ fun LauncherSettingsDialog(
                                 modifier = Modifier.padding(start = 8.dp)
                             )
                         }
+                    )
+
+                    // Background Settings
+                    CompactSettingsItem(
+                        title = stringResource(R.string.settings_background),
+                        description = stringResource(R.string.settings_background_description),
+                        onClick = { showBackgroundSettings = true }
                     )
 
                     // Animations Settings

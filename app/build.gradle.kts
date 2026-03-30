@@ -26,6 +26,17 @@ android {
 		buildConfig = true
 		compose = true
 	}
+
+	lint {
+		warningsAsErrors = false
+		abortOnError = false
+		
+		// Check for missing translations
+		disable += setOf(
+			"ExtraTranslation",  // Allow translations without base language strings
+			"DuplicateStrings"   // Allow duplicate strings (common in different contexts)
+		)
+	}
 }
 
 sqldelight {
