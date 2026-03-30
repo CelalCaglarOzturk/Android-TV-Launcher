@@ -5,30 +5,20 @@
 	<string name="notifications">Notifiche</string>
 	<string name="wifi">Rete e Internet</string>
 	<string name="channel_watch_next">Guarda dopo</string>
-	<string
-        name="channel_no_channels"
-    >I canali delle tue app appariranno qui</string>
+	<string name="channel_no_channels">I canali delle tue app appariranno qui</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Impostazioni Launcher</string>
 	<string name="input_switch">Cambia input</string>
 	<string name="tab_home">Home</string>
 	<string name="tab_apps">Tutte le app</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">Attiva canale</string>
 	<string name="channel_disable">Disattiva canale</string>
 	<string name="channel_move">Sposta canale</string>
 	<string name="close">Chiudi</string>
 	<string name="disabled_channels">Canali disattivati</string>
-
-	<!-- Settings -->
 	<string name="settings_app_card_size">Dimensione scheda app: %1$d dp</string>
-	<string
-        name="settings_channel_card_size"
-    >Dimensione scheda canale: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >Mostra app senza interfaccia TV</string>
+	<string name="settings_channel_card_size">Dimensione scheda canale: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">Mostra app senza interfaccia TV</string>
 	<string name="settings_inputs">Ingressi</string>
 	<string name="settings_no_inputs">Nessun ingresso trovato</string>
 	<string name="settings_section_appearance">Aspetto</string>
@@ -36,16 +26,15 @@
 	<string name="settings_section_behavior">Comportamento</string>
 	<string name="settings_section_data">Dati</string>
 	<string name="settings_section_system">Sistema</string>
-	<string name="settings_accessibility_enabled">Accessibilità: Attiva</string>
-	<string name="settings_accessibility_disabled">Accessibilità: Richiesta</string>
-
-	<!-- Watch Next -->
+	<string name="settings_background">Sfondo</string>
+	<string name="settings_background_description">Scegli un colore o un\'immagine di sfondo per la tua schermata principale</string>
+	<string name="settings_background_colors">Colori predefiniti</string>
+	<string name="settings_background_image">Immagine personalizzata</string>
+	<string name="settings_background_select_image">Seleziona immagine</string>
+	<string name="settings_background_clear_image">Cancella</string>
+	<string name="settings_background_reset">Ripristina predefinito</string>
 	<string name="watch_next_remove">Rimuovi da Guarda dopo</string>
-	<string
-        name="watch_next_no_apps"
-    >Nessuna app supporta questa funzione su questa TV</string>
-
-	<!-- App options -->
+	<string name="watch_next_no_apps">Nessuna app supporta questa funzione su questa TV</string>
 	<string name="app_options">Opzioni app</string>
 	<string name="app_open">Apri</string>
 	<string name="app_move">Sposta</string>
@@ -53,139 +42,97 @@
 	<string name="app_add_to_home">Aggiungi a Home</string>
 	<string name="app_remove_from_home">Rimuovi da Home</string>
 	<string name="app_hide">Nascondi app</string>
-	<string name="app_uninstall">Disinstalla</string>
 	<string name="app_unhide">Mostra app</string>
-	<string
-        name="app_moving_instructions"
-    >Usa le frecce per spostare • OK per confermare</string>
-	<string
-        name="channel_moving_instructions"
-    >Usa ↑↓ per spostare • OK per confermare</string>
-
-	<!-- Apps Tab -->
+	<string name="app_uninstall">Disinstalla</string>
+	<string name="channel_moving_instructions">Usa ↑↓ per spostare • OK per confermare</string>
 	<string name="apps_show_mobile">Mostra app mobili</string>
 	<string name="apps_hidden_title">App nascoste</string>
-
-	<!-- Empty States -->
 	<string name="empty_no_apps_title">Nessuna app</string>
-	<string
-        name="empty_no_apps_message"
-    >Nessuna app trovata. Installa alcune app per iniziare.</string>
-	<string name="empty_no_channels_title">Nessun canale</string>
-	<string
-        name="empty_no_channels_message"
-    >I canali delle tue app appariranno qui.</string>
-
-	<!-- Backup/Restore -->
+	<string name="empty_no_apps_message">Nessuna app trovata. Installa alcune app per iniziare.</string>
 	<string name="backup">Backup</string>
 	<string name="restore">Ripristina</string>
 	<string name="backup_success">Backup completato con successo</string>
 	<string name="backup_failed">Backup fallito</string>
+	<string name="backup_failed_permission">Backup fallito: Autorizzazione archiviazione richiesta</string>
 	<string name="restore_success">Ripristino completato con successo</string>
 	<string name="restore_failed">Ripristino fallito</string>
+	<string name="restore_failed_permission">Ripristino fallito: Autorizzazione archiviazione richiesta</string>
 	<string name="restore_not_found">File di backup non trovato</string>
-	<string
-        name="backup_permission_title"
-    >Permesso di archiviazione richiesto</string>
-	<string
-        name="backup_permission_message"
-    >Attiva i permessi di archiviazione per TV Launcher per eseguire il backup e ripristinare le impostazioni. Apri Impostazioni > Permessi, poi attiva "File e media" o "Accesso a tutti i file".</string>
-	<string name="backup_permission_open_settings">Apri impostazioni</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_title">Autorizzazione archiviazione richiesta</string>
+	<string name="backup_permission_message">TV Launcher necessita dell\'autorizzazione di archiviazione per salvare e caricare il file di backup. Il file sarà salvato in:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\nQuesto file contiene le preferenze delle app, le impostazioni dei canali e gli ingressi nascosti. Senza questa autorizzazione, le funzioni di backup e ripristino non possono funzionare.</string>
+	<string name="backup_permission_open_settings">Apri impostazioni app</string>
+	<string name="restore_preview_title">Ripristinare backup?</string>
+	<string name="restore_preview_message">Questo sostituirà le impostazioni attuali con il backup da:\n\n%1$s\n\nCambiamenti che saranno applicati:\n• Dimensione scheda app: %2$d dp\n• Dimensione scheda canale: %3$d dp\n• App nascoste: %4$d\n• App preferite: %5$d\n• Canali disattivati: %6$d\n\nLe impostazioni attuali andranno perse.</string>
+	<string name="restore_button">Ripristina</string>
 	<string name="settings_reset">Ripristina impostazioni</string>
-	<string
-        name="settings_reset_description"
-    >Cancella tutte le preferenze e ripristina i valori predefiniti</string>
-	<string
-        name="settings_reset_success"
-    >Impostazioni ripristinate ai valori predefiniti</string>
+	<string name="settings_reset_description">Cancella tutte le preferenze e ripristina i valori predefiniti</string>
+	<string name="settings_reset_success">Impostazioni ripristinate ai valori predefiniti</string>
 	<string name="settings_reset_confirm_title">Ripristinare impostazioni?</string>
-	<string
-        name="settings_reset_confirm_message"
-    >Questo cancellerà tutte le tue preferenze e ripristinerà i valori predefiniti. Questa azione non può essere annullata.</string>
+	<string name="settings_reset_confirm_message">Questo cancellerà tutte le tue preferenze e ripristinerà i valori predefiniti. Questa azione non può essere annullata.</string>
 	<string name="settings_reset_confirm_button">Ripristina</string>
 	<string name="cancel">Annulla</string>
-
-	<!-- Animations -->
 	<string name="settings_animations">Animazioni</string>
 	<string name="settings_enable_animations">Attiva tutte le animazioni</string>
-	<string
-        name="settings_enable_animations_description"
-    >Attiva/disattiva tutti gli effetti visivi</string>
+	<string name="settings_enable_animations_description">Attiva/disattiva tutti gli effetti visivi</string>
 	<string name="settings_anim_app_icon">Animazioni icona app</string>
 	<string name="settings_anim_app_icon_desc">Testo scorrevole al focus</string>
 	<string name="settings_anim_channel_row">Animazioni riga canale</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >Effetti di ridimensionamento e dissolvenza al focus</string>
+	<string name="settings_anim_channel_row_desc">Effetti di ridimensionamento e dissolvenza al focus</string>
 	<string name="settings_anim_channel_move">Movimento canale</string>
-	<string
-        name="settings_anim_channel_move_desc"
-    >Riordino fluido dei canali</string>
+	<string name="settings_anim_channel_move_desc">Riordino fluido dei canali</string>
 	<string name="settings_anim_app_move">Movimento app</string>
 	<string name="settings_anim_app_move_desc">Riordino fluido delle app</string>
-
-	<!-- Toolbar Placement -->
-	<string
-        name="settings_toolbar_placement"
-    >Posizione barra degli strumenti</string>
-	<string name="settings_clock">Orologio</string>
-	<string name="settings_clock_enabled">Mostra orologio</string>
-	<string name="settings_clock_position">Posizione orologio</string>
-	<string name="settings_clock_position_start">Inizio (lato sinistro)</string>
-	<string name="settings_clock_position_end">Fine (lato destro)</string>
-	<string name="settings_clock_position_hidden">Nascosto</string>
-	<string name="settings_toolbar_buttons">Pulsanti barra degli strumenti</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >Attiva/disattiva e riordina i pulsanti della barra degli strumenti</string>
-
-	<!-- Toolbar Button Names -->
+	<string name="settings_toolbar_placement">Posizione barra degli strumenti</string>
 	<string name="toolbar_clock">Orologio</string>
 	<string name="toolbar_inputs">Ingressi</string>
 	<string name="toolbar_notifications">Notifiche</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">Impostazioni Launcher</string>
 	<string name="toolbar_settings">Impostazioni sistema</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">Impostazioni canali</string>
 	<string name="settings_channel_cards_per_row">Schede per riga: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >Limita le schede visualizzate per canale per migliorare le prestazioni (3–20)</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">Limita le schede visualizzate per canale per migliorare le prestazioni (3–20)</string>
 	<string name="crash_recovery_title">TV Launcher necessita di ripristino</string>
-	<string
-        name="crash_recovery_message"
-    >Il launcher si è arrestato più volte e non può avviarsi normalmente.\n\nScegli un\'opzione qui sotto per risolvere il problema:</string>
+	<string name="crash_recovery_message">Il launcher si è arrestato più volte e non può avviarsi normalmente.\n\nScegli un\'opzione qui sotto per risolvere il problema:</string>
 	<string name="crash_recovery_reset_settings">Ripristina impostazioni</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >Ripristina tutte le preferenze ai valori predefiniti. Le app e i canali appariranno tra qualche secondo.</string>
+	<string name="crash_recovery_reset_settings_desc">Ripristina tutte le preferenze ai valori predefiniti. Le app e i canali appariranno tra qualche secondo.</string>
 	<string name="crash_recovery_open_app_settings">Apri impostazioni app</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >Apre le impostazioni di sistema. Seleziona "Archiviazione" → "Cancella dati" per un ripristino completo. Questo rimuoverà tutti i dati e i permessi dell\'app</string>
-
-	<!-- Launcher Suppression -->
+	<string name="crash_recovery_open_app_settings_desc">Apre le impostazioni di sistema. Seleziona \"Archiviazione\" → \"Cancella dati\" per un ripristino completo. Questo rimuoverà tutti i dati e i permessi dell\'app</string>
+	<string name="settings_about">Info</string>
+	<string name="settings_developer_mode">Modalità sviluppatore</string>
+	<string name="settings_developer_mode_description">Attiva funzione crash di test (premi 9 cinque volte)</string>
+	<string name="about_app_info">Info app</string>
+	<string name="about_version">Versione %1$s (%2$d)</string>
+	<string name="about_bug_reporting">Segnala bug</string>
+	<string name="about_email">Email: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">Licenza</string>
+	<string name="about_privacy_policy">Politica sulla privacy</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">Sito web</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">Scansiona per segnalare un problema su GitHub</string>
 	<string name="settings_suppress_launcher">Sopprimi launcher originale</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >Intercetta il tasto home per tornare a questo launcher da altre app</string>
-	<string
-        name="accessibility_service_description"
-    >Permette a TV Launcher di intercettare il tasto home quando si ritorna da altre app.</string>
-	<string
-        name="settings_accessibility_required"
-    >Attiva accessibilità: Preferenze dispositivo > Accessibilità > TV Launcher > Attivo</string>
+	<string name="settings_suppress_launcher_description">Intercetta il tasto home per tornare a questo launcher da altre app</string>
+	<string name="accessibility_service_description">Permette a TV Launcher di intercettare il tasto home quando si ritorna da altre app.</string>
+	<string name="settings_accessibility_required">Attiva accessibilità: Preferenze dispositivo > Accessibilità > TV Launcher > Attivo</string>
 	<string name="settings_open_settings">Apri impostazioni</string>
-	<string
-        name="settings_suppress_only_external"
-    >Intercetta solo da altre app</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >Quando attivo, il tasto home funziona normalmente nel launcher. Quando disattivato, il tasto home apre sempre questo launcher.</string>
+	<string name="settings_accessibility_enabled">Accessibilità: Attiva</string>
+	<string name="settings_accessibility_disabled">Accessibilità: Richiesta</string>
+	<string name="settings_suppress_only_external">Intercetta solo da altre app</string>
+	<string name="settings_suppress_only_external_description">Quando attivo, il tasto home funziona normalmente nel launcher. Quando disattivato, il tasto home apre sempre questo launcher.</string>
+	<string name="onboarding_welcome">Benvenuto in TV Launcher</string>
+	<string name="onboarding_skip">Salta</string>
+	<string name="onboarding_next">Avanti</string>
+	<string name="onboarding_get_started">Inizia</string>
+	<string name="onboarding_page1_title">La tua schermata principale personalizzata</string>
+	<string name="onboarding_page1_description">TV Launcher ti offre una schermata principale pulita e personalizzabile per il tuo Android TV. Organizza le tue app, canali e ingressi come preferisci.</string>
+	<string name="onboarding_page2_title">Organizza le tue app</string>
+	<string name="onboarding_page2_description">Tieni premuto su un\'app per spostarla. Usa il menu per aggiungere preferiti alla tua riga principale, nascondere app che non ti servono, o accedere alle info dell\'app.</string>
+	<string name="onboarding_page3_title">Personalizza la tua esperienza</string>
+	<string name="onboarding_page3_description">Apri Impostazioni per modificare le dimensioni delle schede app, attivare le animazioni, configurare la visualizzazione dei canali, salvare le preferenze, e altro.</string>
+	<string name="onboarding_page4_title">Imposta come predefinito</string>
+	<string name="onboarding_page4_description">Per la migliore esperienza, imposta TV Launcher come app home predefinita. Puoi sempre cambiare questa impostazione dopo nelle impostazioni Android TV.</string>
 </resources>

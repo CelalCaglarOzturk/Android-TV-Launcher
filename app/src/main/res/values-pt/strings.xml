@@ -47,7 +47,7 @@
 	<string name="app_hide">Ocultar Aplicação</string>
 	<string name="app_uninstall">Desinstalar</string>
 	<string name="app_unhide">Mostrar Aplicação</string>
-	<string name="app_moving_instructions">Use as setas para mover • OK para confirmar</string>
+
 	<string name="channel_moving_instructions">Use ↑↓ para mover • OK para confirmar</string>
 
 	<!-- Apps Tab -->
@@ -57,11 +57,7 @@
 	<!-- Empty States -->
 	<string name="empty_no_apps_title">Sem Aplicações</string>
 	<string name="empty_no_apps_message">Nenhuma aplicação encontrada. Instale algumas aplicações para começar.</string>
-	<string name="empty_no_channels_title">Sem Canais</string>
-	<string name="empty_no_channels_message">Os canais das suas aplicações aparecerão aqui.</string>
-
-	<!-- Backup/Restore -->
-	<string name="backup">Cópia de Segurança</string>
+	<string name="backup">Cópia de segurança</string>
 	<string name="restore">Restaurar</string>
 	<string name="backup_success">Cópia de segurança efetuada com sucesso</string>
 	<string name="backup_failed">Falha na cópia de segurança</string>
@@ -75,9 +71,7 @@
 	<string name="backup_permission_open_settings">Abrir Info da App</string>
 	<string name="restore_preview_title">Restaurar Cópia de Segurança?</string>
 	<string name="restore_preview_message">Isto substituirá as suas definições atuais pela cópia de segurança de:\n\n%1$s\n\nAlterações que serão aplicadas:\n• Tamanho do card de app: %2$d dp\n• Tamanho do card de canal: %3$d dp\n• Apps ocultas: %4$d\n• Apps favoritas: %5$d\n• Canais desativados: %6$d\n\nAs definições atuais serão perdidas.</string>
-	<string name="restore_preview_backup_date">Cópia de segurança de: %1$s</string>
 	<string name="restore_button">Restaurar</string>
-	<string name="backup_created_at">Cópia de segurança criada: %1$s</string>
 
 	<!-- Reset Settings -->
 	<string name="settings_reset">Repor Definições</string>
@@ -103,14 +97,6 @@
 
 	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">Posição da Barra de Ferramentas</string>
-	<string name="settings_clock">Relógio</string>
-	<string name="settings_clock_enabled">Mostrar Relógio</string>
-	<string name="settings_clock_position">Posição do Relógio</string>
-	<string name="settings_clock_position_start">Início (lado esquerdo)</string>
-	<string name="settings_clock_position_end">Fim (lado direito)</string>
-	<string name="settings_clock_position_hidden">Oculto</string>
-	<string name="settings_toolbar_buttons">Botões da Barra de Ferramentas</string>
-	<string name="settings_toolbar_buttons_description">Ativar/desativar e reordenar botões da barra de ferramentas</string>
 
 	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Relógio</string>
@@ -152,7 +138,6 @@
 	<string name="settings_background_image">Imagem Personalizada</string>
 	<string name="settings_background_select_image">Selecionar Imagem</string>
 	<string name="settings_background_clear_image">Limpar</string>
-	<string name="settings_background_current_image">Imagem atual:</string>
 	<string name="settings_background_reset">Repor Predefinição</string>
 	<string name="about_app_info">Info da App</string>
 	<string name="about_version">Versão %1$s (%2$d)</string>

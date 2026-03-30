@@ -11,20 +11,14 @@
 	<string name="input_switch">切换输入</string>
 	<string name="tab_home">首页</string>
 	<string name="tab_apps">全部应用</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">启用频道</string>
 	<string name="channel_disable">禁用频道</string>
 	<string name="channel_move">移动频道</string>
 	<string name="close">关闭</string>
 	<string name="disabled_channels">已禁用的频道</string>
-
-	<!-- Settings -->
 	<string name="settings_app_card_size">应用卡片大小: %1$d dp</string>
 	<string name="settings_channel_card_size">频道卡片大小: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >显示没有电视界面的应用</string>
+	<string name="settings_show_mobile_apps_description">显示没有电视界面的应用</string>
 	<string name="settings_inputs">输入</string>
 	<string name="settings_no_inputs">未找到输入</string>
 	<string name="settings_section_appearance">外观</string>
@@ -32,14 +26,15 @@
 	<string name="settings_section_behavior">行为</string>
 	<string name="settings_section_data">数据</string>
 	<string name="settings_section_system">系统</string>
-	<string name="settings_accessibility_enabled">无障碍功能：已启用</string>
-	<string name="settings_accessibility_disabled">无障碍功能：需要启用</string>
-
-	<!-- Watch Next -->
+	<string name="settings_background">背景</string>
+	<string name="settings_background_description">为主屏幕选择背景颜色或图片</string>
+	<string name="settings_background_colors">预设颜色</string>
+	<string name="settings_background_image">自定义图片</string>
+	<string name="settings_background_select_image">选择图片</string>
+	<string name="settings_background_clear_image">清除</string>
+	<string name="settings_background_reset">重置为默认</string>
 	<string name="watch_next_remove">从稍后观看移除</string>
 	<string name="watch_next_no_apps">此电视上的应用不支持此功能</string>
-
-	<!-- App options -->
 	<string name="app_options">应用选项</string>
 	<string name="app_open">打开</string>
 	<string name="app_move">移动</string>
@@ -47,119 +42,97 @@
 	<string name="app_add_to_home">添加到首页</string>
 	<string name="app_remove_from_home">从首页移除</string>
 	<string name="app_hide">隐藏应用</string>
-	<string name="app_uninstall">卸载</string>
 	<string name="app_unhide">取消隐藏</string>
-	<string name="app_moving_instructions">使用方向键移动 • 按确定确认</string>
+	<string name="app_uninstall">卸载</string>
 	<string name="channel_moving_instructions">使用↑↓移动 • 按确定确认</string>
-
-	<!-- Apps Tab -->
 	<string name="apps_show_mobile">显示手机应用</string>
 	<string name="apps_hidden_title">已隐藏的应用</string>
-
-	<!-- Empty States -->
 	<string name="empty_no_apps_title">无应用</string>
 	<string name="empty_no_apps_message">未找到应用。安装一些应用开始使用。</string>
-	<string name="empty_no_channels_title">无频道</string>
-	<string name="empty_no_channels_message">来自应用的频道将显示在此处。</string>
-
-	<!-- Backup/Restore -->
 	<string name="backup">备份</string>
 	<string name="restore">恢复</string>
 	<string name="backup_success">备份成功完成</string>
 	<string name="backup_failed">备份失败</string>
+	<string name="backup_failed_permission">备份失败: 需要存储权限</string>
 	<string name="restore_success">恢复成功完成</string>
 	<string name="restore_failed">恢复失败</string>
+	<string name="restore_failed_permission">恢复失败: 需要存储权限</string>
 	<string name="restore_not_found">未找到备份文件</string>
 	<string name="backup_permission_title">需要存储权限</string>
-	<string
-        name="backup_permission_message"
-    >请为电视启动器启用存储权限以备份和恢复设置。打开设置 > 权限，然后启用"文件和媒体"或"所有文件访问"权限。</string>
-	<string name="backup_permission_open_settings">打开设置</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_message">电视启动器需要存储权限才能保存和加载备份文件。文件将保存于:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\n此文件包含您的应用偏好设置、频道设置和隐藏的输入。没有此权限，备份和恢复功能无法工作。</string>
+	<string name="backup_permission_open_settings">打开应用信息</string>
+	<string name="restore_preview_title">恢复备份?</string>
+	<string name="restore_preview_message">这将用以下备份替换当前设置:\n\n%1$s\n\n将应用的更改:\n• 应用卡片大小: %2$d dp\n• 频道卡片大小: %3$d dp\n• 隐藏的应用: %4$d\n• 收藏的应用: %5$d\n• 已禁用的频道: %6$d\n\n当前设置将丢失。</string>
+	<string name="restore_button">恢复</string>
 	<string name="settings_reset">重置设置</string>
 	<string name="settings_reset_description">清除所有偏好设置并恢复默认值</string>
 	<string name="settings_reset_success">设置已重置为默认值</string>
 	<string name="settings_reset_confirm_title">重置设置？</string>
-	<string
-        name="settings_reset_confirm_message"
-    >这将清除所有偏好设置并恢复默认值。此操作无法撤消。</string>
+	<string name="settings_reset_confirm_message">这将清除所有偏好设置并恢复默认值。此操作无法撤消。</string>
 	<string name="settings_reset_confirm_button">重置</string>
 	<string name="cancel">取消</string>
-
-	<!-- Animations -->
 	<string name="settings_animations">动画</string>
 	<string name="settings_enable_animations">启用所有动画</string>
 	<string name="settings_enable_animations_description">切换所有视觉效果</string>
 	<string name="settings_anim_app_icon">应用图标动画</string>
 	<string name="settings_anim_app_icon_desc">聚焦时显示跑马灯文字</string>
 	<string name="settings_anim_channel_row">频道行动画</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >聚焦时的缩放和淡入淡出效果</string>
+	<string name="settings_anim_channel_row_desc">聚焦时的缩放和淡入淡出效果</string>
 	<string name="settings_anim_channel_move">频道移动</string>
 	<string name="settings_anim_channel_move_desc">频道平滑重新排序</string>
 	<string name="settings_anim_app_move">应用移动</string>
 	<string name="settings_anim_app_move_desc">应用平滑重新排序</string>
-
-	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">工具栏位置</string>
-	<string name="settings_clock">时钟</string>
-	<string name="settings_clock_enabled">显示时钟</string>
-	<string name="settings_clock_position">时钟位置</string>
-	<string name="settings_clock_position_start">开始位置（左侧）</string>
-	<string name="settings_clock_position_end">结束位置（右侧）</string>
-	<string name="settings_clock_position_hidden">隐藏</string>
-	<string name="settings_toolbar_buttons">工具栏按钮</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >启用/禁用和重新排序工具栏按钮</string>
-
-	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">时钟</string>
 	<string name="toolbar_inputs">输入</string>
 	<string name="toolbar_notifications">通知</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">启动器设置</string>
 	<string name="toolbar_settings">系统设置</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">频道设置</string>
 	<string name="settings_channel_cards_per_row">每行卡片数: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >限制每个频道显示的卡片数量以提高性能 (3–20)</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">限制每个频道显示的卡片数量以提高性能 (3–20)</string>
 	<string name="crash_recovery_title">电视启动器需要恢复</string>
-	<string
-        name="crash_recovery_message"
-    >启动器多次崩溃，无法正常启动。\n\n请选择以下选项之一来修复问题：</string>
+	<string name="crash_recovery_message">启动器多次崩溃，无法正常启动。\n\n请选择以下选项之一来修复问题：</string>
 	<string name="crash_recovery_reset_settings">重置设置</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >将所有偏好设置重置为默认值。应用和频道将在几秒钟后出现。</string>
+	<string name="crash_recovery_reset_settings_desc">将所有偏好设置重置为默认值。应用和频道将在几秒钟后出现。</string>
 	<string name="crash_recovery_open_app_settings">打开应用设置</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >打开系统设置。选择"存储" → "清除数据"以完全重置。这将删除所有应用数据和权限</string>
-
-	<!-- Launcher Suppression -->
+	<string name="crash_recovery_open_app_settings_desc">打开系统设置。选择"存储" → "清除数据"以完全重置。这将删除所有应用数据和权限</string>
+	<string name="settings_about">关于</string>
+	<string name="settings_developer_mode">开发者模式</string>
+	<string name="settings_developer_mode_description">启用测试崩溃功能（按9五次）</string>
+	<string name="about_app_info">应用信息</string>
+	<string name="about_version">版本 %1$s (%2$d)</string>
+	<string name="about_bug_reporting">错误报告</string>
+	<string name="about_email">电子邮件: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">许可证</string>
+	<string name="about_privacy_policy">隐私政策</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">网站</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">扫描以在GitHub上报告问题</string>
 	<string name="settings_suppress_launcher">抑制原始启动器</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >拦截主页按钮从其他应用返回此启动器</string>
-	<string
-        name="accessibility_service_description"
-    >允许 TV Launcher 在从其他应用返回时拦截主页按钮。</string>
-	<string
-        name="settings_accessibility_required"
-    >启用无障碍功能：设备偏好设置 > 无障碍 > TV Launcher > 开启</string>
+	<string name="settings_suppress_launcher_description">拦截主页按钮从其他应用返回此启动器</string>
+	<string name="accessibility_service_description">允许 TV Launcher 在从其他应用返回时拦截主页按钮。</string>
+	<string name="settings_accessibility_required">启用无障碍功能: 设备偏好设置 > 无障碍 > TV Launcher > 开启</string>
 	<string name="settings_open_settings">打开设置</string>
-	<string
-        name="settings_suppress_only_external"
-    >仅从其他应用拦截</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >启用时，主页按钮在启动器内正常工作。禁用时，主页按钮始终打开此启动器。</string>
+	<string name="settings_accessibility_enabled">无障碍功能：已启用</string>
+	<string name="settings_accessibility_disabled">无障碍功能：需要启用</string>
+	<string name="settings_suppress_only_external">仅从其他应用拦截</string>
+	<string name="settings_suppress_only_external_description">启用时，主页按钮在启动器内正常工作。禁用时，主页按钮始终打开此启动器。</string>
+	<string name="onboarding_welcome">欢迎使用电视启动器</string>
+	<string name="onboarding_skip">跳过</string>
+	<string name="onboarding_next">下一步</string>
+	<string name="onboarding_get_started">开始使用</string>
+	<string name="onboarding_page1_title">您的自定义主屏幕</string>
+	<string name="onboarding_page1_description">电视启动器为您的Android TV提供简洁、可定制的主屏幕。按您的方式整理应用、频道和输入。</string>
+	<string name="onboarding_page2_title">整理您的应用</string>
+	<string name="onboarding_page2_description">长按应用以移动它。使用菜单将收藏添加到主行，隐藏不需要的应用，或访问应用信息。</string>
+	<string name="onboarding_page3_title">自定义您的体验</string>
+	<string name="onboarding_page3_description">打开设置以更改应用卡片大小、启用动画、配置频道显示、备份偏好设置等。</string>
+	<string name="onboarding_page4_title">设为默认</string>
+	<string name="onboarding_page4_description">为获得最佳体验，将电视启动器设为默认主应用。您可以稍后在Android TV设置中随时更改。</string>
 </resources>

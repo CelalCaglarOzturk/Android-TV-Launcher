@@ -11,20 +11,14 @@
 	<string name="input_switch">입력 전환</string>
 	<string name="tab_home">홈</string>
 	<string name="tab_apps">모든 앱</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">채널 활성화</string>
 	<string name="channel_disable">채널 비활성화</string>
 	<string name="channel_move">채널 이동</string>
 	<string name="close">닫기</string>
 	<string name="disabled_channels">비활성화된 채널</string>
-
-	<!-- Settings -->
 	<string name="settings_app_card_size">앱 카드 크기: %1$d dp</string>
 	<string name="settings_channel_card_size">채널 카드 크기: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >TV 인터페이스 없는 앱 표시</string>
+	<string name="settings_show_mobile_apps_description">TV 인터페이스 없는 앱 표시</string>
 	<string name="settings_inputs">입력</string>
 	<string name="settings_no_inputs">입력을 찾을 수 없습니다</string>
 	<string name="settings_section_appearance">모양</string>
@@ -32,16 +26,15 @@
 	<string name="settings_section_behavior">동작</string>
 	<string name="settings_section_data">데이터</string>
 	<string name="settings_section_system">시스템</string>
-	<string name="settings_accessibility_enabled">접근성: 활성화됨</string>
-	<string name="settings_accessibility_disabled">접근성: 필요함</string>
-
-	<!-- Watch Next -->
+	<string name="settings_background">배경</string>
+	<string name="settings_background_description">홈 화면의 배경 색상 또는 이미지를 선택하세요</string>
+	<string name="settings_background_colors">미리 설정된 색상</string>
+	<string name="settings_background_image">사용자 지정 이미지</string>
+	<string name="settings_background_select_image">이미지 선택</string>
+	<string name="settings_background_clear_image">지우기</string>
+	<string name="settings_background_reset">기본값으로 초기화</string>
 	<string name="watch_next_remove">이어서 시청에서 제거</string>
-	<string
-        name="watch_next_no_apps"
-    >이 TV에서 이 기능을 지원하는 앱이 없습니다</string>
-
-	<!-- App options -->
+	<string name="watch_next_no_apps">이 TV에서 이 기능을 지원하는 앱이 없습니다</string>
 	<string name="app_options">앱 옵션</string>
 	<string name="app_open">열기</string>
 	<string name="app_move">이동</string>
@@ -49,126 +42,97 @@
 	<string name="app_add_to_home">홈에 추가</string>
 	<string name="app_remove_from_home">홈에서 제거</string>
 	<string name="app_hide">앱 숨기기</string>
-	<string name="app_uninstall">제거</string>
 	<string name="app_unhide">앱 표시</string>
-	<string name="app_moving_instructions">화살표로 이동 • OK로 확인</string>
+	<string name="app_uninstall">제거</string>
 	<string name="channel_moving_instructions">↑↓로 이동 • OK로 확인</string>
-
-	<!-- Apps Tab -->
 	<string name="apps_show_mobile">모바일 앱 표시</string>
 	<string name="apps_hidden_title">숨겨진 앱</string>
-
-	<!-- Empty States -->
 	<string name="empty_no_apps_title">앱 없음</string>
-	<string
-        name="empty_no_apps_message"
-    >앱을 찾을 수 없습니다. 시작하려면 앱을 설치하세요.</string>
-	<string name="empty_no_channels_title">채널 없음</string>
-	<string name="empty_no_channels_message">앱의 채널이 여기에 표시됩니다.</string>
-
-	<!-- Backup/Restore -->
+	<string name="empty_no_apps_message">앱을 찾을 수 없습니다. 시작하려면 앱을 설치하세요.</string>
 	<string name="backup">백업</string>
 	<string name="restore">복원</string>
 	<string name="backup_success">백업이 완료되었습니다</string>
 	<string name="backup_failed">백업 실패</string>
+	<string name="backup_failed_permission">백업 실패: 저장소 권한 필요</string>
 	<string name="restore_success">복원이 완료되었습니다</string>
 	<string name="restore_failed">복원 실패</string>
+	<string name="restore_failed_permission">복원 실패: 저장소 권한 필요</string>
 	<string name="restore_not_found">백업 파일을 찾을 수 없습니다</string>
 	<string name="backup_permission_title">저장소 권한 필요</string>
-	<string
-        name="backup_permission_message"
-    >TV 런처가 설정을 백업 및 복원할 수 있도록 저장소 권한을 활성화하세요. 설정 > 권한을 열고 "파일 및 미디어" 또는 "모든 파일에 대한 액세스" 권한을 활성화하세요.</string>
-	<string name="backup_permission_open_settings">설정 열기</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_message">TV 런처는 백업 파일을 저장하고 불러오는 데 저장소 권한이 필요합니다. 파일은 다음 위치에 저장됩니다:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\n이 파일에는 앱 환경설정, 채널 설정 및 숨겨진 입력이 포함됩니다. 이 권한 없이는 백업 및 복원 기능이 작동하지 않습니다.</string>
+	<string name="backup_permission_open_settings">앱 정보 열기</string>
+	<string name="restore_preview_title">백업을 복원하시겠습니까?</string>
+	<string name="restore_preview_message">이 작업은 현재 설정을 다음 백업으로 교체합니다:\n\n%1$s\n\n적용될 변경 사항:\n• 앱 카드 크기: %2$d dp\n• 채널 카드 크기: %3$d dp\n• 숨겨진 앱: %4$d\n• 즐겨찾기 앱: %5$d\n• 비활성화된 채널: %6$d\n\n현재 설정은 손실됩니다.</string>
+	<string name="restore_button">복원</string>
 	<string name="settings_reset">설정 초기화</string>
-	<string
-        name="settings_reset_description"
-    >모든 기본 설정을 지우고 기본값으로 복원</string>
-	<string
-        name="settings_reset_success"
-    >설정이 기본값으로 초기화되었습니다</string>
+	<string name="settings_reset_description">모든 기본 설정을 지우고 기본값으로 복원</string>
+	<string name="settings_reset_success">설정이 기본값으로 초기화되었습니다</string>
 	<string name="settings_reset_confirm_title">설정을 초기화하시겠습니까?</string>
-	<string
-        name="settings_reset_confirm_message"
-    >모든 기본 설정이 지워지고 기본값으로 복원됩니다. 이 작업은 취소할 수 없습니다.</string>
+	<string name="settings_reset_confirm_message">모든 기본 설정이 지워지고 기본값으로 복원됩니다. 이 작업은 취소할 수 없습니다.</string>
 	<string name="settings_reset_confirm_button">초기화</string>
 	<string name="cancel">취소</string>
-
-	<!-- Animations -->
 	<string name="settings_animations">애니메이션</string>
 	<string name="settings_enable_animations">모든 애니메이션 활성화</string>
-	<string
-        name="settings_enable_animations_description"
-    >모든 시각 효과 전환</string>
+	<string name="settings_enable_animations_description">모든 시각 효과 전환</string>
 	<string name="settings_anim_app_icon">앱 아이콘 애니메이션</string>
 	<string name="settings_anim_app_icon_desc">포커스 시 마퀴 텍스트</string>
 	<string name="settings_anim_channel_row">채널 행 애니메이션</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >포커스 시 크기 조정 및 페이드 효과</string>
+	<string name="settings_anim_channel_row_desc">포커스 시 크기 조정 및 페이드 효과</string>
 	<string name="settings_anim_channel_move">채널 이동</string>
 	<string name="settings_anim_channel_move_desc">채널의 부드러운 재정렬</string>
 	<string name="settings_anim_app_move">앱 이동</string>
 	<string name="settings_anim_app_move_desc">앱의 부드러운 재정렬</string>
-
-	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">도구 모음 배치</string>
-	<string name="settings_clock">시계</string>
-	<string name="settings_clock_enabled">시계 표시</string>
-	<string name="settings_clock_position">시계 위치</string>
-	<string name="settings_clock_position_start">시작 (왼쪽)</string>
-	<string name="settings_clock_position_end">끝 (오른쪽)</string>
-	<string name="settings_clock_position_hidden">숨김</string>
-	<string name="settings_toolbar_buttons">도구 모음 버튼</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >도구 모음 버튼 활성화/비활성화 및 재정렬</string>
-
-	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">시계</string>
 	<string name="toolbar_inputs">입력</string>
 	<string name="toolbar_notifications">알림</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">런처 설정</string>
 	<string name="toolbar_settings">시스템 설정</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">채널 설정</string>
 	<string name="settings_channel_cards_per_row">행당 카드 수: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >성능 향상을 위해 채널당 표시되는 카드 수 제한 (3–20)</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">성능 향상을 위해 채널당 표시되는 카드 수 제한 (3–20)</string>
 	<string name="crash_recovery_title">TV 런처 복구 필요</string>
-	<string
-        name="crash_recovery_message"
-    >런처가 여러 번 충돌하여 정상적으로 시작할 수 없습니다.\n\n문제를 해결하려면 아래 옵션 중 하나를 선택하세요:</string>
+	<string name="crash_recovery_message">런처가 여러 번 충돌하여 정상적으로 시작할 수 없습니다.\n\n문제를 해결하려면 아래 옵션 중 하나를 선택하세요:</string>
 	<string name="crash_recovery_reset_settings">설정 초기화</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >모든 설정을 기본값으로 초기화합니다. 앱과 채널이 몇 초 후에 표시됩니다.</string>
+	<string name="crash_recovery_reset_settings_desc">모든 설정을 기본값으로 초기화합니다. 앱과 채널이 몇 초 후에 표시됩니다.</string>
 	<string name="crash_recovery_open_app_settings">앱 설정 열기</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >시스템 설정을 엽니다. 완전히 초기화하려면 "저장소" → "데이터 삭제"를 선택하세요. 이렇게 하면 모든 앱 데이터와 권한이 삭제됩니다</string>
-<!-- Launcher Suppression -->
+	<string name="crash_recovery_open_app_settings_desc">시스템 설정을 엽니다. 완전히 초기화하려면 "저장소" → "데이터 삭제"를 선택하세요. 이렇게 하면 모든 앱 데이터와 권한이 삭제됩니다</string>
+	<string name="settings_about">정보</string>
+	<string name="settings_developer_mode">개발자 모드</string>
+	<string name="settings_developer_mode_description">테스트 충돌 기능 활성화 (9를 5번 누름)</string>
+	<string name="about_app_info">앱 정보</string>
+	<string name="about_version">버전 %1$s (%2$d)</string>
+	<string name="about_bug_reporting">버그 신고</string>
+	<string name="about_email">이메일: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">라이선스</string>
+	<string name="about_privacy_policy">개인정보 처리방침</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">웹사이트</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">스캔하여 GitHub에서 문제 신고</string>
 	<string name="settings_suppress_launcher">원래 런처 억제</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >다른 앱에서 이 런처로 돌아가기 위해 홈 버튼 가로채기</string>
-	<string
-        name="accessibility_service_description"
-    >다른 앱에서 돌아올 때 홈 버튼을 가로채도록 TV Launcher를 허용합니다.</string>
-	<string
-        name="settings_accessibility_required"
-    >접근성 활성화: 기기 설정 > 접근성 > TV Launcher > 켬</string>
+	<string name="settings_suppress_launcher_description">다른 앱에서 이 런처로 돌아가기 위해 홈 버튼 가로채기</string>
+	<string name="accessibility_service_description">다른 앱에서 돌아올 때 홈 버튼을 가로채도록 TV Launcher를 허용합니다.</string>
+	<string name="settings_accessibility_required">접근성 활성화: 기기 설정 > 접근성 > TV Launcher > 켬</string>
 	<string name="settings_open_settings">설정 열기</string>
-	<string
-        name="settings_suppress_only_external"
-    >다른 앱에서만 가로채기</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >활성화하면 홈 버튼이 런처 내에서 정상적으로 작동합니다. 비활성화하면 홈 버튼이 항상 이 런처를 엽니다.</string>
+	<string name="settings_accessibility_enabled">접근성: 활성화됨</string>
+	<string name="settings_accessibility_disabled">접근성: 필요함</string>
+	<string name="settings_suppress_only_external">다른 앱에서만 가로채기</string>
+	<string name="settings_suppress_only_external_description">활성화하면 홈 버튼이 런처 내에서 정상적으로 작동합니다. 비활성화하면 홈 버튼이 항상 이 런처를 엽니다.</string>
+	<string name="onboarding_welcome">TV 런처에 오신 것을 환영합니다</string>
+	<string name="onboarding_skip">건너뛰기</string>
+	<string name="onboarding_next">다음</string>
+	<string name="onboarding_get_started">시작하기</string>
+	<string name="onboarding_page1_title">나만의 홈 화면</string>
+	<string name="onboarding_page1_description">TV 런처는 Android TV를 위한 깔끔하고 맞춤 설정 가능한 홈 화면을 제공합니다. 앱, 채널 및 입력을 원하는 대로 구성하세요.</string>
+	<string name="onboarding_page2_title">앱 구성하기</string>
+	<string name="onboarding_page2_description">앱을 길게 눌러 이동하세요. 메뉴를 사용하여 홈 행에 즐겨찾기를 추가하고, 필요 없는 앱을 숨기고, 앱 정보에 액세스할 수 있습니다.</string>
+	<string name="onboarding_page3_title">경험 맞춤 설정</string>
+	<string name="onboarding_page3_description">설정을 열어 앱 카드 크기를 변경하고, 애니메이션을 활성화하고, 채널 표시를 구성하고, 환경설정을 백업하는 등의 작업을 할 수 있습니다.</string>
+	<string name="onboarding_page4_title">기본으로 설정</string>
+	<string name="onboarding_page4_description">최상의 경험을 위해 TV 런처를 기본 홈 앱으로 설정하세요. Android TV 설정에서 나중에 언제든지 변경할 수 있습니다.</string>
 </resources>

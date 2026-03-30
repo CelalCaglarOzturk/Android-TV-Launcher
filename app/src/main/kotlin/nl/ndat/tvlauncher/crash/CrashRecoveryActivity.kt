@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +29,7 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import nl.ndat.tvlauncher.R
 import nl.ndat.tvlauncher.data.DatabaseContainer
+import timber.log.Timber
 
 class CrashRecoveryActivity : ComponentActivity() {
 
@@ -156,7 +156,7 @@ class CrashRecoveryActivity : ComponentActivity() {
             // Restart the app - it will refresh apps/channels on startup
             restartApp()
         } catch (e: Exception) {
-            Log.e("CrashRecovery", "Failed to reset settings", e)
+            Timber.e(e, "Failed to reset settings")
             openAppSettings()
         }
     }

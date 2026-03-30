@@ -5,30 +5,20 @@
 	<string name="notifications">通知</string>
 	<string name="wifi">ネットワークとインターネット</string>
 	<string name="channel_watch_next">ウォッチネクスト</string>
-	<string
-        name="channel_no_channels"
-    >アプリのチャンネルがここに表示されます</string>
+	<string name="channel_no_channels">アプリのチャンネルがここに表示されます</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">ランチャー設定</string>
 	<string name="input_switch">入力を切り替え</string>
 	<string name="tab_home">ホーム</string>
 	<string name="tab_apps">すべてのアプリ</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">チャンネルを有効化</string>
 	<string name="channel_disable">チャンネルを無効化</string>
 	<string name="channel_move">チャンネルを移動</string>
 	<string name="close">閉じる</string>
 	<string name="disabled_channels">無効化されたチャンネル</string>
-
-	<!-- Settings -->
 	<string name="settings_app_card_size">アプリカードサイズ: %1$d dp</string>
-	<string
-        name="settings_channel_card_size"
-    >チャンネルカードサイズ: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >TVインターフェースのないアプリを表示</string>
+	<string name="settings_channel_card_size">チャンネルカードサイズ: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">TVインターフェースのないアプリを表示</string>
 	<string name="settings_inputs">入力</string>
 	<string name="settings_no_inputs">入力が見つかりません</string>
 	<string name="settings_section_appearance">外観</string>
@@ -36,16 +26,15 @@
 	<string name="settings_section_behavior">動作</string>
 	<string name="settings_section_data">データ</string>
 	<string name="settings_section_system">システム</string>
-	<string name="settings_accessibility_enabled">アクセシビリティ: 有効</string>
-	<string name="settings_accessibility_disabled">アクセシビリティ: 必要</string>
-
-	<!-- Watch Next -->
+	<string name="settings_background">背景</string>
+	<string name="settings_background_description">ホーム画面の背景色または画像を選択</string>
+	<string name="settings_background_colors">プリセット色</string>
+	<string name="settings_background_image">カスタム画像</string>
+	<string name="settings_background_select_image">画像を選択</string>
+	<string name="settings_background_clear_image">クリア</string>
+	<string name="settings_background_reset">デフォルトにリセット</string>
 	<string name="watch_next_remove">ウォッチネクストから削除</string>
-	<string
-        name="watch_next_no_apps"
-    >このTVで данную функцию 지원하는 앱이 없습니다</string>
-
-	<!-- App options -->
+	<string name="watch_next_no_apps">このTVでこの機能をサポートするアプリはありません</string>
 	<string name="app_options">アプリのオプション</string>
 	<string name="app_open">開く</string>
 	<string name="app_move">移動</string>
@@ -53,135 +42,97 @@
 	<string name="app_add_to_home">ホームに追加</string>
 	<string name="app_remove_from_home">ホームから削除</string>
 	<string name="app_hide">アプリを非表示</string>
-	<string name="app_uninstall">アンインストール</string>
 	<string name="app_unhide">アプリを表示</string>
-	<string name="app_moving_instructions">矢印で移動 • OKで確定</string>
+	<string name="app_uninstall">アンインストール</string>
 	<string name="channel_moving_instructions">↑↓で移動 • OKで確定</string>
-
-	<!-- Apps Tab -->
 	<string name="apps_show_mobile">モバイルアプリを表示</string>
 	<string name="apps_hidden_title">非表示のアプリ</string>
-
-	<!-- Empty States -->
 	<string name="empty_no_apps_title">アプリなし</string>
-	<string
-        name="empty_no_apps_message"
-    >アプリが見つかりません。開始するにはいくつかのアプリをインストールしてください。</string>
-	<string name="empty_no_channels_title">チャンネルなし</string>
-	<string
-        name="empty_no_channels_message"
-    >アプリのチャンネルがここに表示されます。</string>
-
-	<!-- Backup/Restore -->
+	<string name="empty_no_apps_message">アプリが見つかりません。開始するにはいくつかのアプリをインストールしてください。</string>
 	<string name="backup">バックアップ</string>
 	<string name="restore">復元</string>
 	<string name="backup_success">バックアップが完了しました</string>
 	<string name="backup_failed">バックアップに失敗しました</string>
+	<string name="backup_failed_permission">バックアップに失敗しました: ストレージ権限が必要です</string>
 	<string name="restore_success">復元が完了しました</string>
 	<string name="restore_failed">復元に失敗しました</string>
+	<string name="restore_failed_permission">復元に失敗しました: ストレージ権限が必要です</string>
 	<string name="restore_not_found">バックアップファイルが見つかりません</string>
 	<string name="backup_permission_title">ストレージ権限が必要です</string>
-	<string
-        name="backup_permission_message"
-    >TVランチャーが設定をバックアップおよび復元するためにストレージ権限を有効にしてください。設定 > 権限を開き、「ファイルとメディア」または「すべてのファイルへのアクセス」権限を有効にしてください。</string>
-	<string name="backup_permission_open_settings">設定を開く</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_message">TVランチャーはバックアップの保存と読み込みにストレージ権限が必要です。ファイルは以下に保存されます:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\nこのファイルにはアプリの設定、チャンネル設定、非表示の入力が含まれます。この権限がないと、バックアップと復元機能は動作しません。</string>
+	<string name="backup_permission_open_settings">アプリ情報を開く</string>
+	<string name="restore_preview_title">バックアップを復元しますか?</string>
+	<string name="restore_preview_message">これにより現在の設定がバックアップに置き換えられます:\n\n%1$s\n\n適用される変更:\n• アプリカードサイズ: %2$d dp\n• チャンネルカードサイズ: %3$d dp\n• 非表示のアプリ: %4$d\n• お気に入りのアプリ: %5$d\n• 無効化されたチャンネル: %6$d\n\n現在の設定は失われます。</string>
+	<string name="restore_button">復元</string>
 	<string name="settings_reset">設定をリセット</string>
-	<string
-        name="settings_reset_description"
-    >すべての設定を消去してデフォルトに戻す</string>
-	<string
-        name="settings_reset_success"
-    >設定がデフォルトにリセットされました</string>
+	<string name="settings_reset_description">すべての設定を消去してデフォルトに戻す</string>
+	<string name="settings_reset_success">設定がデフォルトにリセットされました</string>
 	<string name="settings_reset_confirm_title">設定をリセットしますか？</string>
-	<string
-        name="settings_reset_confirm_message"
-    >これによりすべての設定が消去され、デフォルトに戻されます。この操作は元に戻せません。</string>
+	<string name="settings_reset_confirm_message">これによりすべての設定が消去され、デフォルトに戻されます。この操作は元に戻せません。</string>
 	<string name="settings_reset_confirm_button">リセット</string>
 	<string name="cancel">キャンセル</string>
-
-	<!-- Animations -->
 	<string name="settings_animations">アニメーション</string>
-	<string
-        name="settings_enable_animations"
-    >すべてのアニメーションを有効化</string>
-	<string
-        name="settings_enable_animations_description"
-    >すべての視覚効果を切り替え</string>
+	<string name="settings_enable_animations">すべてのアニメーションを有効化</string>
+	<string name="settings_enable_animations_description">すべての視覚効果を切り替え</string>
 	<string name="settings_anim_app_icon">アプリアイコンアニメーション</string>
-	<string
-        name="settings_anim_app_icon_desc"
-    >フォーカス時のマーキーテキスト</string>
+	<string name="settings_anim_app_icon_desc">フォーカス時のマーキーテキスト</string>
 	<string name="settings_anim_channel_row">チャンネル行アニメーション</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >フォーカス時のスケールとフェード効果</string>
+	<string name="settings_anim_channel_row_desc">フォーカス時のスケールとフェード効果</string>
 	<string name="settings_anim_channel_move">チャンネル移動</string>
-	<string
-        name="settings_anim_channel_move_desc"
-    >チャンネルのスムーズな並べ替え</string>
+	<string name="settings_anim_channel_move_desc">チャンネルのスムーズな並べ替え</string>
 	<string name="settings_anim_app_move">アプリ移動</string>
 	<string name="settings_anim_app_move_desc">アプリのスムーズな並べ替え</string>
-
-	<!-- Toolbar Placement -->
 	<string name="settings_toolbar_placement">ツールバー配置</string>
-	<string name="settings_clock">時計</string>
-	<string name="settings_clock_enabled">時計を表示</string>
-	<string name="settings_clock_position">時計の位置</string>
-	<string name="settings_clock_position_start">開始（左側）</string>
-	<string name="settings_clock_position_end">終了（右側）</string>
-	<string name="settings_clock_position_hidden">非表示</string>
-	<string name="settings_toolbar_buttons">ツールバーボタン</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >ツールバーボタンの有効/無効と並べ替え</string>
-
-	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">時計</string>
 	<string name="toolbar_inputs">入力</string>
 	<string name="toolbar_notifications">通知</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">ランチャー設定</string>
 	<string name="toolbar_settings">システム設定</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">チャンネル設定</string>
 	<string name="settings_channel_cards_per_row">行あたりのカード数: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >パフォーマンスを向上させるためチャンネルあたりの表示カード数を制限 (3–20)</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">パフォーマンスを向上させるためチャンネルあたりの表示カード数を制限 (3–20)</string>
 	<string name="crash_recovery_title">TVランチャーの回復が必要です</string>
-	<string
-        name="crash_recovery_message"
-    >ランチャーが複数回クラッシュし、正常に起動できません。\n\n問題を解決するには以下のオプションを選択してください：</string>
+	<string name="crash_recovery_message">ランチャーが複数回クラッシュし、正常に起動できません。\n\n問題を解決するには以下のオプションを選択してください：</string>
 	<string name="crash_recovery_reset_settings">設定をリセット</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >すべての設定をデフォルトにリセットします。アプリとチャンネルは数秒後に表示されます。</string>
+	<string name="crash_recovery_reset_settings_desc">すべての設定をデフォルトにリセットします。アプリとチャンネルは数秒後に表示されます。</string>
 	<string name="crash_recovery_open_app_settings">アプリ設定を開く</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >システム設定を開きます。「ストレージ」→「データを消去」を選択して完全にリセットします。これによりすべてのアプリデータと権限が削除されます</string>
-
-	<!-- Launcher Suppression -->
+	<string name="crash_recovery_open_app_settings_desc">システム設定を開きます。「ストレージ」→「データを消去」を選択して完全にリセットします。これによりすべてのアプリデータと権限が削除されます</string>
+	<string name="settings_about">アプリ情報</string>
+	<string name="settings_developer_mode">開発者モード</string>
+	<string name="settings_developer_mode_description">テストクラッシュ機能を有効化（9を5回押す）</string>
+	<string name="about_app_info">アプリ情報</string>
+	<string name="about_version">バージョン %1$s (%2$d)</string>
+	<string name="about_bug_reporting">バグ報告</string>
+	<string name="about_email">メール: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">ライセンス</string>
+	<string name="about_privacy_policy">プライバシーポリシー</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">ウェブサイト</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">スキャンしてGitHubで問題を報告</string>
 	<string name="settings_suppress_launcher">元のランチャーを抑制</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >他のアプリからこのランチャーに戻るためにホームボタンをインターセプト</string>
-	<string
-        name="accessibility_service_description"
-    >他のアプリから戻るときにホームボタンをインターセプトすることをTV Launcherに許可します。</string>
-	<string
-        name="settings_accessibility_required"
-    >アクセシビリティを有効化: デバイス設定 > アクセシビリティ > TV Launcher > オン</string>
+	<string name="settings_suppress_launcher_description">他のアプリからこのランチャーに戻るためにホームボタンをインターセプト</string>
+	<string name="accessibility_service_description">他のアプリから戻るときにホームボタンをインターセプトすることをTV Launcherに許可します。</string>
+	<string name="settings_accessibility_required">アクセシビリティを有効化: デバイス設定 > アクセシビリティ > TV Launcher > オン</string>
 	<string name="settings_open_settings">設定を開く</string>
-	<string
-        name="settings_suppress_only_external"
-    >他のアプリからのみインターセプト</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >有効にすると、ホームボタンはランチャー内で正常に動作します。無効にすると、ホームボタンは常にこのランチャーを開きます。</string>
+	<string name="settings_accessibility_enabled">アクセシビリティ: 有効</string>
+	<string name="settings_accessibility_disabled">アクセシビリティ: 必要</string>
+	<string name="settings_suppress_only_external">他のアプリからのみインターセプト</string>
+	<string name="settings_suppress_only_external_description">有効にすると、ホームボタンはランチャー内で正常に動作します。無効にすると、ホームボタンは常にこのランチャーを開きます。</string>
+	<string name="onboarding_welcome">TVランチャーへようこそ</string>
+	<string name="onboarding_skip">スキップ</string>
+	<string name="onboarding_next">次へ</string>
+	<string name="onboarding_get_started">開始</string>
+	<string name="onboarding_page1_title">カスタマイズ可能なホーム画面</string>
+	<string name="onboarding_page1_description">TVランチャーはAndroid TVのクリーンでカスタマイズ可能なホーム画面を提供します。アプリ、チャンネル、入力をお好みのように整理できます。</string>
+	<string name="onboarding_page2_title">アプリを整理</string>
+	<string name="onboarding_page2_description">アプリを長押しして移動します。メニューを使用してお気に入りをホーム行に追加し、不要なアプリを非表示にし、アプリ情報にアクセスできます。</string>
+	<string name="onboarding_page3_title">体験をカスタマイズ</string>
+	<string name="onboarding_page3_description">設定を開いてアプリアイコンサイズを変更し、アニメーションを有効にし、チャンネル表示を設定し、設定をバックアップし、その他のことができます。</string>
+	<string name="onboarding_page4_title">デフォルトとして設定</string>
+	<string name="onboarding_page4_description">最高の体験のために、TVランチャーをデフォルトのホームアプリとして設定してください。Android TV設定で後からいつでも変更できます。</string>
 </resources>

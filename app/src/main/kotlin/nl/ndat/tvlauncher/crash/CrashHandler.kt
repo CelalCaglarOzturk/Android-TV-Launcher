@@ -10,7 +10,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class CrashHandler(
-    private val context: Context
+    private val appContext: Context
 ) : Thread.UncaughtExceptionHandler {
 
     companion object {
@@ -43,7 +43,7 @@ class CrashHandler(
         fun getInstance(): CrashHandler = instance ?: throw IllegalStateException("CrashHandler not initialized")
 
         @SuppressLint("ApplySharedPref")
-		fun clearCrashHistory(context: Context) {
+        fun clearCrashHistory(context: Context) {
             context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                 .edit()
                 .clear()
@@ -68,12 +68,12 @@ class CrashHandler(
         }
     }
 
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     var defaultHandler: Thread.UncaughtExceptionHandler? = null
         internal set
 
     @SuppressLint("ApplySharedPref")
-	override fun uncaughtException(thread: Thread, throwable: Throwable) {
+    override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.e(throwable, "CrashHandler: Uncaught exception")
 
         try {
@@ -140,12 +140,12 @@ class CrashHandler(
     private fun launchRecoveryActivity() {
         try {
             Timber.d("CrashHandler: Launching CrashRecoveryActivity")
-            val intent = Intent(context, CrashRecoveryActivity::class.java).apply {
+            val intent = Intent(appContext, CrashRecoveryActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK or
                         Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             }
-            context.startActivity(intent)
+            appContext.startActivity(intent)
             Timber.d("CrashHandler: CrashRecoveryActivity started, finishing process")
             Process.killProcess(Process.myPid())
         } catch (e: Exception) {

@@ -2,42 +2,39 @@
 <resources>
 	<string name="app_name">TV Launcher</string>
 	<string name="settings">Ayarlar</string>
-    <string name="channel_watch_next">Sıradakini Oynat</string>
-	<string
-        name="channel_no_channels"
-    >Uygulamalarınızdan kanallar burada görünecek</string>
+	<string name="notifications">Bildirimler</string>
+	<string name="wifi">Ağ ve İnternet</string>
+	<string name="channel_watch_next">Sıradakini Oynat</string>
+	<string name="channel_no_channels">Uygulamalarınızdan kanallar burada görünecek</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Başlatıcı ayarları</string>
 	<string name="input_switch">Girişi değiştir</string>
 	<string name="tab_home">Ana Sayfa</string>
 	<string name="tab_apps">Tüm uygulamalar</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">Kanalı Etkinleştir</string>
 	<string name="channel_disable">Kanalı Devre Dışı Bırak</string>
 	<string name="channel_move">Kanalı Taşı</string>
-    <string name="close">Kapat</string>
-    <string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
-
-	<!-- Settings -->
+	<string name="close">Kapat</string>
+	<string name="disabled_channels">Devre Dışı Bırakılan Kanallar</string>
 	<string name="settings_app_card_size">Uygulama Kart Boyutu: %1$d dp</string>
 	<string name="settings_channel_card_size">Kanal Kart Boyutu: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >TV arayüzü olmayan uygulamaları göster</string>
+	<string name="settings_show_mobile_apps_description">TV arayüzü olmayan uygulamaları göster</string>
 	<string name="settings_inputs">Girişler</string>
-
-	<!-- Watch Next -->
-	<string name="watch_next_remove">Sıradakilerden Kaldır</string>
+	<string name="settings_no_inputs">Giriş bulunamadı</string>
 	<string name="settings_section_appearance">Görünüm</string>
 	<string name="settings_section_layout">Düzen</string>
 	<string name="settings_section_behavior">Davranış</string>
 	<string name="settings_section_data">Veri</string>
 	<string name="settings_section_system">Sistem</string>
-	<string name="settings_accessibility_enabled">Erişilebilirlik: Etkin</string>
-	<string name="settings_accessibility_disabled">Erişilebilirlik: Gerekli</string>
-
-	<!-- App options -->
+	<string name="settings_background">Arka Plan</string>
+	<string name="settings_background_description">Ana ekranınız için bir arka plan rengi veya resim seçin</string>
+	<string name="settings_background_colors">Hazır Renkler</string>
+	<string name="settings_background_image">Özel Resim</string>
+	<string name="settings_background_select_image">Resim Seç</string>
+	<string name="settings_background_clear_image">Temizle</string>
+	<string name="settings_background_reset">Varsayılana Sıfırla</string>
+	<string name="watch_next_remove">Sıradakilerden Kaldır</string>
+	<string name="watch_next_no_apps">Bu TV\'de bu özelliği destekleyen uygulama yok</string>
 	<string name="app_options">Uygulama Seçenekleri</string>
 	<string name="app_open">Aç</string>
 	<string name="app_move">Taşı</string>
@@ -45,149 +42,97 @@
 	<string name="app_add_to_home">Ana Ekrana Ekle</string>
 	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
 	<string name="app_hide">Uygulamayı Gizle</string>
-	<string name="app_uninstall">Kaldır</string>
 	<string name="app_unhide">Uygulamayı Göster</string>
-
-	<!-- Apps Tab -->
+	<string name="app_uninstall">Kaldır</string>
+	<string name="channel_moving_instructions">Taşımak için ↑↓ • Onaylamak için OK</string>
 	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
 	<string name="apps_hidden_title">Gizli Uygulamalar</string>
-
-    <!-- Backup/Restore -->
+	<string name="empty_no_apps_title">Uygulama Yok</string>
+	<string name="empty_no_apps_message">Uygulama bulunamadı. Başlamak için uygulama yükleyin.</string>
 	<string name="backup">Yedekle</string>
 	<string name="restore">Geri Yükle</string>
 	<string name="backup_success">Yedekleme başarılı</string>
 	<string name="backup_failed">Yedekleme başarısız</string>
-	<string
-        name="backup_failed_permission"
-    >Yedekleme başarısız: Depolama izni gerekli</string>
+	<string name="backup_failed_permission">Yedekleme başarısız: Depolama izni gerekli</string>
 	<string name="restore_success">Geri yükleme başarılı</string>
 	<string name="restore_failed">Geri yükleme başarısız</string>
-	<string
-        name="restore_failed_permission"
-    >Geri yükleme başarısız: Depolama izni gerekli</string>
+	<string name="restore_failed_permission">Geri yükleme başarısız: Depolama izni gerekli</string>
 	<string name="restore_not_found">Yedek dosyası bulunamadı</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_title">Depolama İzni Gerekli</string>
+	<string name="backup_permission_message">TV Launcher\'ın yedek dosyanızı kaydetmesi ve yüklemesi için depolama izni gerekiyor. Dosya şuraya kaydedilecek:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\nBu dosya uygulama tercihlerinizi, kanal ayarlarınızı ve gizli girişlerinizi içerir. Bu izin olmadan yedekleme ve geri yükleme özellikleri çalışmaz.</string>
+	<string name="backup_permission_open_settings">Uygulama Bilgilerini Aç</string>
+	<string name="restore_preview_title">Yedeği Geri Yükle?</string>
+	<string name="restore_preview_message">Bu işlem mevcut ayarlarınızı şu yedek ile değiştirecek:\n\n%1$s\n\nUygulanacak değişiklikler:\n• Uygulama kart boyutu: %2$d dp\n• Kanal kart boyutu: %3$d dp\n• Gizli uygulamalar: %4$d\n• Favori uygulamalar: %5$d\n• Devre dışı kanallar: %6$d\n\nMevcut ayarlar kaybolacak.</string>
+	<string name="restore_button">Geri Yükle</string>
 	<string name="settings_reset">Ayarları Sıfırla</string>
-	<string
-        name="settings_reset_description"
-    >Tüm tercihleri temizle ve varsayılanları geri yükle</string>
+	<string name="settings_reset_description">Tüm tercihleri temizle ve varsayılanları geri yükle</string>
 	<string name="settings_reset_success">Ayarlar varsayılana sıfırlandı</string>
-
-	<!-- Animations -->
-	<string name="settings_enable_animations">Animasyonları Etkinleştir</string>
-	<string
-        name="settings_enable_animations_description"
-    >Kayan yazı ve diğer görsel efektleri göster</string>
+	<string name="settings_reset_confirm_title">Ayarları Sıfırla?</string>
+	<string name="settings_reset_confirm_message">Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
+	<string name="settings_reset_confirm_button">Sıfırla</string>
+	<string name="cancel">İptal</string>
 	<string name="settings_animations">Animasyonlar</string>
+	<string name="settings_enable_animations">Tüm Animasyonları Etkinleştir</string>
+	<string name="settings_enable_animations_description">Tüm görsel efektleri aç/kapat</string>
 	<string name="settings_anim_app_icon">Uygulama İkonu Animasyonları</string>
 	<string name="settings_anim_app_icon_desc">Odaklanınca kayan metin</string>
 	<string name="settings_anim_channel_row">Kanal Satırı Animasyonları</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >Odaklanınca ölçek ve solma efektleri</string>
+	<string name="settings_anim_channel_row_desc">Odaklanınca ölçek ve solma efektleri</string>
 	<string name="settings_anim_channel_move">Kanal Taşıma</string>
-	<string
-        name="settings_anim_channel_move_desc"
-    >Kanalların düzgün yeniden sıralanması</string>
+	<string name="settings_anim_channel_move_desc">Kanalların düzgün yeniden sıralanması</string>
 	<string name="settings_anim_app_move">Uygulama Taşıma</string>
-	<string
-        name="settings_anim_app_move_desc"
-    >Uygulamaların düzgün yeniden sıralanması</string>
-
-	<!-- Toolbar Placement -->
+	<string name="settings_anim_app_move_desc">Uygulamaların düzgün yeniden sıralanması</string>
 	<string name="settings_toolbar_placement">Araç Çubuğu Konumu</string>
-	<string name="settings_clock">Saat</string>
-	<string name="settings_clock_enabled">Saati Göster</string>
-	<string name="settings_clock_position">Saat Konumu</string>
-	<string name="settings_clock_position_start">Başlangıç (sol taraf)</string>
-	<string name="settings_clock_position_end">Bitiş (sağ taraf)</string>
-	<string name="settings_clock_position_hidden">Gizli</string>
-	<string name="settings_toolbar_buttons">Araç Çubuğu Düğmeleri</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >Araç çubuğu düğmelerini etkinleştir/devre dışı bırak ve sırala</string>
-
-	<!-- Toolbar Button Names -->
 	<string name="toolbar_clock">Saat</string>
 	<string name="toolbar_inputs">Girişler</string>
 	<string name="toolbar_notifications">Bildirimler</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">Başlatıcı Ayarları</string>
 	<string name="toolbar_settings">Sistem Ayarları</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">Kanal Ayarları</string>
 	<string name="settings_channel_cards_per_row">Satır Başına Kart: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >Performansı artırmak için kanal başına görüntülenen kart sayısını sınırla (3–20)</string>
-
-	<!-- Empty States -->
-	<string name="empty_no_apps_title">Uygulama Yok</string>
-	<string
-        name="empty_no_apps_message"
-    >Uygulama bulunamadı. Başlamak için uygulama yükleyin.</string>
-	<string name="empty_no_channels_title">Kanal Yok</string>
-	<string
-        name="empty_no_channels_message"
-    >Uygulamalarınızdan kanallar burada görünecek.</string>
-
-	<!-- Additional -->
-	<string name="notifications">Bildirimler</string>
-	<string name="wifi">Ağ ve İnternet</string>
-	<string name="settings_no_inputs">Giriş bulunamadı</string>
-	<string
-        name="watch_next_no_apps"
-    >Bu TV\'de bu özelliği destekleyen uygulama yok</string>
-	<string
-        name="app_moving_instructions"
-    >Taşımak için oklar • Onaylamak için OK</string>
-	<string
-        name="channel_moving_instructions"
-    >Taşımak için ↑↓ • Onaylamak için OK</string>
-	<string name="backup_permission_title">Depolama İzni Gerekli</string>
-	<string
-        name="backup_permission_message"
-    >TV Launcher\'ın ayarlarınızı yedeklemesi ve geri yüklemesi için depolama erişimi gerekiyor.\n\nLütfen Uygulama Bilgileri > İzinler\'e gidin ve \"Dosyalar ve medya\" veya \"Tüm dosyalara erişim\" iznini etkinleştirin.</string>
-	<string name="backup_permission_open_settings">Uygulama Bilgilerini Aç</string>
-	<string name="settings_reset_confirm_title">Ayarları Sıfırla?</string>
-	<string
-        name="settings_reset_confirm_message"
-    >Bu işlem tüm tercihlerinizi temizleyip varsayılanlara döndürecek. Bu işlem geri alınamaz.</string>
-	<string name="settings_reset_confirm_button">Sıfırla</string>
-	<string name="cancel">İptal</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">Performansı artırmak için kanal başına görüntülenen kart sayısını sınırla (3–20)</string>
 	<string name="crash_recovery_title">TV Launcher Kurtarma Gerekiyor</string>
-	<string
-        name="crash_recovery_message"
-    >Başlatıcı birden çok kez çöktü ve normal başlatılamıyor.\n\nSorunu çözmek için aşağıdan bir seçenek seçin:</string>
+	<string name="crash_recovery_message">Başlatıcı birden çok kez çöktü ve normal başlatılamıyor.\n\nSorunu çözmek için aşağıdan bir seçenek seçin:</string>
 	<string name="crash_recovery_reset_settings">Ayarları Sıfırla</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >Tüm tercihleri varsayılana sıfırlar. Uygulamalar ve kanallar birkaç saniye içinde görünecektir.</string>
+	<string name="crash_recovery_reset_settings_desc">Tüm tercihleri varsayılana sıfırlar. Uygulamalar ve kanallar birkaç saniye içinde görünecektir.</string>
 	<string name="crash_recovery_open_app_settings">Uygulama Ayarlarını Aç</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >Sistem ayarlarını açar. \"Depolama\" → \"Verileri Temizle\" seçeneğini seçin. Bu uygulamanın tüm verileri ve izinleri kaldırır.</string>
-
-	<!-- Launcher Suppression -->
+	<string name="crash_recovery_open_app_settings_desc">Sistem ayarlarını açar. Tam sıfırlama için \"Depolama\" → \"Verileri Temizle\" seçeneğini kullanın. Bu, tüm uygulama verilerini ve izinlerini kaldırır</string>
+	<string name="settings_about">Hakkında</string>
+	<string name="settings_developer_mode">Geliştirici Modu</string>
+	<string name="settings_developer_mode_description">Test çökme özelliğini etkinleştir (9\'u beş kez tuşla)</string>
+	<string name="about_app_info">Uygulama Bilgileri</string>
+	<string name="about_version">Sürüm %1$s (%2$d)</string>
+	<string name="about_bug_reporting">Hata Bildirme</string>
+	<string name="about_email">E-posta: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">Lisans</string>
+	<string name="about_privacy_policy">Gizlilik Politikası</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">Web Sitesi</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">GitHub\'da sorun bildirmek için tara</string>
 	<string name="settings_suppress_launcher">Orijinal Başlatıcıyı Bastır</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >Diğer uygulamalardan bu başlatıcıya dönmek için ana düğmeyi yakala</string>
-	<string
-        name="accessibility_service_description"
-    >TV Launcher\'ın diğer uygulamalardan dönerken ana düğmeyi yakalamasına izin verir.</string>
-	<string
-        name="settings_accessibility_required"
-    >Erişilebilirliği etkinleştir: Cihaz Tercihleri > Erişilebilirlik > TV Launcher > Açık</string>
+	<string name="settings_suppress_launcher_description">Diğer uygulamalardan bu başlatıcıya dönmek için ana düğmeyi yakala</string>
+	<string name="accessibility_service_description">TV Launcher\'ın diğer uygulamalardan dönerken ana düğmeyi yakalamasına izin verir.</string>
+	<string name="settings_accessibility_required">Erişilebilirliği etkinleştir: Cihaz Tercihleri > Erişilebilirlik > TV Launcher > Açık</string>
 	<string name="settings_open_settings">Ayarları Aç</string>
-	<string
-        name="settings_suppress_only_external"
-    >Sadece diğer uygulamalardan yakala</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >Etkinleştirildiğinde, ana düğme başlatıcı içinde normal çalışır. Devre dışı bırakıldığında, ana düğme her zaman bu başlatıcıyı açar.</string>
+	<string name="settings_accessibility_enabled">Erişilebilirlik: Etkin</string>
+	<string name="settings_accessibility_disabled">Erişilebilirlik: Gerekli</string>
+	<string name="settings_suppress_only_external">Sadece diğer uygulamalardan yakala</string>
+	<string name="settings_suppress_only_external_description">Etkinleştirildiğinde, ana düğme başlatıcı içinde normal çalışır. Devre dışı bırakıldığında, ana düğme her zaman bu başlatıcıyı açar.</string>
+	<string name="onboarding_welcome">TV Launcher\'a Hoş Geldiniz</string>
+	<string name="onboarding_skip">Atla</string>
+	<string name="onboarding_next">İleri</string>
+	<string name="onboarding_get_started">Başla</string>
+	<string name="onboarding_page1_title">Özel Ana Ekranınız</string>
+	<string name="onboarding_page1_description">TV Launcher, Android TV\'niz için temiz, özelleştirilebilir bir ana ekran sunar. Uygulamalarınızı, kanallarınızı ve girişlerinizi istediğiniz gibi düzenleyin.</string>
+	<string name="onboarding_page2_title">Uygulamalarınızı Düzenleyin</string>
+	<string name="onboarding_page2_description">Taşımak için bir uygulamaya uzun basın. Menüyü kullanarak favorileri ana satırınıza ekleyin, ihtiyacınız olmayan uygulamaları gizleyin veya uygulama bilgilerine erişin.</string>
+	<string name="onboarding_page3_title">Deneyiminizi Özelleştirin</string>
+	<string name="onboarding_page3_description">Uygulama kart boyutlarını değiştirmek, animasyonları etkinleştirmek, kanal görüntülemesini yapılandırmak, tercihlerinizi yedeklemek ve daha fazlası için Ayarları açın.</string>
+	<string name="onboarding_page4_title">Varsayılan Olarak Ayarla</string>
+	<string name="onboarding_page4_description">En iyi deneyim için TV Launcher\'ı varsayılan ana uygulamanız olarak ayarlayın. Bunu daha sonra Android TV ayarlarından istediğiniz zaman değiştirebilirsiniz.</string>
 </resources>

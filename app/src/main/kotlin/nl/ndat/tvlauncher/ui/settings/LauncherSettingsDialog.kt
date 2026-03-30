@@ -69,6 +69,16 @@ fun LauncherSettingsDialog(
     val developerMode by settingsRepository.developerMode.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
+    // Pre-resolve string resources for use in coroutines
+    val resetSuccessMsg = stringResource(R.string.settings_reset_success)
+    val restoreSuccessMsg = stringResource(R.string.restore_success)
+    val restoreFailedPermissionMsg = stringResource(R.string.restore_failed_permission)
+    val restoreFailedMsg = stringResource(R.string.restore_failed)
+    val backupSuccessMsg = stringResource(R.string.backup_success)
+    val backupFailedPermissionMsg = stringResource(R.string.backup_failed_permission)
+    val backupFailedMsg = stringResource(R.string.backup_failed)
+    val restoreNotFoundMsg = stringResource(R.string.restore_not_found)
+
     var showWatchNextSettings by remember { mutableStateOf(false) }
     var showInputsSettings by remember { mutableStateOf(false) }
     var showAnimationsSettings by remember { mutableStateOf(false) }
@@ -116,7 +126,7 @@ fun LauncherSettingsDialog(
                     
                     Toast.makeText(
                         context,
-                        context.getString(R.string.settings_reset_success),
+                        resetSuccessMsg,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -168,14 +178,14 @@ fun LauncherSettingsDialog(
                         backupRepository.restoreBackup()
                         Toast.makeText(
                             context,
-                            context.getString(R.string.restore_success),
+                            restoreSuccessMsg,
                             Toast.LENGTH_SHORT
                         ).show()
                     } catch (e: IOException) {
                         Timber.e(e, "Restore failed - IO exception (likely permission)")
                         Toast.makeText(
                             context,
-                            context.getString(R.string.restore_failed_permission),
+                            restoreFailedPermissionMsg,
                             Toast.LENGTH_LONG
                         ).show()
                         showPermissionDialog = true
@@ -183,7 +193,7 @@ fun LauncherSettingsDialog(
                         Timber.e(e, "Restore failed - security exception")
                         Toast.makeText(
                             context,
-                            context.getString(R.string.restore_failed_permission),
+                            restoreFailedPermissionMsg,
                             Toast.LENGTH_LONG
                         ).show()
                         showPermissionDialog = true
@@ -193,7 +203,7 @@ fun LauncherSettingsDialog(
                         Timber.e(e, "Restore failed")
                         Toast.makeText(
                             context,
-                            context.getString(R.string.restore_failed),
+                            restoreFailedMsg,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -374,14 +384,14 @@ fun LauncherSettingsDialog(
                                     backupRepository.createBackup()
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.backup_success),
+                                        backupSuccessMsg,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } catch (e: IOException) {
                                     Timber.e(e, "Backup failed - IO exception (likely permission)")
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.backup_failed_permission),
+                                        backupFailedPermissionMsg,
                                         Toast.LENGTH_LONG
                                     ).show()
                                     showPermissionDialog = true
@@ -389,7 +399,7 @@ fun LauncherSettingsDialog(
                                     Timber.e(e, "Backup failed - security exception")
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.backup_failed_permission),
+                                        backupFailedPermissionMsg,
                                         Toast.LENGTH_LONG
                                     ).show()
                                     showPermissionDialog = true
@@ -397,7 +407,7 @@ fun LauncherSettingsDialog(
                                     Timber.e(e, "Backup failed")
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.backup_failed),
+                                        backupFailedMsg,
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -416,7 +426,7 @@ fun LauncherSettingsDialog(
                             if (backupInfo == null) {
                                 Toast.makeText(
                                     context,
-                                    context.getString(R.string.restore_not_found),
+                                    restoreNotFoundMsg,
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 return@CompactSettingsItem

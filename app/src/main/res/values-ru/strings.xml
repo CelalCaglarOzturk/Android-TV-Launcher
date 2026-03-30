@@ -5,32 +5,20 @@
 	<string name="notifications">Уведомления</string>
 	<string name="wifi">Сеть и интернет</string>
 	<string name="channel_watch_next">Смотреть далее</string>
-	<string
-        name="channel_no_channels"
-    >Каналы из ваших приложений появятся здесь</string>
+	<string name="channel_no_channels">Каналы из ваших приложений появятся здесь</string>
 	<string name="channel_preview">%1$s: %2$s</string>
 	<string name="settings_launcher">Настройки лаунчера</string>
 	<string name="input_switch">Переключить вход</string>
 	<string name="tab_home">Главная</string>
 	<string name="tab_apps">Все приложения</string>
-
-	<!-- Channel management -->
 	<string name="channel_enable">Включить канал</string>
 	<string name="channel_disable">Отключить канал</string>
 	<string name="channel_move">Переместить канал</string>
 	<string name="close">Закрыть</string>
 	<string name="disabled_channels">Отключённые каналы</string>
-
-	<!-- Settings -->
-	<string
-        name="settings_app_card_size"
-    >Размер карточки приложения: %1$d dp</string>
-	<string
-        name="settings_channel_card_size"
-    >Размер карточки канала: %1$d dp</string>
-	<string
-        name="settings_show_mobile_apps_description"
-    >Показывать приложения без ТВ-интерфейса</string>
+	<string name="settings_app_card_size">Размер карточки приложения: %1$d dp</string>
+	<string name="settings_channel_card_size">Размер карточки канала: %1$d dp</string>
+	<string name="settings_show_mobile_apps_description">Показывать приложения без ТВ-интерфейса</string>
 	<string name="settings_inputs">Входы</string>
 	<string name="settings_no_inputs">Входы не найдены</string>
 	<string name="settings_section_appearance">Внешний вид</string>
@@ -38,16 +26,15 @@
 	<string name="settings_section_behavior">Поведение</string>
 	<string name="settings_section_data">Данные</string>
 	<string name="settings_section_system">Система</string>
-	<string name="settings_accessibility_enabled">Спец. возможности: Включено</string>
-	<string name="settings_accessibility_disabled">Спец. возможности: Требуется</string>
-
-	<!-- Watch Next -->
+	<string name="settings_background">Фон</string>
+	<string name="settings_background_description">Выберите цвет фона или изображение для главного экрана</string>
+	<string name="settings_background_colors">Предустановленные цвета</string>
+	<string name="settings_background_image">Пользовательское изображение</string>
+	<string name="settings_background_select_image">Выбрать изображение</string>
+	<string name="settings_background_clear_image">Очистить</string>
+	<string name="settings_background_reset">Сбросить по умолчанию</string>
 	<string name="watch_next_remove">Удалить из Смотреть далее</string>
-	<string
-        name="watch_next_no_apps"
-    >Ни одно приложение не поддерживает эту функцию на этом ТВ</string>
-
-	<!-- App options -->
+	<string name="watch_next_no_apps">Ни одно приложение не поддерживает эту функцию на этом ТВ</string>
 	<string name="app_options">Параметры приложения</string>
 	<string name="app_open">Открыть</string>
 	<string name="app_move">Переместить</string>
@@ -55,143 +42,97 @@
 	<string name="app_add_to_home">Добавить на главную</string>
 	<string name="app_remove_from_home">Удалить с главной</string>
 	<string name="app_hide">Скрыть приложение</string>
-	<string name="app_uninstall">Удалить</string>
 	<string name="app_unhide">Показать приложение</string>
-	<string
-        name="app_moving_instructions"
-    >Используйте стрелки для перемещения • ОК для подтверждения</string>
-	<string
-        name="channel_moving_instructions"
-    >Используйте ↑↓ для перемещения • ОК для подтверждения</string>
-
-	<!-- Apps Tab -->
+	<string name="app_uninstall">Удалить</string>
+	<string name="channel_moving_instructions">Используйте ↑↓ для перемещения • ОК для подтверждения</string>
 	<string name="apps_show_mobile">Показывать мобильные приложения</string>
 	<string name="apps_hidden_title">Скрытые приложения</string>
-
-	<!-- Empty States -->
 	<string name="empty_no_apps_title">Нет приложений</string>
-	<string
-        name="empty_no_apps_message"
-    >Приложения не найдены. Установите несколько приложений для начала.</string>
-	<string name="empty_no_channels_title">Нет каналов</string>
-	<string
-        name="empty_no_channels_message"
-    >Каналы из ваших приложений появятся здесь.</string>
-
-	<!-- Backup/Restore -->
+	<string name="empty_no_apps_message">Приложения не найдены. Установите несколько приложений для начала.</string>
 	<string name="backup">Резервная копия</string>
 	<string name="restore">Восстановить</string>
 	<string name="backup_success">Резервная копия успешно создана</string>
 	<string name="backup_failed">Ошибка создания резервной копии</string>
+	<string name="backup_failed_permission">Ошибка создания резервной копии: Требуется разрешение на хранилище</string>
 	<string name="restore_success">Восстановление успешно завершено</string>
 	<string name="restore_failed">Ошибка восстановления</string>
+	<string name="restore_failed_permission">Ошибка восстановления: Требуется разрешение на хранилище</string>
 	<string name="restore_not_found">Файл резервной копии не найден</string>
-	<string
-        name="backup_permission_title"
-    >Требуется разрешение на хранилище</string>
-	<string
-        name="backup_permission_message"
-    >Пожалуйста, включите разрешения на хранилище для TV Launcher для резервного копирования и восстановления настроек. Откройте Настройки > Разрешения и включите "Файлы и медиа" или "Доступ ко всем файлам".</string>
-	<string name="backup_permission_open_settings">Открыть настройки</string>
-
-	<!-- Reset Settings -->
+	<string name="backup_permission_title">Требуется разрешение на хранилище</string>
+	<string name="backup_permission_message">ТВ Лаунчеру требуется разрешение на хранилище для сохранения и загрузки файла резервной копии. Файл будет сохранён в:\n\nDocuments/TVLauncher/tv_launcher_backup.json\n\nЭтот файл содержит настройки приложений, настройки каналов и скрытые входы. Без этого разрешения функции резервного копирования и восстановления не будут работать.</string>
+	<string name="backup_permission_open_settings">Открыть информацию о приложении</string>
+	<string name="restore_preview_title">Восстановить резервную копию?</string>
+	<string name="restore_preview_message">Это заменит ваши текущие настройки резервной копией от:\n\n%1$s\n\nИзменения, которые будут применены:\n• Размер карточки приложения: %2$d dp\n• Размер карточки канала: %3$d dp\n• Скрытые приложения: %4$d\n• Избранные приложения: %5$d\n• Отключённые каналы: %6$d\n\nТекущие настройки будут потеряны.</string>
+	<string name="restore_button">Восстановить</string>
 	<string name="settings_reset">Сбросить настройки</string>
-	<string
-        name="settings_reset_description"
-    >Очистить все настройки и восстановить значения по умолчанию</string>
-	<string
-        name="settings_reset_success"
-    >Настройки сброшены до значений по умолчанию</string>
+	<string name="settings_reset_description">Очистить все настройки и восстановить значения по умолчанию</string>
+	<string name="settings_reset_success">Настройки сброшены до значений по умолчанию</string>
 	<string name="settings_reset_confirm_title">Сбросить настройки?</string>
-	<string
-        name="settings_reset_confirm_message"
-    >Это очистит все ваши настройки и восстановит значения по умолчанию. Это действие нельзя отменить.</string>
+	<string name="settings_reset_confirm_message">Это очистит все ваши настройки и восстановит значения по умолчанию. Это действие нельзя отменить.</string>
 	<string name="settings_reset_confirm_button">Сбросить</string>
 	<string name="cancel">Отмена</string>
-
-	<!-- Animations -->
 	<string name="settings_animations">Анимации</string>
 	<string name="settings_enable_animations">Включить все анимации</string>
-	<string
-        name="settings_enable_animations_description"
-    >Переключить все визуальные эффекты</string>
+	<string name="settings_enable_animations_description">Переключить все визуальные эффекты</string>
 	<string name="settings_anim_app_icon">Анимации иконок приложений</string>
 	<string name="settings_anim_app_icon_desc">Бегущий текст при фокусе</string>
 	<string name="settings_anim_channel_row">Анимации строк каналов</string>
-	<string
-        name="settings_anim_channel_row_desc"
-    >Эффекты масштабирования и затухания при фокусе</string>
+	<string name="settings_anim_channel_row_desc">Эффекты масштабирования и затухания при фокусе</string>
 	<string name="settings_anim_channel_move">Перемещение каналов</string>
-	<string
-        name="settings_anim_channel_move_desc"
-    >Плавное переупорядочивание каналов</string>
+	<string name="settings_anim_channel_move_desc">Плавное переупорядочивание каналов</string>
 	<string name="settings_anim_app_move">Перемещение приложений</string>
-	<string
-        name="settings_anim_app_move_desc"
-    >Плавное переупорядочивание приложений</string>
-
-	<!-- Toolbar Placement -->
-	<string
-        name="settings_toolbar_placement"
-    >Размещение панели инструментов</string>
-	<string name="settings_clock">Часы</string>
-	<string name="settings_clock_enabled">Показывать часы</string>
-	<string name="settings_clock_position">Позиция часов</string>
-	<string name="settings_clock_position_start">Начало (слева)</string>
-	<string name="settings_clock_position_end">Конец (справа)</string>
-	<string name="settings_clock_position_hidden">Скрыты</string>
-	<string name="settings_toolbar_buttons">Кнопки панели инструментов</string>
-	<string
-        name="settings_toolbar_buttons_description"
-    >Включить/выключить и изменить порядок кнопок панели инструментов</string>
-
-	<!-- Toolbar Button Names -->
+	<string name="settings_anim_app_move_desc">Плавное переупорядочивание приложений</string>
+	<string name="settings_toolbar_placement">Размещение панели инструментов</string>
 	<string name="toolbar_clock">Часы</string>
 	<string name="toolbar_inputs">Входы</string>
 	<string name="toolbar_notifications">Уведомления</string>
 	<string name="toolbar_wifi">Wi-Fi</string>
 	<string name="toolbar_launcher_settings">Настройки лаунчера</string>
 	<string name="toolbar_settings">Системные настройки</string>
-
-	<!-- Channel Settings -->
 	<string name="settings_channel">Настройки каналов</string>
 	<string name="settings_channel_cards_per_row">Карточек в ряду: %1$d</string>
-	<string
-        name="settings_channel_cards_per_row_description"
-    >Ограничить количество карточек на канал для улучшения производительности (3–20)</string>
-
-	<!-- Crash Recovery -->
+	<string name="settings_channel_cards_per_row_description">Ограничить количество карточек на канал для улучшения производительности (3–20)</string>
 	<string name="crash_recovery_title">ТВ Лаунчер требует восстановления</string>
-	<string
-        name="crash_recovery_message"
-    >Лаунчер несколько раз аварийно завершился и не может запуститься нормально.\n\nВыберите вариант ниже для устранения проблемы:</string>
+	<string name="crash_recovery_message">Лаунчер несколько раз аварийно завершился и не может запуститься нормально.\n\nВыберите вариант ниже для устранения проблемы:</string>
 	<string name="crash_recovery_reset_settings">Сбросить настройки</string>
-	<string
-        name="crash_recovery_reset_settings_desc"
-    >Сбрасывает все настройки до значений по умолчанию. Приложения и каналы появятся через несколько секунд.</string>
-	<string
-        name="crash_recovery_open_app_settings"
-    >Открыть настройки приложения</string>
-	<string
-        name="crash_recovery_open_app_settings_desc"
-    >Открывает системные настройки. Выберите "Хранилище" → "Очистить данные" для полного сброса. Это удалит все данные и разрешения приложения</string>
-
-	<!-- Launcher Suppression -->
+	<string name="crash_recovery_reset_settings_desc">Сбрасывает все настройки до значений по умолчанию. Приложения и каналы появятся через несколько секунд.</string>
+	<string name="crash_recovery_open_app_settings">Открыть настройки приложения</string>
+	<string name="crash_recovery_open_app_settings_desc">Открывает системные настройки. Выберите \"Хранилище\" → \"Очистить данные\" для полного сброса. Это удалит все данные и разрешения приложения</string>
+	<string name="settings_about">О приложении</string>
+	<string name="settings_developer_mode">Режим разработчика</string>
+	<string name="settings_developer_mode_description">Включить функцию тестового сбоя (нажмите 9 пять раз)</string>
+	<string name="about_app_info">Информация о приложении</string>
+	<string name="about_version">Версия %1$s (%2$d)</string>
+	<string name="about_bug_reporting">Сообщить об ошибке</string>
+	<string name="about_email">Email: %1$s</string>
+	<string name="about_email_address">support@example.com</string>
+	<string name="about_github_issues">GitHub Issues</string>
+	<string name="about_github_issues_url">https://github.com/example/tv-launcher/issues</string>
+	<string name="about_license">Лицензия</string>
+	<string name="about_privacy_policy">Политика конфиденциальности</string>
+	<string name="about_privacy_policy_url">https://example.com/tv-launcher/privacy</string>
+	<string name="about_website">Веб-сайт</string>
+	<string name="about_website_url">https://example.com/tv-launcher</string>
+	<string name="about_github_qr_desc">Отсканируйте, чтобы сообщить о проблеме на GitHub</string>
 	<string name="settings_suppress_launcher">Подавить оригинальный лаунчер</string>
-	<string
-        name="settings_suppress_launcher_description"
-    >Перехватывать кнопку home для возврата к этому лаунчеру из других приложений</string>
-	<string
-        name="accessibility_service_description"
-    >Позволяет TV Launcher перехватывать кнопку home при возврате из других приложений.</string>
-	<string
-        name="settings_accessibility_required"
-    >Включить спец. возможности: Настройки устройства > Спец. возможности > TV Launcher > Вкл</string>
+	<string name="settings_suppress_launcher_description">Перехватывать кнопку home для возврата к этому лаунчеру из других приложений</string>
+	<string name="accessibility_service_description">Позволяет TV Launcher перехватывать кнопку home при возврате из других приложений.</string>
+	<string name="settings_accessibility_required">Включить спец. возможности: Настройки устройства > Спец. возможности > TV Launcher > Вкл</string>
 	<string name="settings_open_settings">Открыть настройки</string>
-	<string
-        name="settings_suppress_only_external"
-    >Перехватывать только из других приложений</string>
-	<string
-        name="settings_suppress_only_external_description"
-    >Когда включено, кнопка home работает нормально внутри лаунчера. Когда выключено, кнопка home всегда открывает этот лаунчер.</string>
+	<string name="settings_accessibility_enabled">Спец. возможности: Включено</string>
+	<string name="settings_accessibility_disabled">Спец. возможности: Требуется</string>
+	<string name="settings_suppress_only_external">Перехватывать только из других приложений</string>
+	<string name="settings_suppress_only_external_description">Когда включено, кнопка home работает нормально внутри лаунчера. Когда выключено, кнопка home всегда открывает этот лаунчер.</string>
+	<string name="onboarding_welcome">Добро пожаловать в ТВ Лаунчер</string>
+	<string name="onboarding_skip">Пропустить</string>
+	<string name="onboarding_next">Далее</string>
+	<string name="onboarding_get_started">Начать</string>
+	<string name="onboarding_page1_title">Ваш персональный главный экран</string>
+	<string name="onboarding_page1_description">ТВ Лаунчер предоставляет чистый, настраиваемый главный экран для вашего Android TV. Организуйте приложения, каналы и входы по своему усмотрению.</string>
+	<string name="onboarding_page2_title">Организуйте ваши приложения</string>
+	<string name="onboarding_page2_description">Нажмите и удерживайте приложение, чтобы переместить его. Используйте меню, чтобы добавить избранное в главную строку, скрыть ненужные приложения или получить доступ к информации о приложении.</string>
+	<string name="onboarding_page3_title">Настройте свой опыт</string>
+	<string name="onboarding_page3_description">Откройте Настройки, чтобы изменить размеры карточек приложений, включить анимации, настроить отображение каналов, создать резервную копию настроек и многое другое.</string>
+	<string name="onboarding_page4_title">Установить по умолчанию</string>
+	<string name="onboarding_page4_description">Для лучшего опыта установите ТВ Лаунчер как приложение главного экрана по умолчанию. Вы всегда можете изменить это позже в настройках Android TV.</string>
 </resources>
