@@ -1,6 +1,5 @@
 package nl.ndat.tvlauncher.ui.tab.apps
 
-import android.content.Intent
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
@@ -31,10 +29,8 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.nativeKeyCode
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
@@ -50,8 +46,6 @@ fun AppPopup(
     onToggleFavorite: (favorite: Boolean) -> Unit,
     onToggleHidden: ((hidden: Boolean) -> Unit)? = null,
 ) {
-    val context = LocalContext.current
-
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -84,19 +78,6 @@ fun AppPopup(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-
-        // Uninstall
-        KeyDownButton(
-            onClick = {
-                val intent = Intent(Intent.ACTION_DELETE).apply {
-                    data = "package:$packageName".toUri()
-                }
-                context.startActivity(intent)
-            },
-            icon = Icons.Default.Delete,
-            text = stringResource(R.string.app_uninstall),
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 

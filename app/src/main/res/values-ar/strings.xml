@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">إزالة من الرئيسية</string>
 	<string name="app_hide">إخفاء التطبيق</string>
 	<string name="app_unhide">إظهار التطبيق</string>
-	<string name="app_uninstall">إلغاء التثبيت</string>
+	
 	<string name="channel_moving_instructions">استخدم ↑↓ للنقل • OK للتأكيد</string>
 	<string name="apps_show_mobile">إظهار تطبيقات الهاتف</string>
 	<string name="apps_hidden_title">التطبيقات المخفية</string>

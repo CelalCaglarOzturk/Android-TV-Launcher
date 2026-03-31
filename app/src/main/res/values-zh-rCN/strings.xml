@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">从首页移除</string>
 	<string name="app_hide">隐藏应用</string>
 	<string name="app_unhide">取消隐藏</string>
-	<string name="app_uninstall">卸载</string>
+	
 	<string name="channel_moving_instructions">使用↑↓移动 • 按确定确认</string>
 	<string name="apps_show_mobile">显示手机应用</string>
 	<string name="apps_hidden_title">已隐藏的应用</string>

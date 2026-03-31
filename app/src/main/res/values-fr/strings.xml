@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">Retirer de l\'accueil</string>
 	<string name="app_hide">Masquer l\'app</string>
 	<string name="app_unhide">Afficher l\'app</string>
-	<string name="app_uninstall">Désinstaller</string>
+	
 	<string name="channel_moving_instructions">Utiliser ↑↓ pour déplacer • OK pour confirmer</string>
 	<string name="apps_show_mobile">Afficher les apps mobiles</string>
 	<string name="apps_hidden_title">Apps masquées</string>

@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">ホームから削除</string>
 	<string name="app_hide">アプリを非表示</string>
 	<string name="app_unhide">アプリを表示</string>
-	<string name="app_uninstall">アンインストール</string>
+	
 	<string name="channel_moving_instructions">↑↓で移動 • OKで確定</string>
 	<string name="apps_show_mobile">モバイルアプリを表示</string>
 	<string name="apps_hidden_title">非表示のアプリ</string>

@@ -45,7 +45,7 @@
 	<string name="app_add_to_home">Adicionar ao Início</string>
 	<string name="app_remove_from_home">Remover do Início</string>
 	<string name="app_hide">Ocultar Aplicação</string>
-	<string name="app_uninstall">Desinstalar</string>
+	
 	<string name="app_unhide">Mostrar Aplicação</string>
 
 	<string name="channel_moving_instructions">Use ↑↓ para mover • OK para confirmar</string>

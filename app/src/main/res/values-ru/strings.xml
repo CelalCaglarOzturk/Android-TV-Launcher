@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">Удалить с главной</string>
 	<string name="app_hide">Скрыть приложение</string>
 	<string name="app_unhide">Показать приложение</string>
-	<string name="app_uninstall">Удалить</string>
+	
 	<string name="channel_moving_instructions">Используйте ↑↓ для перемещения • ОК для подтверждения</string>
 	<string name="apps_show_mobile">Показывать мобильные приложения</string>
 	<string name="apps_hidden_title">Скрытые приложения</string>

@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">Hapus dari Beranda</string>
 	<string name="app_hide">Sembunyikan Aplikasi</string>
 	<string name="app_unhide">Tampilkan Aplikasi</string>
-	<string name="app_uninstall">Hapus Instalasi</string>
+	
 	<string name="channel_moving_instructions">Gunakan ↑↓ untuk memindahkan • OK untuk konfirmasi</string>
 	<string name="apps_show_mobile">Tampilkan aplikasi seluler</string>
 	<string name="apps_hidden_title">Aplikasi Tersembunyi</string>

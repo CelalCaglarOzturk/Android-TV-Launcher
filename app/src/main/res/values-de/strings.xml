@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">Von Startseite entfernen</string>
 	<string name="app_hide">App ausblenden</string>
 	<string name="app_unhide">App einblenden</string>
-	<string name="app_uninstall">Deinstallieren</string>
+	
 	<string name="channel_moving_instructions">↑↓ zum Verschieben • OK zum Bestätigen</string>
 	<string name="apps_show_mobile">Mobile Apps anzeigen</string>
 	<string name="apps_hidden_title">Ausgeblendete Apps</string>

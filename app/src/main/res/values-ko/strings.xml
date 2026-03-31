@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">홈에서 제거</string>
 	<string name="app_hide">앱 숨기기</string>
 	<string name="app_unhide">앱 표시</string>
-	<string name="app_uninstall">제거</string>
+	
 	<string name="channel_moving_instructions">↑↓로 이동 • OK로 확인</string>
 	<string name="apps_show_mobile">모바일 앱 표시</string>
 	<string name="apps_hidden_title">숨겨진 앱</string>

@@ -43,7 +43,7 @@
 	<string name="app_remove_from_home">Ana Ekrandan Kaldır</string>
 	<string name="app_hide">Uygulamayı Gizle</string>
 	<string name="app_unhide">Uygulamayı Göster</string>
-	<string name="app_uninstall">Kaldır</string>
+	
 	<string name="channel_moving_instructions">Taşımak için ↑↓ • Onaylamak için OK</string>
 	<string name="apps_show_mobile">Mobil uygulamaları göster</string>
 	<string name="apps_hidden_title">Gizli Uygulamalar</string>
