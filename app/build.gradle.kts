@@ -10,7 +10,7 @@ kotlin {
 }
 
 android {
-	namespace = "dev.mudrock.TiViyomiTVLauncher"
+	namespace = "dev.mudrock.tiviyomitvlauncher"
 	compileSdk = libs.versions.android.compileSdk.get().toInt()
 
 	defaultConfig {
@@ -42,7 +42,7 @@ android {
 sqldelight {
 	databases {
 		create("Database") {
-			packageName.set("dev.mudrock.TiViyomiTVLauncher.data.sqldelight")
+			packageName.set("dev.mudrock.tiviyomitvlauncher.data.sqldelight")
 			generateAsync.set(false)
 		}
 	}

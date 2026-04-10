@@ -1,0 +1,48 @@
+package dev.mudrock.tiviyomitvlauncher.ui.toolbar
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.tv.material3.Tab
+import androidx.tv.material3.TabRow
+import androidx.tv.material3.Text
+import dev.mudrock.tiviyomitvlauncher.R
+import dev.mudrock.tiviyomitvlauncher.data.Destinations
+import dev.mudrock.tiviyomitvlauncher.util.composition.LocalBackStack
+
+@Composable
+fun ToolbarTabs(
+    modifier: Modifier,
+) {
+    val backStack = LocalBackStack.current
+    val currentDestination = backStack.lastOrNull()
+    val tabs = mapOf(
+        Destinations.Home to stringResource(R.string.tab_home),
+        Destinations.Apps to stringResource(R.string.tab_apps),
+    )
+
+    TabRow(
+        selectedTabIndex = tabs.keys.indexOfFirst { destination -> destination == currentDestination },
+        modifier = modifier,
+    ) {
+        tabs.toList().forEachIndexed { index, (destination, name) ->
+            key(index) {
+                Tab(
+                    selected = destination == currentDestination,
+                    onFocus = {
+                        if (destination == currentDestination) return@Tab
+
+                        backStack.clear()
+                        backStack.add(destination)
+                    },
+                    modifier = Modifier.padding(16.dp, 8.dp)
+                ) {
+                    Text(name)
+                }
+            }
+        }
+    }
+}
