@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-	<string name="app_name">电视启动器</string>
+	<string name="app_name">TiViyomi TV Launcher</string>
 	<string name="settings">设置</string>
 	<string name="notifications">通知</string>
 	<string name="wifi">网络和互联网</string>

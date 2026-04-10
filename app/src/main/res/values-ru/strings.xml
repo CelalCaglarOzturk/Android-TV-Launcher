@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-	<string name="app_name">ТВ Лаунчер</string>
+	<string name="app_name">TiViyomi TV Launcher</string>
 	<string name="settings">Настройки</string>
 	<string name="notifications">Уведомления</string>
 	<string name="wifi">Сеть и интернет</string>

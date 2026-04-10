@@ -6,4 +6,4 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/accessibility_service_description"
     android:notificationTimeout="@integer/accessibility_notification_timeout"
-    android:settingsActivity="nl.ndat.tvlauncher.LauncherActivity"/>
+    android:settingsActivity="dev.mudrock.TiViyomiTVLauncher.LauncherActivity"/>

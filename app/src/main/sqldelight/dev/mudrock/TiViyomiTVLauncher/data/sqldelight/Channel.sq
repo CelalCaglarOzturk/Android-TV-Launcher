@@ -1,0 +1,125 @@
+import kotlin.Boolean;
+import dev.mudrock.TiViyomiTVLauncher.data.model.ChannelType;
+
+CREATE TABLE Channel (
+	id TEXT NOT NULL PRIMARY KEY,
+	type TEXT AS ChannelType NOT NULL,
+	channelId INTEGER NOT NULL,
+	displayName TEXT NOT NULL,
+	description TEXT,
+	packageName TEXT NOT NULL,
+	appLinkIntentUri TEXT,
+	enabled INTEGER AS Boolean NOT NULL DEFAULT 1,
+	displayOrder INTEGER
+);
+
+CREATE INDEX channelType ON Channel(type);
+CREATE INDEX channelPackageName ON Channel(packageName);
+CREATE INDEX channelEnabled ON Channel(enabled);
+CREATE INDEX channelDisplayOrder ON Channel(displayOrder);
+
+getAll:
+SELECT * FROM Channel
+WHERE (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0;
+
+getAllEnabled:
+SELECT * FROM Channel
+WHERE enabled = 1
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
+ORDER BY displayOrder ASC, displayName ASC;
+
+getAllDisabled:
+SELECT * FROM Channel
+WHERE enabled = 0
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
+ORDER BY displayName ASC;
+
+getFavoriteAppChannels:
+SELECT Channel.* FROM Channel
+WHERE Channel.enabled = 1
+AND (SELECT favoriteOrder FROM App WHERE App.packageName = Channel.packageName) IS NOT NULL
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE ChannelProgram.channelId = Channel.id) > 0
+ORDER BY Channel.displayOrder ASC, Channel.displayName ASC;
+
+getAllAppChannels:
+SELECT * FROM Channel
+WHERE type = 'PREVIEW'
+ORDER BY displayOrder ASC, displayName ASC;
+
+getById:
+SELECT * FROM Channel WHERE id = :id LIMIT 1;
+
+getByType:
+SELECT * FROM Channel WHERE type = :type;
+
+getByTypeEnabled:
+SELECT * FROM Channel
+WHERE type = :type
+AND enabled = 1
+AND (SELECT COUNT(*) FROM ChannelProgram WHERE channelId = Channel.id) > 0
+ORDER BY displayOrder ASC, displayName ASC;
+
+findPrevious:
+SELECT * FROM Channel WHERE enabled = 1 AND displayOrder < :displayOrder ORDER BY displayOrder DESC LIMIT 1;
+
+findNext:
+SELECT * FROM Channel WHERE enabled = 1 AND displayOrder > :displayOrder ORDER BY displayOrder ASC LIMIT 1;
+
+upsert {
+	UPDATE Channel SET
+		type = :type,
+        channelId = :channelId,
+        displayName = :displayName,
+        description = :description,
+        packageName = :packageName,
+        appLinkIntentUri = :appLinkIntentUri
+	WHERE id = :id;
+
+	INSERT OR IGNORE INTO Channel (
+		id,
+		type,
+        channelId,
+        displayName,
+        description,
+        packageName,
+        appLinkIntentUri
+	) VALUES (
+		:id,
+		:type,
+        :channelId,
+        :displayName,
+        :description,
+        :packageName,
+        :appLinkIntentUri
+	);
+}
+
+enableChannel:
+UPDATE Channel SET enabled = 1 WHERE id = :id;
+
+disableChannel:
+UPDATE Channel SET enabled = 0 WHERE id = :id;
+
+updateDisplayOrder:
+UPDATE Channel SET displayOrder = :displayOrder WHERE id = :id;
+
+updateDisplayOrderAdd:
+UPDATE Channel SET displayOrder = COALESCE((SELECT MAX(displayOrder) FROM Channel WHERE enabled = 1), -1) + 1 WHERE id = :id;
+
+updateDisplayOrderShift {
+	-- Decrease the order for all items after the old order
+	UPDATE Channel SET displayOrder = displayOrder - 1 WHERE displayOrder > (SELECT displayOrder FROM Channel WHERE id = :id) AND id != :id AND enabled = 1;
+	-- Increase the order for all items after the new order
+	UPDATE Channel SET displayOrder = displayOrder + 1 WHERE displayOrder >= :order AND id != :id AND enabled = 1;
+	-- Update requested item
+	UPDATE Channel SET displayOrder = :order WHERE id = :id;
+}
+
+removeById:
+DELETE FROM Channel WHERE id = :id;
+
+removeByType:
+DELETE FROM Channel WHERE type = :type;
+
+deleteAllChannels:
+DELETE FROM Channel;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-	<string name="app_name">مُطلق التلفزيون</string>
+	<string name="app_name">TiViyomi TV Launcher</string>
 	<string name="settings">الإعدادات</string>
 	<string name="notifications">الإشعارات</string>
 	<string name="wifi">الشبكة والإنترنت</string>

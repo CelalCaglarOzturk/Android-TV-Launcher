@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-	<string name="app_name">TV 런처</string>
+	<string name="app_name">TiViyomi TV Launcher</string>
 	<string name="settings">설정</string>
 	<string name="notifications">알림</string>
 	<string name="wifi">네트워크 및 인터넷</string>

@@ -10,14 +10,14 @@ kotlin {
 }
 
 android {
-	namespace = "nl.ndat.tvlauncher"
+	namespace = "dev.mudrock.TiViyomiTVLauncher"
 	compileSdk = libs.versions.android.compileSdk.get().toInt()
 
 	defaultConfig {
 		minSdk = libs.versions.android.minSdk.get().toInt()
 		targetSdk = libs.versions.android.targetSdk.get().toInt()
 
-		applicationId = "nl.ndat.tvlauncher"
+		applicationId = "dev.mudrock.TiViyomiTVLauncher"
 		versionCode = 1_00_00
 		versionName = "1.0.0"
 	}
@@ -42,7 +42,7 @@ android {
 sqldelight {
 	databases {
 		create("Database") {
-			packageName.set("nl.ndat.tvlauncher.data.sqldelight")
+			packageName.set("dev.mudrock.TiViyomiTVLauncher.data.sqldelight")
 			generateAsync.set(false)
 		}
 	}

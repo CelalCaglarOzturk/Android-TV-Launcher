@@ -9,7 +9,7 @@ Unit tests run on the JVM and don't require an Android device or emulator.
 ./gradlew test
 
 # Run specific test class
-./gradlew test --tests "nl.ndat.tvlauncher.data.repository.SettingsRepositoryTest"
+./gradlew test --tests "dev.mudrock.TiViyomiTVLauncher.data.repository.SettingsRepositoryTest"
 
 # Run with verbose output
 ./gradlew test --info
@@ -28,7 +28,7 @@ Instrumentation tests require an Android device or emulator.
 ./gradlew connectedAndroidTest
 
 # Run specific test class
-./gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=nl.ndat.tvlauncher.LauncherSettingsTest
+./gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=dev.mudrock.TiViyomiTVLauncher.LauncherSettingsTest
 
 # Run on specific device
 adb devices  # List connected devices
@@ -112,12 +112,12 @@ adb shell am start -a android.intent.action.MAIN -c android.intent.category.LEAN
 ```
 app/src/
 ├── test/                           # Unit tests
-│   └── java/nl/ndat/tvlauncher/
+│   └── java/dev/mudrock/TiViyomiTVLauncher/
 │       └── data/repository/
 │           └── SettingsRepositoryTest.kt
 │
 └── androidTest/                    # Instrumentation tests
-    └── java/nl/ndat/tvlauncher/
+    └── java/dev/mudrock/TiViyomiTVLauncher/
         ├── LauncherSettingsTest.kt
         └── ExampleInstrumentedTest.kt
 ```
