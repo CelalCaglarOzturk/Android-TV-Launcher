@@ -24,7 +24,6 @@ kotlinx-serialization = "1.11.0"
 material-icons = "1.7.8"
 sqldelight = "2.3.2"
 timber = "5.0.1"
-leakcanary = "2.14"
 junit = "4.13.2"
 mockito = "5.23.0"
 mockito-kotlin = "6.3.0"
@@ -65,7 +64,6 @@ material-icons-extended = { module = "androidx.compose.material:material-icons-e
 sqldelight-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }

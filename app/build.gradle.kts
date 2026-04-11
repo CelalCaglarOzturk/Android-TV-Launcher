@@ -75,7 +75,4 @@ dependencies {
 	// Testing
 	testImplementation(libs.bundles.testing.unit)
 	androidTestImplementation(libs.bundles.testing.instrumentation)
-	
-	// Debug only
-	debugImplementation(libs.leakcanary)
 }
